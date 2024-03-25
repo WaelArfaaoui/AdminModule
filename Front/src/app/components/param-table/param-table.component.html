@@ -1,0 +1,131 @@
+<div class="container pb-3">
+  <h1 class="pt-3">Param Table</h1>
+  <div class="row">
+    <div class="col-12" >
+    <!--  <p-toast></p-toast>
+      <p-table [value]="tablesArray" dataKey="name" [expandedRowKeys]="expandedRows"  [rows]="5" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [totalRecords]="totalRecords" responsiveLayout="scroll" >
+        <ng-template pTemplate="caption" >
+          <button pButton icon="pi pi-fw {{isExpanded ? 'pi-minus' : 'pi-plus'}}" label="{{isExpanded ? 'Collapse All' : 'Expand All'}}" class="btn btn-success btn-config mt-2" ></button>
+          <div class="flex table-header"></div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem"></th>
+            <th style="width: 12rem;">Table</th>
+            <th style="width: 12rem;" pSortableColumn="columns">Columns <p-sortIcon field=""></p-sortIcon></th>
+            <th style="width: 12rem;" pSortableColumn="Sort">Sort By <p-sortIcon field=""></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-table let-expanded="expanded">
+          <tr>
+            <td>
+              <button type="button" pButton pRipple [pRowToggler]="table" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td style="min-width:12rem;">{{table.name}}</td>
+            <td style="white-space: nowrap; width: 200px;">
+              <div >
+                <p-multiSelect [options]="table.columns" [(ngModel)]="selectedColumns[table.name]" optionLabel="name" display="chip" class="custom-chip" [style]="{'width': '200px'}"></p-multiSelect>
+              </div>
+            </td>
+            <td style="white-space: nowrap; width: 200px;">
+              <div >
+                <p-multiSelect [options]="selectedColumns[table.name]"  optionLabel="name" display="chip" class="custom-chip" [style]="{'width': '200px'}"></p-multiSelect>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>-->
+      <p-toast></p-toast>
+      <p-table [value]="products" dataKey="name"  [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [totalRecords]="totalRecords"  [expandedRowKeys]="expandedRows" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <button pButton icon="pi pi-fw {{isExpanded ? 'pi-minus' : 'pi-plus'}}" label="{{isExpanded ? 'Collapse All' : 'Expand All'}}" ></button>
+          <div class="flex table-header">
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+          <th style="width: 3rem"></th>
+          <th style="width: 12rem;">Table</th>
+          <th style="width: 12rem;" pSortableColumn="columns">Columns <p-sortIcon field=""></p-sortIcon></th>
+          <th style="width: 12rem;" pSortableColumn="Sort">Sort By <p-sortIcon field=""></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-expanded="expanded">
+          <tr>
+            <td>
+              <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td style="min-width: 12rem;">{{product.name}}</td>
+            <td style="white-space: nowrap; width: 200px;">
+              <div >
+                <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns[product.name]" optionLabel="name" display="chip" class="custom-chip" [style]="{'width': '200px'}"></p-multiSelect>
+              </div>
+            </td>
+            <td style="white-space: nowrap; width: 200px;">
+              <div >
+                <p-multiSelect [options]="selectedColumns[product.name]"  optionLabel="name" display="chip" class="custom-chip" [style]="{'width': '200px'}"></p-multiSelect>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-product>
+          <tr>
+            <td [attr.colspan]="columns.length">
+              <div class="p-3">
+                <div class="text-right mb-2">
+                  <button pButton type="button" style="margin-right:40px" label=" New Parameter" (click)="addNewRow(product)" class="btn btn-success btn-config mt-2"><i class="pi pi-fw pi-plus "></i></button>
+                </div>
+
+                <!-- Table to display existing rows and new row -->
+                <table class="table">
+                  <!-- Header row -->
+                  <thead>
+                  <tr>
+                    <!-- Display column names in header -->
+                    <th *ngFor="let column of columns">{{ column }}</th>
+                  </tr>
+                  </thead>
+                  <!-- Existing rows -->
+                  <tbody>
+                  <tr *ngFor="let order of product.orders">
+                    <td *ngFor="let column of columns">      <ng-container *ngIf="!order.editMode; else editModeTemplate">
+                      {{ order[column] }}
+                    </ng-container>
+                      <ng-template #editModeTemplate>
+                        <input type="text" [(ngModel)]="order[column]" class="p-inputtext">
+                      </ng-template>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="!order.editMode">
+                        <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning" (click)="toggleEditMode(order)"></button>
+                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger" ></button>
+                      </ng-container>
+                      <!-- Display the "Cancel" button in edit mode -->
+                      <ng-container *ngIf="order.editMode">
+                        <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="toggleEditMode(order)"></button>
+                      </ng-container>
+                    </td>
+                  </tr>
+                  </tbody>
+                  <!-- New row with input fields -->
+                  <tbody *ngIf="showNewRow">
+                  <tr>
+                    <td *ngFor="let column of columns">
+                      <input type="text" [(ngModel)]="newRow[column]" class="p-inputtext">
+                    </td>
+
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+  </div>
+</div>

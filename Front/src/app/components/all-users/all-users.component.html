@@ -1,0 +1,56 @@
+<div class="all-users" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table no-wrap user-table mb-0">
+              <thead>
+              <tr>
+                <th scope="col" class="border-0 text-uppercase font-medium pl-4"></th>
+                <th scope="col" class="border-0 text-uppercase font-medium">Name</th>
+                <th scope="col" class="border-0 text-uppercase font-medium">Occupation</th>
+                <th scope="col" class="border-0 text-uppercase font-medium">Email</th>
+                <th scope="col" class="border-0 text-uppercase font-medium">Added</th>
+                <th scope="col" class="border-0 text-uppercase font-medium">Role</th>
+                <th scope="col" class="border-0 text-uppercase font-medium">Manage</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let user of users; let i = index">
+                <td class="pl-4 item-id">{{ i + 1 }}</td>
+                <td>
+                  <h5 class="font-medium mb-0">{{ user.name }}</h5>
+                  <span class="text-muted">{{ user.location }}</span>
+                </td>
+                <td>
+                  <span class="text-muted">{{ user.occupation }}</span><br>
+                  <span class="text-muted">{{ user.pastOccupation }}</span>
+                </td>
+                <td>
+                  <span class="text-muted">{{ user.email }}</span><br>
+                  <span class="text-muted">{{ user.phone }}</span>
+                </td>
+                <td>
+                  <span class="text-muted">{{ user.addedDate }}</span><br>
+                  <span class="text-muted">{{ user.addedTime }}</span>
+                </td>
+                <td>
+                  <select class="form-control category-select">
+                    <option *ngFor="let category of [ 'Admin', 'Analyst', 'User']">{{ category }}</option>
+                  </select>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle"><i class="fa fa-key"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2"><i class="fa fa-trash"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2"><i class="fa fa-edit"></i> </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

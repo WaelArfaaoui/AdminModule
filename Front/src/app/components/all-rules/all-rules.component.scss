@@ -1,0 +1,70 @@
+
+.recent-rules {
+  min-height: 80vh;
+  background: white;
+  border-radius: var(--card-border-radius);
+
+}
+
+.recent-rules h2 {
+  margin-bottom: 0.8rem;
+}
+
+.assign-count {
+  text-align: center;
+}
+
+.recent-rules table {
+  background: var(--color-white);
+  width: 100%;
+  border-radius: var(--card-border-radius);
+  padding: var(--card-padding);
+  text-align: center;
+  transition: all 300ms ease;
+}
+
+.recent-rules table:hover {
+  box-shadow: none;
+}
+
+th {
+  padding: 1rem 0;
+}
+
+
+table tbody td {
+  height: 2.8rem;
+  border-bottom: 1px solid var(--color-light);
+  color: var(--color-dark-variant);
+
+}
+
+table tbody tr:last-child td {
+  border: none;
+  padding: 1rem 0 1.6rem 0 !important;
+}
+
+.recent-rules a {
+  text-align: center;
+  display: block;
+  margin: 1rem auto;
+  color: var(--color-info-dark);
+}
+
+.details:hover {
+  cursor: pointer;
+}
+
+.status-enabled {
+  color: #2A482EFF;
+}
+
+.status-disabled {
+  color: #772828FF;
+}
+
+mat-paginator {
+  background-color:var(--color-background) ;
+  color: var(--color-dark);
+}
+

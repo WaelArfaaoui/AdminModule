@@ -1,0 +1,31 @@
+<div class="grid p-fluid">
+  <div class="col-6 mx-n4">
+
+    <div class="card">
+      <h5>Les tables les plus modifiés</h5>
+      <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
+    </div>
+    <div class="card">
+      <h5>Linear Chart</h5>
+      <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
+    </div>
+
+    <div class="card">
+      <h5>Polar Area Chart</h5>
+      <p-chart type="polarArea" [data]="polarData" [options]="polarOptions"></p-chart>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="card">
+      <h5>Bar Chart</h5>
+      <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+    </div>
+
+    <div class="card">
+      <h5>Pie Chart</h5>
+      <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+    </div>
+
+
+
+</div>

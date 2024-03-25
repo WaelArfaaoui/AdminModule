@@ -1,0 +1,23 @@
+<div class="recent-rules ">
+  <table >
+    <thead>
+    <tr>
+      <th>Rule name</th>
+      <th>Rule description</th>
+      <th>Date created</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of data">
+      <td>{{ item.name }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.createdDate | date: 'dd/MM/yyyy' }}</td>
+      <td [ngStyle]="{'color': item.enabled ? 'green' : 'red'}">
+        {{ item.enabled ? 'Enabled' : 'Disabled' }}
+      </td>
+      <td class="primary details" >Details</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

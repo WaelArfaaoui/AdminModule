@@ -35,12 +35,12 @@ public class AuthenticationController {
     } catch (BadCredentialsException e) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
               .body(AuthenticationResponse.builder()
-                      .error("Les informations d'identification fournies sont incorrectes. Veuillez vérifier vos identifiants et réessayer.")
+                      .error("Credentials provided are incorrect. Please check your credentials and try again.")
                       .build());
     } catch (AuthenticationException e) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
               .body(AuthenticationResponse.builder()
-                      .error("Une erreur s'est produite lors de l'authentification. Veuillez réessayer plus tard.")
+                      .error("An error occurred during authentication. Please try again later.")
                       .build());
     }
   }

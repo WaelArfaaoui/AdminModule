@@ -36,9 +36,9 @@ public class UserController {
                                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         if (userservice.findbyemail(email)!=null){
           /*  UserDto userDto=UserDto.builder()
-                    .error("Email existe déjà").build();
+                    .error("Email already exists").build();
             return new ResponseEntity<>(userDto, HttpStatus.BAD_REQUEST);*/
-            throw new RuntimeException("Email existe");
+            throw new RuntimeException("Email already exists");
         }
 
         UserDto utilisateurAjoute = userservice.addUser(firstname, lastname, email, password, phone, role, file);
@@ -55,7 +55,7 @@ public class UserController {
                                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         if (userservice.findbyemail(email)!=null){
             UserDto userDto=UserDto.builder()
-                    .error("Email existe déjà").build();
+                    .error("Email already exists").build();
             return new ResponseEntity<>(userDto, HttpStatus.BAD_REQUEST);
         }
         UserDto userDto = userservice.update(id,firstname,lastname, email, password, phone, role, file);
@@ -63,7 +63,7 @@ public class UserController {
     }
 
 
-    @PatchMapping("/changepass")
+    @PatchMapping("/changepassword")
     public ResponseEntity<ChangePassword> changePassword(
           @RequestBody ChangePassword request,
           Principal connectedUser

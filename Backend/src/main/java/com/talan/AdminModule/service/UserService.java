@@ -95,7 +95,9 @@ public UserDto addUser(String firstname, String lastname, String email, String p
             String path = storeProfileImage(file);
             user.setProfileImagePath(path);
         }
-    return mapUserToDto(user);
+
+        this.userRepository.save(user) ;
+        return mapUserToDto(user);
 
     }
 public List<UserDto> getAll(){

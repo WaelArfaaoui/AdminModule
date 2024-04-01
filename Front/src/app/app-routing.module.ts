@@ -9,22 +9,26 @@ import {DashbordComponent} from "./components/dashbord/dashbord.component";
 
 import {LoginComponent} from "./pages/login/login.component";
 import {AllRulesComponent} from "./components/all-rules/all-rules.component";
+import {AddUserComponent} from "./components/add-user/add-user.component";
+import {GuardService} from "./services/gurad/guard.service";
 
 
 const routes: Routes = [
   {
+    path: 'signIn',
+    component: LoginComponent
+  },
+  {
     path: '',
-    component: AppLayoutComponent,
+    component: AppLayoutComponent , canActivate: [GuardService],
     children: [
       { path: '', component: DashbordComponent },
       { path: 'all', component: AllUsersComponent },
       { path: 'users', component: AllUsersComponent } ,
-
       { path: 'addrule', component: NewRuleComponent },
-
       { path: 'configtable', component: ParamTableComponent },
-
-      { path: 'rules', component: AllRulesComponent }
+      { path: 'rules', component: AllRulesComponent } ,
+      { path: 'adduser', component: AddUserComponent },
 
 
 

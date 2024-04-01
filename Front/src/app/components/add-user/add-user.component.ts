@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
+  formSave: any;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  addUser() {
+    
+  }
 }

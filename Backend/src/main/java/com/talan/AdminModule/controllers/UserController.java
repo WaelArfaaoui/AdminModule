@@ -38,6 +38,8 @@ public class UserController {
             throw new RuntimeException("Email already exists");
         }
 
+        System.out.println("okay");
+
         UserDto savedUser = userservice.addUser(firstname, lastname, email, password, phone, role, file);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }

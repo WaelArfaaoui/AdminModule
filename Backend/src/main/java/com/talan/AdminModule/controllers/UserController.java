@@ -35,14 +35,11 @@ public class UserController {
                                        @RequestParam("role") Role role,
                                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         if (userservice.findbyemail(email)!=null){
-          /*  UserDto userDto=UserDto.builder()
-                    .error("Email already exists").build();
-            return new ResponseEntity<>(userDto, HttpStatus.BAD_REQUEST);*/
             throw new RuntimeException("Email already exists");
         }
 
-        UserDto utilisateurAjoute = userservice.addUser(firstname, lastname, email, password, phone, role, file);
-        return new ResponseEntity<>(utilisateurAjoute, HttpStatus.CREATED);
+        UserDto savedUser = userservice.addUser(firstname, lastname, email, password, phone, role, file);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable int id ,

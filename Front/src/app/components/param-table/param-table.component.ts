@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {MessageService} from "primeng/api";
-import {TableService} from "../../Services/table.service";
+import {TableService} from "../../services/table/table.service";
 import {HttpClient} from "@angular/common/http";
 interface expandedRows {
   [key: string]: boolean;

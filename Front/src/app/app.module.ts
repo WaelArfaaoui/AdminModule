@@ -37,9 +37,10 @@ import { LoginComponent } from './pages/login/login.component';
 import { ParamTableComponent } from './components/param-table/param-table.component';
 import { DashbordComponent } from './components/dashbord/dashbord.component';
 import {ChartModule} from "primeng/chart";
+import { AddUserComponent } from './components/add-user/add-user.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

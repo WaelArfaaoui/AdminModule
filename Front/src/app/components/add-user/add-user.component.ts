@@ -14,6 +14,6 @@ export class AddUserComponent implements OnInit {
   }
 
   addUser() {
-    
+
   }
 }

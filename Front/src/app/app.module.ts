@@ -38,6 +38,7 @@ import { ParamTableComponent } from './components/param-table/param-table.compon
 import { DashbordComponent } from './components/dashbord/dashbord.component';
 import {ChartModule} from "primeng/chart";
 import { AddUserComponent } from './components/add-user/add-user.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent],
@@ -72,6 +73,7 @@ import { AddUserComponent } from './components/add-user/add-user.component';
     SliderModule,
     ToggleButtonModule,
     ChartModule,
+      MatSnackBarModule,
 
   ],
   providers: [MessageService],

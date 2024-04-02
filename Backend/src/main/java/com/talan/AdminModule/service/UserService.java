@@ -81,16 +81,17 @@ public class UserService {
         }
        return path;
     }
-public UserDto addUser(String firstname, String lastname, String email, String password, String phone, Role role, MultipartFile file) throws IOException {
+public UserDto addUser(UserDto dto, MultipartFile file) throws IOException {
 
-        User user = new User();
-
-        user.setFirstname(firstname);
-        user.setLastname(lastname);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setPhone(phone);
-        user.setRole(role);
+    var user = User.builder()
+            .firstname(dto.getFirstname())
+            .lastname(dto.getLastname())
+            .email(dto.getEmail())
+            .company(dto.getCompany())
+            .phone(dto.getPhone())
+            .password(passwordEncoder.encode(dto.getPassword()))
+            .role(dto.getRole())
+            .build();
         if (file != null) {
             String path = storeProfileImage(file);
             user.setProfileImagePath(path);

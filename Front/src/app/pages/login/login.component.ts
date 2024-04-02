@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {UserService} from "../../services/user/user.service";
+import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-login',
@@ -7,14 +10,45 @@ import {FormGroup} from "@angular/forms";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  formLogin!:FormGroup ;
+    formLogin!:FormGroup ;
+    errorFound:boolean = false ;
 
-  constructor() { }
 
-  ngOnInit(): void {
-  }
+    constructor(
+        private userService: UserService,
+        private router: Router ,private fb:FormBuilder , private _snackBar: MatSnackBar) { }
 
-  handleLogin() {
+    ngOnInit(): void {
+        this.formLogin = this.fb.group(
+            {
+                email : this.fb.control("") ,
+                password : this.fb.control("")
+            }
+        )
+    }
+    handleLogin() {
 
-  }
+        this.userService.login(this.formLogin.value).subscribe({
+                next: data => {
+                    this.errorFound = false ;
+                    console.log(data.access_token) ;
+                    this.userService.setToken(data) ;
+                    this.connectUser(data) ;
+
+                }, error: error => {
+                    this.errorFound=true ;
+                    this._snackBar.open('Wrong email or password', 'Dismiss', {
+                        duration: 1000
+                    });
+                }
+            }
+        ) ;
+
+    }
+
+    connectUser(data:any){
+        this.userService.setConnectedUser(this.userService.getUserDetails());
+        this.router.navigate(['/']) ;
+    }
+
 }

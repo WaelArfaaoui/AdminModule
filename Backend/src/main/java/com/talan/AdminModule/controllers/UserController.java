@@ -27,21 +27,13 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> add(@RequestParam("firstname") String firstname,
-                                       @RequestParam("lastname") String lastname,
-                                       @RequestParam("email") String email,
-                                       @RequestParam("password") String password,
-                                       @RequestParam("phone") String phone,
-                                       @RequestParam("role") Role role,
+    public ResponseEntity<UserDto> add(@RequestBody UserDto dto,
                                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        if (userservice.findbyemail(email)!=null){
+        if (userservice.findbyemail(dto.getEmail())!=null){
             throw new RuntimeException("Email already exists");
         }
 
-        System.out.println("okay");
-
-        UserDto savedUser = userservice.addUser(firstname, lastname, email, password, phone, role, file);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return ResponseEntity.ok(userservice.addUser(dto , file));
     }
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable int id ,

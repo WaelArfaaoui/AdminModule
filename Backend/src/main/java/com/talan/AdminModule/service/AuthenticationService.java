@@ -34,6 +34,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
+        System.out.println(request.getEmail());
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         logger.info("User found ");
@@ -43,6 +44,7 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+
     }
 
 

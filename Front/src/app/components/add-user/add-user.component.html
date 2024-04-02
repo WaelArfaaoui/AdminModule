@@ -21,13 +21,13 @@
                 <!-- Phone number -->
                 <div class="col-md-6">
                   <label class="form-label">Phone number *</label>
-                  <input type="text" class="form-control" placeholder=""  formControlName="phoneNumber">
+                  <input type="text" class="form-control" placeholder=""  formControlName="phone">
                 </div>
                 <!-- Mobile number -->
                 <div class="col-md-6">
                   <label class="form-label">Company *</label>
                   <select class="form-control category-select" formControlName="company">
-                    <option *ngFor="let company of [ 'Bpi , Paris', 'Bpi , Marseille', 'Bpi , Lion']">{{company}} </option>
+                    <option *ngFor="let company of [ 'Talan , Paris', 'Talan , Marseille', 'Talan , Lion']">{{company}} </option>
                   </select>
                 </div>
                 <!-- Email -->
@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                   <label class="form-label">Role *</label>
                   <select class="form-control category-select" formControlName="role">
-                    <option *ngFor="let category of [ 'ADMIN', 'MANAGER', 'USER']">{{ category }}</option>
+                    <option *ngFor="let category of [ 'ADMIN', 'BUSINESSEXPERT', 'CONSULTANT']">{{ category }}</option>
                   </select>
                 </div>
                 <div class="col-md-6">
@@ -64,7 +64,7 @@
                     <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
                   </div>
                   <!-- Button -->
-                  <input type="file" id="customFile" name="file" hidden="">
+                  <input type="file" id="customFile" name="file" hidden="" formControlName="file">
                   <div class="upload-remove">
                     <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
                     <button type="button" class="btn btn-danger-soft">Remove</button>

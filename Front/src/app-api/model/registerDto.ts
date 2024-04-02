@@ -11,17 +11,16 @@
  */
 
 
-export interface UserDto { 
-    id?: number;
+export interface RegisterDto { 
     firstname?: string;
     lastname?: string;
+    password?: string;
     email?: string;
-    profileImagePath?: string;
+    company?: string;
     phone?: string;
-    role?: UserDto.RoleEnum;
-    error?: string;
+    role?: RegisterDto.RoleEnum;
 }
-export namespace UserDto {
+export namespace RegisterDto {
     export type RoleEnum = 'BUSINESSEXPERT' | 'ADMIN' | 'CONSULTANT';
     export const RoleEnum = {
         Businessexpert: 'BUSINESSEXPERT' as RoleEnum,

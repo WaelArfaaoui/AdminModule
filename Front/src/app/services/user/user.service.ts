@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {jwtDecode} from "jwt-decode";
 import {
     AuthenticationControllerService,
-    AuthenticationRequest, AuthenticationResponse,
-    UserControllerService, AddRequest
+    AuthenticationRequest,
+    RegisterDto,
+    UserControllerService,
 } from "../../../app-api";
-import {jwtDecode} from "jwt-decode";
 
 
 @Injectable({
@@ -30,7 +30,7 @@ export class UserService {
         return this.authenticationService.authenticate(authenticationRequest);
     }
 
-    addUser(addRequest: AddRequest) {
+    addUser(addRequest: RegisterDto) {
         return this.userService.add(addRequest);
     }
 
@@ -39,31 +39,15 @@ export class UserService {
         let decodedJwt: any = jwtDecode(this.token);
         console.log(decodedJwt) ;
         this.email = decodedJwt.sub;
-        this.roles = decodedJwt.role;
-        this.name = decodedJwt.sub;
-        this.id = decodedJwt.id;
         return {
-            'id': this.id,
             'email': this.email,
-            'roles': this.roles,
-            'name': this.name
         }
     }
 
     setConnectedUser(user: any): void {
         localStorage.setItem('connectedUser', JSON.stringify(user));
+        console.log(localStorage.getItem('connectedUser')) ;
     }
-
-    getConnectedUser() {
-        const storedUserString = localStorage.getItem('connectedUser');
-        if (storedUserString) {
-            const storedUser = JSON.parse(storedUserString);
-            return storedUser;
-        } else {
-            console.log('No user data found in localStorage');
-        }
-    }
-
 
     isUserLoggedAndAccessTokenValid(): boolean {
         const accessToken = localStorage.getItem('accessToken');
@@ -94,21 +78,12 @@ export class UserService {
 
 
     setToken(data: any) {
+        console.log("access token set")
         localStorage.setItem('accessToken', data['access_token']);
-    }
-
-    logout(): void {
-        localStorage.removeItem('connectedUser');
-        localStorage.removeItem('accessToken');
-        this.router.navigate(['/SignIn']);
     }
 
     getAllUsers() {
         return this.userService.getusers();
-    }
-
-    getUserByEmail(email:string) {
-        return this.userService.getUser(email) ;
     }
 
 }

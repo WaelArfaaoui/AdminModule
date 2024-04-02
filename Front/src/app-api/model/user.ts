@@ -22,12 +22,12 @@ export interface User {
     company?: string;
     phone?: string;
     role?: User.RoleEnum;
-    enabled?: boolean;
     authorities?: Array<GrantedAuthority>;
     username?: string;
     accountNonLocked?: boolean;
     accountNonExpired?: boolean;
     credentialsNonExpired?: boolean;
+    enabled?: boolean;
 }
 export namespace User {
     export type RoleEnum = 'BUSINESSEXPERT' | 'ADMIN' | 'CONSULTANT';

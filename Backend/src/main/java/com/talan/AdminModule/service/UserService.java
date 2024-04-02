@@ -3,6 +3,7 @@ package com.talan.AdminModule.service;
 
 import com.talan.AdminModule.config.ApplicationConfig;
 import com.talan.AdminModule.dto.ChangePassword;
+import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
 import com.talan.AdminModule.entities.Role;
 import com.talan.AdminModule.entities.User;
@@ -81,7 +82,7 @@ public class UserService {
         }
        return path;
     }
-public UserDto addUser(UserDto dto, MultipartFile file) throws IOException {
+public UserDto addUser(RegisterDto dto) throws IOException {
 
     var user = User.builder()
             .firstname(dto.getFirstname())
@@ -92,10 +93,10 @@ public UserDto addUser(UserDto dto, MultipartFile file) throws IOException {
             .password(passwordEncoder.encode(dto.getPassword()))
             .role(dto.getRole())
             .build();
-        if (file != null) {
-            String path = storeProfileImage(file);
-            user.setProfileImagePath(path);
-        }
+//        if (file != null) {
+//            String path = storeProfileImage(file);
+//            user.setProfileImagePath(path);
+//        }
 
         this.userRepository.save(user) ;
         return mapUserToDto(user);

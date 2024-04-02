@@ -33,7 +33,7 @@ describe 'UserControllerApi' do
   end
 
   # unit tests for add
-  # @param add_request 
+  # @param user_dto 
   # @param [Hash] opts the optional parameters
   # @return [UserDto]
   describe 'add test' do

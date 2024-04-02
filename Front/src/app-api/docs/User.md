@@ -13,12 +13,12 @@
 | **company** | **String** |  | [optional] |
 | **phone** | **String** |  | [optional] |
 | **role** | **String** |  | [optional] |
-| **enabled** | **Boolean** |  | [optional] |
 | **authorities** | [**Array&lt;GrantedAuthority&gt;**](GrantedAuthority.md) |  | [optional] |
 | **username** | **String** |  | [optional] |
 | **account_non_locked** | **Boolean** |  | [optional] |
 | **account_non_expired** | **Boolean** |  | [optional] |
 | **credentials_non_expired** | **Boolean** |  | [optional] |
+| **enabled** | **Boolean** |  | [optional] |
 
 ## Example
 
@@ -35,12 +35,12 @@ instance = OpenapiClient::User.new(
   company: null,
   phone: null,
   role: null,
-  enabled: null,
   authorities: null,
   username: null,
   account_non_locked: null,
   account_non_expired: null,
-  credentials_non_expired: null
+  credentials_non_expired: null,
+  enabled: null
 )
 ```
 

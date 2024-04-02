@@ -17,7 +17,6 @@ require 'openapi_client/version'
 require 'openapi_client/configuration'
 
 # Models
-require 'openapi_client/models/add_request'
 require 'openapi_client/models/authentication_request'
 require 'openapi_client/models/authentication_response'
 require 'openapi_client/models/change_password'

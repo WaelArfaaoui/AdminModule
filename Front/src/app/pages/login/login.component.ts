@@ -10,6 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
     formLogin!:FormGroup ;
     errorFound:boolean = false ;
 
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit {
         this.userService.login(this.formLogin.value).subscribe({
                 next: data => {
                     this.errorFound = false ;
-                    console.log(data.access_token) ;
+                    console.log(this.errorFound) ;
+                    console.log(data) ;
                     this.userService.setToken(data) ;
                     this.connectUser(data) ;
 

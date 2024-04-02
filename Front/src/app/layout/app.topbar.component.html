@@ -36,18 +36,18 @@
       <div class="user-info">
 
         <div class="user-details">
-          <div class="user-name">John Doe</div>
-          <div class="user-role">Administrator</div>
+          <div class="user-name">{{username}}</div>
+          <div class="user-role">{{role}}</div>
         </div>
         <p-avatar image="assets/demo/images/avatar/amyelsner.png" size="large" shape="circle" style="margin-left:25px !important;"></p-avatar>
 
       </div>
       <div class="separator"></div>
-      <div class="logout" [routerLink]="'/table'">
+      <div class="logout" [routerLink]="'/table'" (click)="getUserByEmail()">
         <i class="pi pi-user"></i> Profile
       </div>
       <div class="separator"></div>
-      <div class="logout">
+      <div class="logout" (click)="logout()">
         <i class="pi pi-sign-out"></i> Logout
       </div>
     </div>

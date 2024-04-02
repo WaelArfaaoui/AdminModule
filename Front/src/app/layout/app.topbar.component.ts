@@ -1,12 +1,14 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MenuItem, OverlayService} from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { OverlayPanel } from 'primeng/overlaypanel';
+import {UserControllerService} from "../../app-api";
+import {Router} from "@angular/router";
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnInit{
   dropdownVisible: boolean = false;
 
     items!: MenuItem[];
@@ -19,7 +21,7 @@ export class AppTopBarComponent {
 
   @ViewChild('overlayPanel') overlayPanel: OverlayPanel | undefined;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService ,private  router:Router , private userService:UserControllerService) { }
   toggleDropdown(event: Event) {
     this.dropdownVisible = !this.dropdownVisible;
     event.stopPropagation(); // Prevent event from bubbling up to document click listener
@@ -32,6 +34,8 @@ export class AppTopBarComponent {
   }
 
   // Close dropdown when clicking outside of it
+  username: any;
+  role: any;
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     const target = event.target as HTMLElement; // Explicitly cast event.target to HTMLElement
@@ -40,4 +44,32 @@ export class AppTopBarComponent {
     }
   }
 
+    logout() {
+        console.log("logout clicked !") ;
+        localStorage.clear() ;
+        this.router.navigate(['/signIn']) ;
+    }
+
+  getUserByEmail() {
+    const email = JSON.parse(localStorage.getItem('connectedUser') || '{}').email;
+    if (email) {
+      this.userService.getUser(email).subscribe(
+          (user) => {
+            console.log("User details:", user);
+            this.username = user.firstname;
+            this.role = user.role;
+          },
+          (error) => {
+            console.error("Error fetching user:", error);
+          }
+      );
+    } else {
+      console.error("Email is null or not found in localStorage");
+    }
+  }
+
+
+  ngOnInit(): void {
+    this.getUserByEmail() ;
+  }
 }

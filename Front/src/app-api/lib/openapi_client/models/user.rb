@@ -33,8 +33,6 @@ module OpenapiClient
 
     attr_accessor :role
 
-    attr_accessor :enabled
-
     attr_accessor :authorities
 
     attr_accessor :username
@@ -44,6 +42,8 @@ module OpenapiClient
     attr_accessor :account_non_expired
 
     attr_accessor :credentials_non_expired
+
+    attr_accessor :enabled
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -79,12 +79,12 @@ module OpenapiClient
         :'company' => :'company',
         :'phone' => :'phone',
         :'role' => :'role',
-        :'enabled' => :'enabled',
         :'authorities' => :'authorities',
         :'username' => :'username',
         :'account_non_locked' => :'accountNonLocked',
         :'account_non_expired' => :'accountNonExpired',
-        :'credentials_non_expired' => :'credentialsNonExpired'
+        :'credentials_non_expired' => :'credentialsNonExpired',
+        :'enabled' => :'enabled'
       }
     end
 
@@ -105,12 +105,12 @@ module OpenapiClient
         :'company' => :'String',
         :'phone' => :'String',
         :'role' => :'String',
-        :'enabled' => :'Boolean',
         :'authorities' => :'Array<GrantedAuthority>',
         :'username' => :'String',
         :'account_non_locked' => :'Boolean',
         :'account_non_expired' => :'Boolean',
-        :'credentials_non_expired' => :'Boolean'
+        :'credentials_non_expired' => :'Boolean',
+        :'enabled' => :'Boolean'
       }
     end
 
@@ -171,10 +171,6 @@ module OpenapiClient
         self.role = attributes[:'role']
       end
 
-      if attributes.key?(:'enabled')
-        self.enabled = attributes[:'enabled']
-      end
-
       if attributes.key?(:'authorities')
         if (value = attributes[:'authorities']).is_a?(Array)
           self.authorities = value
@@ -195,6 +191,10 @@ module OpenapiClient
 
       if attributes.key?(:'credentials_non_expired')
         self.credentials_non_expired = attributes[:'credentials_non_expired']
+      end
+
+      if attributes.key?(:'enabled')
+        self.enabled = attributes[:'enabled']
       end
     end
 
@@ -239,12 +239,12 @@ module OpenapiClient
           company == o.company &&
           phone == o.phone &&
           role == o.role &&
-          enabled == o.enabled &&
           authorities == o.authorities &&
           username == o.username &&
           account_non_locked == o.account_non_locked &&
           account_non_expired == o.account_non_expired &&
-          credentials_non_expired == o.credentials_non_expired
+          credentials_non_expired == o.credentials_non_expired &&
+          enabled == o.enabled
     end
 
     # @see the `==` method
@@ -256,7 +256,7 @@ module OpenapiClient
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, firstname, lastname, email, password, profile_image_path, company, phone, role, enabled, authorities, username, account_non_locked, account_non_expired, credentials_non_expired].hash
+      [id, firstname, lastname, email, password, profile_image_path, company, phone, role, authorities, username, account_non_locked, account_non_expired, credentials_non_expired, enabled].hash
     end
 
     # Builds the object from hash

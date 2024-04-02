@@ -12,14 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
-public class UserDto {
-    private Long id;
+public class RegisterDto {
     private String firstname;
     private String lastname;
+    private String password ;
     private String email;
-    private String profileImagePath;
+    private String company ;
     private String phone;
     private Role role;
-    private String error;
 }

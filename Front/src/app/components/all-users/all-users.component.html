@@ -1,3 +1,4 @@
+
 <div class="all-users" >
   <div class="container">
     <div class="row">
@@ -17,23 +18,22 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let user of users; let i = index">
+              <tr *ngFor="let user of userList; let i = index">
                 <td class="pl-4 item-id">{{ i + 1 }}</td>
                 <td>
-                  <h5 class="font-medium mb-0">{{ user.name }}</h5>
-                  <span class="text-muted">{{ user.location }}</span>
+                  <h5 class="font-medium mb-0">{{ user.firstname+" "+user.lastname }}</h5>
+                  <span class="text-muted">Talan , Tunisie</span>
                 </td>
                 <td>
-                  <span class="text-muted">{{ user.occupation }}</span><br>
-                  <span class="text-muted">{{ user.pastOccupation }}</span>
+                  <span class="text-muted">Engineer</span><br>
                 </td>
                 <td>
                   <span class="text-muted">{{ user.email }}</span><br>
-                  <span class="text-muted">{{ user.phone }}</span>
+                  <span class="text-muted">+216 - {{ user.phone }}</span>
                 </td>
                 <td>
-                  <span class="text-muted">{{ user.addedDate }}</span><br>
-                  <span class="text-muted">{{ user.addedTime }}</span>
+                  <span class="text-muted">12/10</span><br>
+                  <span class="text-muted">09:23</span>
                 </td>
                 <td>
                   <select class="form-control category-select">
@@ -41,9 +41,9 @@
                   </select>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle"><i class="fa fa-key"></i> </button>
-                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2"><i class="fa fa-trash"></i> </button>
-                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2"><i class="fa fa-edit"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle" ><i class="fa fa-key"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2" ><i class="fa fa-trash"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2" ><i class="fa fa-edit"></i> </button>
                 </td>
               </tr>
               </tbody>

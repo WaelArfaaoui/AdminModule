@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost:8090*
 
 ## add
 
-> <UserDto> add(add_request)
+> <UserDto> add(user_dto)
 
 
 
@@ -30,11 +30,11 @@ OpenapiClient.configure do |config|
 end
 
 api_instance = OpenapiClient::UserControllerApi.new
-add_request = OpenapiClient::AddRequest.new # AddRequest | 
+user_dto = OpenapiClient::UserDto.new # UserDto | 
 
 begin
   
-  result = api_instance.add(add_request)
+  result = api_instance.add(user_dto)
   p result
 rescue OpenapiClient::ApiError => e
   puts "Error when calling UserControllerApi->add: #{e}"
@@ -45,12 +45,12 @@ end
 
 This returns an Array which contains the response data, status code and headers.
 
-> <Array(<UserDto>, Integer, Hash)> add_with_http_info(add_request)
+> <Array(<UserDto>, Integer, Hash)> add_with_http_info(user_dto)
 
 ```ruby
 begin
   
-  data, status_code, headers = api_instance.add_with_http_info(add_request)
+  data, status_code, headers = api_instance.add_with_http_info(user_dto)
   p status_code # => 2xx
   p headers # => { ... }
   p data # => <UserDto>
@@ -63,7 +63,7 @@ end
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **add_request** | [**AddRequest**](AddRequest.md) |  |  |
+| **user_dto** | [**UserDto**](UserDto.md) |  |  |
 
 ### Return type
 

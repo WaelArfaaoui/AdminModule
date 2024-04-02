@@ -1,12 +1,14 @@
 package com.talan.AdminModule.controllers;
 
 import com.talan.AdminModule.dto.ChangePassword;
+import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
 import com.talan.AdminModule.entities.Role;
 import com.talan.AdminModule.entities.User;
 import com.talan.AdminModule.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.NonUniqueObjectException;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,8 @@ import java.util.List;
 public class UserController {
 
     private final UserService userservice;
+    private final ModelMapper modelMapper;
+
 
     @GetMapping()
     public List<UserDto> getusers() {
@@ -27,13 +31,12 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> add(@RequestBody UserDto dto,
-                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+    public ResponseEntity<UserDto> add(@RequestBody RegisterDto dto) throws IOException {
         if (userservice.findbyemail(dto.getEmail())!=null){
             throw new RuntimeException("Email already exists");
         }
 
-        return ResponseEntity.ok(userservice.addUser(dto , file));
+        return ResponseEntity.ok(userservice.addUser(dto));
     }
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable int id ,
@@ -66,8 +69,10 @@ public class UserController {
 
 
     @GetMapping("/get/{email}")
-    public User getUser(@PathVariable String email){
-        return userservice.findbyemail(email);
+    public ResponseEntity<UserDto> getUser(@PathVariable String email){
+        User user = this.userservice.findbyemail(email);
+        UserDto userDto = modelMapper.map(user, UserDto.class) ;
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

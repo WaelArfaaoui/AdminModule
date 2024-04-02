@@ -19,24 +19,24 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
-    # @param add_request [AddRequest] 
+    # @param user_dto [UserDto] 
     # @param [Hash] opts the optional parameters
     # @return [UserDto]
-    def add(add_request, opts = {})
-      data, _status_code, _headers = add_with_http_info(add_request, opts)
+    def add(user_dto, opts = {})
+      data, _status_code, _headers = add_with_http_info(user_dto, opts)
       data
     end
 
-    # @param add_request [AddRequest] 
+    # @param user_dto [UserDto] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(UserDto, Integer, Hash)>] UserDto data, response status code and response headers
-    def add_with_http_info(add_request, opts = {})
+    def add_with_http_info(user_dto, opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: UserControllerApi.add ...'
       end
-      # verify the required parameter 'add_request' is set
-      if @api_client.config.client_side_validation && add_request.nil?
-        fail ArgumentError, "Missing the required parameter 'add_request' when calling UserControllerApi.add"
+      # verify the required parameter 'user_dto' is set
+      if @api_client.config.client_side_validation && user_dto.nil?
+        fail ArgumentError, "Missing the required parameter 'user_dto' when calling UserControllerApi.add"
       end
       # resource path
       local_var_path = '/api/users/add'
@@ -58,7 +58,7 @@ module OpenapiClient
       form_params = opts[:form_params] || {}
 
       # http body (model)
-      post_body = opts[:debug_body] || @api_client.object_to_http_body(add_request)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(user_dto)
 
       # return_type
       return_type = opts[:debug_return_type] || 'UserDto'

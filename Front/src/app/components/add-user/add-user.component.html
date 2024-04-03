@@ -64,7 +64,7 @@
                     <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
                   </div>
                   <!-- Button -->
-                  <input type="file" id="customFile" name="file" hidden="" formControlName="file">
+                  <input type="file" id="customFile" name="file" hidden formControlName="file" (change)="onFileSelected($event)">
                   <div class="upload-remove">
                     <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
                     <button type="button" class="btn btn-danger-soft">Remove</button>
@@ -85,3 +85,4 @@
     </div>
   </div>
 </div>
+<p-toast></p-toast>

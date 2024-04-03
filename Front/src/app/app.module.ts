@@ -73,7 +73,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     SliderModule,
     ToggleButtonModule,
     ChartModule,
-      MatSnackBarModule,
+    ToastModule
 
   ],
   providers: [MessageService],

@@ -36,9 +36,9 @@
                   <span class="text-muted">09:23</span>
                 </td>
                 <td>
-                  <select class="form-control category-select">
-                    <option *ngFor="let category of [ 'Admin', 'Analyst', 'User']">{{ category }}</option>
-                  </select>
+                  <p class="form-control category-select">
+                    {{user.role}}
+                  </p>
                 </td>
                 <td>
                   <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle" ><i class="fa fa-key"></i> </button>

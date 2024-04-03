@@ -1,4 +1,4 @@
-package com.talan.AdminModule.config;
+package com.talan.AdminModule.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

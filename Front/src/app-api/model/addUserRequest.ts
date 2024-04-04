@@ -9,9 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RegisterDto } from './registerDto';
 
 
-export interface GrantedAuthority { 
-    authority?: string;
+export interface AddUserRequest { 
+    dto?: RegisterDto;
+    file: Blob;
 }
 

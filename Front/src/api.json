@@ -154,16 +154,27 @@
         "tags": [
           "user-controller"
         ],
-        "operationId": "add",
+        "operationId": "addUser",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterDto"
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "dto": {
+                    "$ref": "#/components/schemas/RegisterDto"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -328,6 +339,9 @@
             "type": "string"
           },
           "phone": {
+            "type": "string"
+          },
+          "company": {
             "type": "string"
           },
           "role": {

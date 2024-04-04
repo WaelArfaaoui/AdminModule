@@ -18,6 +18,7 @@ export interface UserDto {
     email?: string;
     profileImagePath?: string;
     phone?: string;
+    company?: string;
     role?: UserDto.RoleEnum;
     error?: string;
 }

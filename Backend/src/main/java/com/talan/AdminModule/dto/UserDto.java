@@ -20,6 +20,7 @@ public class UserDto {
     private String email;
     private String profileImagePath;
     private String phone;
+    private String company ;
     private Role role;
     private String error;
 }

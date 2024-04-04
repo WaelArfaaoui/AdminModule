@@ -2,10 +2,10 @@
   <div class="row">
     <div class="col-12">
 
-      <form class="file-upload"   (ngSubmit)="addUser()" [formGroup]="formSave">
-        <div class="row  gx-5">
+      <form class="file-upload" (ngSubmit)="addUser()" [formGroup]="formSave" enctype="multipart/form-data">
+        <div class="row gx-5">
           <!-- Contact detail -->
-          <div class="col-xxl-8   mb-xxl-0">
+          <div class="col-xxl-8 mb-xxl-0">
             <div class="bg-secondary-soft px-4 py-5 rounded">
               <div class="row g-3">
                 <!-- First Name -->
@@ -64,7 +64,7 @@
                     <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
                   </div>
                   <!-- Button -->
-                  <input type="file" id="customFile" name="file" hidden formControlName="file" (change)="onFileSelected($event)">
+                  <input type="file" id="customFile" name="file" hidden  (change)="onFileChange($event)">
                   <div class="upload-remove">
                     <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
                     <button type="button" class="btn btn-danger-soft">Remove</button>

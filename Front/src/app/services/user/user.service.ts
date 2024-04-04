@@ -3,11 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {jwtDecode} from "jwt-decode";
 import {
+    AddUserRequest,
     AuthenticationControllerService,
     AuthenticationRequest,
     RegisterDto,
-    UserControllerService,
+    UserControllerService, UserDto,
 } from "../../../app-api";
+import {Observable} from "rxjs";
 
 
 @Injectable({
@@ -19,7 +21,6 @@ export class UserService {
     email!: string;
     name!: string;
     id!: number;
-    roles!: any;
 
     constructor(private authenticationService: AuthenticationControllerService, private http: HttpClient,
                 private router: Router, private userService: UserControllerService
@@ -30,8 +31,12 @@ export class UserService {
         return this.authenticationService.authenticate(authenticationRequest);
     }
 
-    addUser(addRequest: RegisterDto) {
-        return this.userService.add(addRequest);
+    addUser(dto: any, file: File): Observable<UserDto> {
+        const formData: FormData = new FormData();
+        formData.append('file', file);
+        Object.keys(dto).forEach(key => formData.append(key, dto[key]));
+
+        return this.http.post<any>('http://localhost:8090/api/users/add', formData);
     }
 
     getUserDetails() {

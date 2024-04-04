@@ -19,9 +19,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { ChangePassword } from '../model/changePassword';
+import { AddUserRequest } from '../model/addUserRequest';
 // @ts-ignore
-import { RegisterDto } from '../model/registerDto';
+import { ChangePassword } from '../model/changePassword';
 // @ts-ignore
 import { UpdateRequest } from '../model/updateRequest';
 // @ts-ignore
@@ -167,17 +167,14 @@ export class UserControllerService {
     }
 
     /**
-     * @param registerDto
+     * @param addUserRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public add(registerDto: RegisterDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
-    public add(registerDto: RegisterDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
-    public add(registerDto: RegisterDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
-    public add(registerDto: RegisterDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (registerDto === null || registerDto === undefined) {
-            throw new Error('Required parameter registerDto was null or undefined when calling add.');
-        }
+    public addUser(addUserRequest?: AddUserRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
+    public addUser(addUserRequest?: AddUserRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
+    public addUser(addUserRequest?: AddUserRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
+    public addUser(addUserRequest?: AddUserRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -235,7 +232,7 @@ export class UserControllerService {
         return this.httpClient.request<UserDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: registerDto,
+                body: addUserRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

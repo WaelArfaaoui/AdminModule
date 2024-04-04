@@ -82,25 +82,24 @@ public class UserService {
         }
        return path;
     }
-public UserDto addUser(RegisterDto dto) throws IOException {
+    public UserDto addUser(RegisterDto dto, MultipartFile file) throws IOException {
+        String profileImagePath = null;
+        if (file != null && !file.isEmpty()) {
+            profileImagePath = storeProfileImage(file);
+        }
+        User user = User.builder()
+                .firstname(dto.getFirstname())
+                .lastname(dto.getLastname())
+                .email(dto.getEmail())
+                .company(dto.getCompany())
+                .phone(dto.getPhone())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .role(dto.getRole())
+                .profileImagePath(profileImagePath)
+                .build();
 
-    var user = User.builder()
-            .firstname(dto.getFirstname())
-            .lastname(dto.getLastname())
-            .email(dto.getEmail())
-            .company(dto.getCompany())
-            .phone(dto.getPhone())
-            .password(passwordEncoder.encode(dto.getPassword()))
-            .role(dto.getRole())
-            .build();
-//        if (file != null) {
-//            String path = storeProfileImage(file);
-//            user.setProfileImagePath(path);
-//        }
-
-        this.userRepository.save(user) ;
+        userRepository.save(user);
         return mapUserToDto(user);
-
     }
 public List<UserDto> getAll(){
         List<User>  users= userRepository.findAll();

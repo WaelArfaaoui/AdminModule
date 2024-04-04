@@ -3,8 +3,7 @@ import { UserService } from "../../services/user/user.service";
 import { Router } from "@angular/router";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MessageService } from 'primeng/api';
-import { UserDto } from "../../../app-api";
-import { FileUploadService } from '../../services/file-upload.service';
+import {AddUserRequest, RegisterDto, UserDto} from "../../../app-api";
 
 @Component({
   selector: 'app-add-user',
@@ -14,26 +13,26 @@ import { FileUploadService } from '../../services/file-upload.service';
 })
 export class AddUserComponent implements OnInit {
 
-  errorFound: boolean = false;
-  formSave!: FormGroup;
+    errorFound: boolean = false;
+    formSave!: FormGroup;
+    file!: File;
+    constructor(private userService: UserService,
+                private router: Router,
+                private fb: FormBuilder,
+                private messageService: MessageService) { }
+    ngOnInit(): void {
+        this.formSave = this.fb.group(
+            {
+                firstname : this.fb.control("") ,
+                lastname : this.fb.control("") ,
+                email : this.fb.control("") ,
+                phoneNumber : this.fb.control("") ,
+                company : this.fb.control("") ,
+                role : UserDto.RoleEnum.Admin ,
+                password : this.fb.control("") ,
 
-  constructor(private userService: UserService,
-              private router: Router,
-              private fb: FormBuilder,
-              private messageService: MessageService,
-              private fileUploadService: FileUploadService) { }
-
-  ngOnInit(): void {
-    this.formSave = this.fb.group({
-      firstname: this.fb.control(""),
-      lastname: this.fb.control(""),
-      email: this.fb.control(""),
-      phone: this.fb.control(""),
-      company: this.fb.control(""),
-      role: '',
-      password: this.fb.control(""),
-      file: null
-    });
+            }
+        ) ;
     this.formSave.get('role')!.valueChanges.subscribe((role: UserDto.RoleEnum) => {
       switch (role) {
         case UserDto.RoleEnum.Admin:
@@ -51,33 +50,26 @@ export class AddUserComponent implements OnInit {
     });
   }
 
-  addUser() {
-    const formData = new FormData();
-    formData.append('file', this.formSave.get('file')!.value);
-    formData.append('firstname', this.formSave.get('firstname')!.value);
-    formData.append('lastname', this.formSave.get('lastname')!.value);
-    formData.append('email', this.formSave.get('email')!.value);
-    formData.append('phone', this.formSave.get('phone')!.value);
-    formData.append('company', this.formSave.get('company')!.value);
-    formData.append('role', this.formSave.get('role')!.value);
-    formData.append('password', this.formSave.get('password')!.value);
+    addUser() {
+        if (this.formSave.invalid) {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill in all required fields' });
+            return;
+        }
 
-    this.fileUploadService.addUserWithFile(formData).subscribe({
-      next: data => {
-        this.router.navigate(['users']);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully added' });
-      },
-      error: error => {
-        this.errorFound = true;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add user' });
-      }
-    });
-  }
+        this.userService.addUser(this.formSave.value, this.file).subscribe({
+            next: data => {
+                this.router.navigate(['users']);
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully added' });
+            },
+            error: error => {
+                this.errorFound = true;
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add user' });
+            }
+        });
+    }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    this.formSave.patchValue({
-      file: file
-    });
-  }
+
+    onFileChange(event: any) {
+        this.file = event.target.files[0];
+    }
 }

@@ -1,3 +1,4 @@
+export * from './addUserRequest';
 export * from './authenticationRequest';
 export * from './authenticationResponse';
 export * from './changePassword';

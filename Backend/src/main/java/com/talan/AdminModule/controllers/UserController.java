@@ -31,12 +31,11 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> add(@RequestBody RegisterDto dto) throws IOException {
-        if (userservice.findbyemail(dto.getEmail())!=null){
-            throw new RuntimeException("Email already exists");
-        }
+    public ResponseEntity<UserDto> addUser(@ModelAttribute RegisterDto dto,
+                                           @RequestParam("file") MultipartFile file) throws IOException {
 
-        return ResponseEntity.ok(userservice.addUser(dto));
+        UserDto userDto = this.userservice.addUser(dto, file);
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable int id ,

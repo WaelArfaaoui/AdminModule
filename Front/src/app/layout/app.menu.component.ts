@@ -20,7 +20,7 @@ export class AppMenuComponent implements OnInit {
           {label: 'Rules', icon: 'pi pi-fw pi-list', routerLink: ['/rules']} ,
           {label: 'Add rule', icon: 'pi pi-fw pi-plus', routerLink: ['/addrule']},
           {label: 'Configuration table ', icon: 'pi pi-fw pi-table', routerLink: ['/configtable']},
-          {label: 'Add user ', icon: 'pi pi-fw pi-plus', routerLink: ['/adduser']}
+          {label: 'Add user ', icon: 'pi pi-fw pi-user-plus', routerLink: ['/adduser']}
         ]
       } ]
   }

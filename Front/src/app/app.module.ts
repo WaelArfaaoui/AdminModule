@@ -39,9 +39,12 @@ import { DashbordComponent } from './components/dashbord/dashbord.component';
 import {ChartModule} from "primeng/chart";
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { LockUserComponent } from './components/lock-user/lock-user.component';
+import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -73,7 +76,8 @@ import { UpdateUserComponent } from './components/update-user/update-user.compon
     SliderModule,
     ToggleButtonModule,
     ChartModule,
-    ToastModule
+    ToastModule ,
+    DialogModule
 
   ],
   providers: [MessageService],

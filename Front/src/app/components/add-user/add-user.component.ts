@@ -26,7 +26,7 @@ export class AddUserComponent implements OnInit {
                 firstname : this.fb.control("") ,
                 lastname : this.fb.control("") ,
                 email : this.fb.control("") ,
-                phoneNumber : this.fb.control("") ,
+                phone : this.fb.control("") ,
                 company : this.fb.control("") ,
                 role : UserDto.RoleEnum.Admin ,
                 password : this.fb.control("") ,

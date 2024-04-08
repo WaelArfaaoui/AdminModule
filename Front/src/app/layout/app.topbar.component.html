@@ -39,8 +39,11 @@
           <div class="user-name">{{username}}</div>
           <div class="user-role">{{role}}</div>
         </div>
-        <p-avatar image="assets/demo/images/avatar/amyelsner.png" size="large" shape="circle" style="margin-left:25px !important;"></p-avatar>
-
+        <div class="avatar-container">
+        <p-avatar size="large" shape="circle" class="custom-avatar">
+          <img src="{{profileImagePath}}" alt="Avatar Image">
+        </p-avatar>
+      </div>
       </div>
       <div class="separator"></div>
       <div class="logout" [routerLink]="'/table'" (click)="getUserByEmail()">

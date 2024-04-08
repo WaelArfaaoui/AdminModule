@@ -6259,3 +6259,13 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 
+.custom-avatar {
+  width: 100px; /* Width of the avatar */
+  height: 100px; /* Height of the avatar */
+}
+
+.custom-avatar img {
+  width: 100%; /* Ensure the image fills the avatar horizontally */
+  height: 100%; /* Ensure the image fills the avatar vertically */
+  object-fit: cover; /* Scale the image to cover the entire avatar */
+}

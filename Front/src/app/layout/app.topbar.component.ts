@@ -36,6 +36,7 @@ export class AppTopBarComponent implements OnInit{
   // Close dropdown when clicking outside of it
   username: any;
   role: any;
+  profileImagePath: string | undefined;
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     const target = event.target as HTMLElement; // Explicitly cast event.target to HTMLElement
@@ -58,6 +59,7 @@ export class AppTopBarComponent implements OnInit{
             console.log("User details:", user);
             this.username = user.firstname;
             this.role = user.role;
+            this.profileImagePath=user.profileImagePath;
           },
           (error) => {
             console.error("Error fetching user:", error);

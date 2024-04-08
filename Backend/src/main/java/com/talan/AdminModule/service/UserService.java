@@ -66,7 +66,7 @@ public class UserService {
             String fileName = StringUtils.cleanPath(profileImage.getOriginalFilename());
             String currentDir = System.getProperty("user.dir");
             Path uploadDir = Paths.get(currentDir,"Front", "src","assets","demo","images", "user-profiles");
-            Path storeDir = Paths.get("images","user-profiles",fileName);
+            Path storeDir = Paths.get("assets","demo","images","user-profiles",fileName);
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }

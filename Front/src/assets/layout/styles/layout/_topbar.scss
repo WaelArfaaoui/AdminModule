@@ -52,6 +52,12 @@
   .user-details {
     display: flex;
     flex-direction: column;
+    margin-right: auto; /* Push avatar to the right */
+
+  }
+  .avatar-container {
+    margin-left: auto; /* Push user details to the left */
+    margin-right: 10px; /* Add some spacing between avatar and user details */
   }
 
   .user-name {

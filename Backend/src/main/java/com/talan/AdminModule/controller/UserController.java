@@ -66,7 +66,7 @@ public class UserController {
 
 
 
-    @GetMapping("/get/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<UserDto> getUser(@PathVariable String email){
         User user = this.userservice.findbyemail(email);
         UserDto userDto = modelMapper.map(user, UserDto.class) ;

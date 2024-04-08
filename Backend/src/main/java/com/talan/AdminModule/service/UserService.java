@@ -1,13 +1,12 @@
 package com.talan.AdminModule.service;
 
 
-import com.talan.AdminModule.config.ApplicationConfig;
 import com.talan.AdminModule.dto.ChangePassword;
 import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
-import com.talan.AdminModule.entities.Role;
-import com.talan.AdminModule.entities.User;
-import com.talan.AdminModule.repositories.UserRepository;
+import com.talan.AdminModule.entity.Role;
+import com.talan.AdminModule.entity.User;
+import com.talan.AdminModule.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

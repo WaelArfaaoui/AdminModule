@@ -1,7 +1,7 @@
 package com.talan.AdminModule.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.talan.AdminModule.entities.Role;
+import com.talan.AdminModule.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

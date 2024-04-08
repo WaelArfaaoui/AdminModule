@@ -1,9 +1,7 @@
 package com.talan.AdminModule.config;
 
 
-import com.talan.AdminModule.dto.UserDto;
-import com.talan.AdminModule.entities.User;
-import com.talan.AdminModule.repositories.UserRepository;
+import com.talan.AdminModule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

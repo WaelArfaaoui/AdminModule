@@ -1,13 +1,12 @@
-package com.talan.AdminModule.controllers;
+package com.talan.AdminModule.controller;
 
 import com.talan.AdminModule.dto.ChangePassword;
 import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
-import com.talan.AdminModule.entities.Role;
-import com.talan.AdminModule.entities.User;
+import com.talan.AdminModule.entity.Role;
+import com.talan.AdminModule.entity.User;
 import com.talan.AdminModule.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.NonUniqueObjectException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class UserController {
         return userservice.getAll();
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<UserDto> addUser(@ModelAttribute RegisterDto dto,
                                            @RequestParam("file") MultipartFile file) throws IOException {
 

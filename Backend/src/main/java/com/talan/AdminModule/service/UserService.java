@@ -8,9 +8,9 @@ import com.talan.AdminModule.entity.Role;
 import com.talan.AdminModule.entity.User;
 import com.talan.AdminModule.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,11 +28,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
-    private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    @Autowired
+    private  ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
     public UserDto mapUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }

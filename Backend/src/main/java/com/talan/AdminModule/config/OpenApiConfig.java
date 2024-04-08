@@ -12,12 +12,9 @@ import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
         info = @Info(
-                contact = @Contact(
-                        name = "Wael Arfaoui",
-                        email = "wael.arfaoui@talan.com"
-                ),
+
                 description = "OpenApi documentation for Admin Module Demo",
-                title = "OpenApi specification - Arfaoui",
+                title = "OpenApi specification ",
                 version = "1.0",
                 license = @License(
                         name = "Licence name"

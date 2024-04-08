@@ -7,7 +7,7 @@ import com.talan.AdminModule.dto.AuthenticationResponse;
 import com.talan.AdminModule.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,10 +19,9 @@ import java.io.IOException;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class AuthenticationController {
-
-  private final AuthenticationService authenticationService;
+@Autowired
+  private AuthenticationService authenticationService;
 
 
   @PostMapping("/authenticate")

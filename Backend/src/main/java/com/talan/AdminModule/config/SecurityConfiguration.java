@@ -25,7 +25,7 @@ public class SecurityConfiguration {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private LogoutHandler logoutHandler;
-    private static final String[] WHITE_LIST_URL = {"/api/auth/**",
+    private static final String[] WHITE_LIST_URL = {"/api/**","/api/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",

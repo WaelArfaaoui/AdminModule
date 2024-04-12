@@ -20,11 +20,12 @@ import java.io.IOException;
 @Service
 public class AuthenticationService {
     @Autowired
-    private  UserRepository repository;
+    private UserRepository repository;
     @Autowired
-    private  JwtService jwtService;
+    private JwtService jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 

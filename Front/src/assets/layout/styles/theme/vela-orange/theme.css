@@ -780,11 +780,9 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 
 .p-dropdown {
   background: #ffffff;
-  border: 1px solid #dee2e6;
-  border-width: 0 0 1px 0;
-  border-radius:6px
+  border: 1px solid #d1d5db;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 3px;
+  border-radius: 6px;
 }
 .p-dropdown:not(.p-disabled):hover {
   border-color: #FFD54F;
@@ -1869,11 +1867,11 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 3px;
 }
-.p-button:enabled:hover {
+/*.p-button:enabled:hover {
   background: #ffcd2e;
   color: #212529;
   border-color: #ffcd2e;
-}
+}*/
 .p-button:enabled:active {
   background: #ffc50c;
   color: #212529;
@@ -2255,9 +2253,9 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-button.p-button-danger, .p-buttonset.p-button-danger > .p-button, .p-splitbutton.p-button-danger > .p-button {
-  color: #121212;
-  background: #F48FB1;
-  border: 1px solid #F48FB1;
+  color: white;
+  background: #d9534f;
+  border: 1px solid #d9534f;
 }
 .p-button.p-button-danger:enabled:hover, .p-buttonset.p-button-danger > .p-button:enabled:hover, .p-splitbutton.p-button-danger > .p-button:enabled:hover {
   background: #f16c98;
@@ -3524,6 +3522,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-paginator .p-dropdown .p-dropdown-label {
   padding-right: 0;
 }
+
 .p-paginator .p-paginator-page-input {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -6085,8 +6084,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #121212;
 }
 .p-badge.p-badge-info {
-  background-color: #81D4FA;
-  color: #121212;
+  background-color: rgba(3, 47, 68, 0.83);
+  color: #f6f1f1;
 }
 .p-badge.p-badge-warning {
   background-color: #FFE082;
@@ -6259,13 +6258,3 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 
-.custom-avatar {
-  width: 100px; /* Width of the avatar */
-  height: 100px; /* Height of the avatar */
-}
-
-.custom-avatar img {
-  width: 100%; /* Ensure the image fills the avatar horizontally */
-  height: 100%; /* Ensure the image fills the avatar vertically */
-  object-fit: cover; /* Scale the image to cover the entire avatar */
-}

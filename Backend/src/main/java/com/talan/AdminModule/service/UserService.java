@@ -4,12 +4,9 @@ package com.talan.AdminModule.service;
 import com.talan.AdminModule.dto.ChangePassword;
 import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
-import com.talan.AdminModule.entity.Role;
 import com.talan.AdminModule.entity.User;
 import com.talan.AdminModule.repository.UserRepository;
-
 import org.modelmapper.ModelMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -81,7 +78,7 @@ public class UserService {
                 throw new IOException("Could not store file " + fileName + ". Please try again!", ex);
             }
         }
-       return path;
+        return path;
     }
     public UserDto addUser(RegisterDto dto, MultipartFile file) throws IOException {
         String profileImagePath = null;
@@ -102,47 +99,53 @@ public class UserService {
         userRepository.save(user);
         return mapUserToDto(user);
     }
-public List<UserDto> getAll(){
+    public List<UserDto> getAll(){
         List<User>  users= userRepository.findAll();
-    return users.stream()
-            .map(this::mapUserToDto)
-            .collect(Collectors.toList());
-}
-public void delete (int id){
-      User user =  userRepository.findById(id).orElse(null);
-    userRepository.delete(user);
-}
-public UserDto update(int id,String firstname,String lastname, String email, String password, String phone, Role role, MultipartFile file) throws IOException {
+        return users.stream()
+                .map(this::mapUserToDto)
+                .collect(Collectors.toList());
+    }
+    public void delete (int id){
+        User user =  userRepository.findById(id).orElse(null);
+        userRepository.delete(user);
+    }
+    public UserDto update(int id, RegisterDto dto, MultipartFile file) throws IOException {
         User user = userRepository.findById(id).orElse(null);
-        if (firstname!=null){
-            user.setFirstname(firstname);
+        if (user == null) {
+            return null;
         }
-    if (lastname!=null){
-        user.setLastname(lastname);
+
+        if (dto.getFirstname() != null) {
+            user.setFirstname(dto.getFirstname());
+        }
+        if (dto.getLastname() != null) {
+            user.setLastname(dto.getLastname());
+        }
+        if (dto.getEmail() != null) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        if (dto.getPhone() != null) {
+            user.setPhone(dto.getPhone());
+        }
+        if (dto.getRole() != null) {
+            user.setRole(dto.getRole());
+        }
+        if (file != null && !file.isEmpty()) {
+            String profileImagePath = storeProfileImage(file);
+            user.setProfileImagePath(profileImagePath);
+        }
+
+        userRepository.save(user);
+        return mapUserToDto(user);
     }
-        if (email!=null){
-            user.setEmail(email);
-        }
-        if (password!=null){
-            user.setPassword(passwordEncoder.encode(password));
-        }
-        if (phone!=null){
-            user.setPhone(phone);
-        }
-        if (role!=null){
-            user.setRole(role);
-        }
-    if(file!=null){
-        String path = storeProfileImage(file);
-        user.setProfileImagePath(path);
+
+    public User findbyemail(String email)
+    {
+        return userRepository.findByEmail(email).orElse(null);
     }
-    userRepository.save(user);
-    return   mapUserToDto(user);
-}
-public User findbyemail(String email)
-{
-    return userRepository.findByEmail(email).orElse(null);
-}
 
 
 }

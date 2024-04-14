@@ -30,6 +30,10 @@
                       <label class="form-label">Attribute percentage *</label>
                       <input type="text" class="form-control inp-control" formControlName="percentage" placeholder="">
                     </div>
+                    <div>
+                      <label class="form-label">Attribute value *</label>
+                      <input type="text" class="form-control inp-control" formControlName="percentage" placeholder="">
+                    </div>
                     <div class=" mt-4 ">
                       <button *ngIf="j === getAttributeControls().length - 1" (click)="addAttribute()" class="btn btn-success btn-config mt-2"><i class="pi pi-fw pi-plus "></i>Add attribute</button>
                       <button *ngIf="j !== getAttributeControls().length - 1" (click)="removeAttribute(j)" class="btn btn-danger btn-config mt-2"><i class="pi pi-fw pi-times-circle"></i>Delete attribute</button>

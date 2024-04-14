@@ -43,6 +43,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { LockUserComponent } from './components/lock-user/lock-user.component';
 import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 import {AvatarModule} from "primeng/avatar";
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {InterceptorService} from "./services/interceptor/interceptor.service";
 
 @NgModule({
   declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent],
@@ -82,7 +84,11 @@ import {AvatarModule} from "primeng/avatar";
         AvatarModule
 
     ],
-  providers: [MessageService],
+  providers: [MessageService,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: InterceptorService,
+    multi: true,
+  },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

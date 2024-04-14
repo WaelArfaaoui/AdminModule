@@ -9,7 +9,8 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 export class NewRuleComponent implements OnInit {
 
   attributeForm!: FormGroup;
-  attributes: string[] = ['Attribute 1', 'Attribute 2', 'Attribute 3']; // Sample attribute names
+  attributes: string[] = ['Attribute 1', 'Attribute 2', 'Attribute 3'];
+  categories: string[] = ['Category 1', 'Category 2', 'Category 3'];
 
   constructor(private fb: FormBuilder) { }
 

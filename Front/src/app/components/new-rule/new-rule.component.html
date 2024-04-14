@@ -11,6 +11,12 @@
                   <label class="form-label">Rule name *</label>
                   <input type="text" class="form-control" placeholder="">
                 </div>
+                <div class="col-md-6">
+                  <label class="form-label">Rule category *</label>
+                  <select type="text" class="form-control" placeholder="">
+                    <option *ngFor="let cat of categories">{{cat}}</option>
+                  </select>
+                </div>
                 <div class="col-md-6 desc-dis">
                   <label class="form-label">Rule description *</label>
                   <textarea class="form-control" placeholder=""></textarea>

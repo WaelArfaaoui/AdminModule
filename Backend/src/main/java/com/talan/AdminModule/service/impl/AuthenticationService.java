@@ -1,4 +1,4 @@
-package com.talan.AdminModule.service;
+package com.talan.AdminModule.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.AdminModule.config.JwtService;

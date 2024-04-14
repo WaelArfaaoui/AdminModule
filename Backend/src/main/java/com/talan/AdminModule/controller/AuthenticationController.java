@@ -4,7 +4,7 @@ package com.talan.AdminModule.controller;
 
 import com.talan.AdminModule.dto.AuthenticationRequest;
 import com.talan.AdminModule.dto.AuthenticationResponse;
-import com.talan.AdminModule.service.AuthenticationService;
+import com.talan.AdminModule.service.impl.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

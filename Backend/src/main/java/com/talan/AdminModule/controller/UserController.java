@@ -4,7 +4,7 @@ import com.talan.AdminModule.dto.ChangePassword;
 import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
 import com.talan.AdminModule.entity.User;
-import com.talan.AdminModule.service.UserService;
+import com.talan.AdminModule.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

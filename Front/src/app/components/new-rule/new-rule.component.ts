@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-new-rule',
@@ -9,10 +10,13 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 export class NewRuleComponent implements OnInit {
 
   attributeForm!: FormGroup;
-  attributes: string[] = ['Attribute 1', 'Attribute 2', 'Attribute 3'];
-  categories: string[] = ['Category 1', 'Category 2', 'Category 3'];
+  attributes: string[] = ['Color', 'Size', 'Position'];
+  categories: string[] = ['Vehicles', 'Real Estate', 'Industrial'];
+  selectedCategory: any;
+  selectedAttribute: any;
 
-  constructor(private fb: FormBuilder) { }
+
+  constructor(private fb: FormBuilder , private messageService:MessageService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -46,6 +50,25 @@ export class NewRuleComponent implements OnInit {
 
   getAttributeControls() {
     return (this.attributeForm.get('attributes') as FormArray).controls;
+  }
+
+  onSubmit() {
+    let sum = 0;
+    const controls = this.getAttributeControls();
+    for (let control of controls) {
+      const percentage = parseInt(control.value.percentage);
+      if (!isNaN(percentage)) {
+        sum += percentage;
+      }
+    }
+    if (sum !== 100) {
+      console.log("ok")
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Sum of attribute percentages must be equal to 100' });
+
+    } else {
+      // Form submission logic here
+      console.log('Form submitted successfully');
+    }
   }
 
 }

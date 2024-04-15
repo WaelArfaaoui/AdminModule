@@ -2,43 +2,45 @@
 <div class="container add-rule pb-3">
   <div class="row">
     <div class="col-12">
-      <form [formGroup]="attributeForm">
+      <form [formGroup]="attributeForm" (ngSubmit)="onSubmit()">
         <div class="row gx-5">
           <div class="col-xxl-8 mb-xxl-0">
             <div class="bg-secondary-soft px-4 mt-3 rounded">
               <div class="row g-3 comp-dis">
                 <div class="col-md-6">
                   <label class="form-label">Rule name *</label>
-                  <input type="text" class="form-control" placeholder="">
+                  <input type="text" class="form-control" placeholder="" required>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label">Rule category *</label>
-                  <select type="text" class="form-control" placeholder="">
-                    <option *ngFor="let cat of categories">{{cat}}</option>
-                  </select>
+                  <div class="form-group">
+                    <label class="form-label">Rule category *</label>
+                    <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" placeholder="Select a Category" [editable]="true" optionLabel="name" ></p-dropdown>
+                  </div>
+
                 </div>
                 <div class="col-md-6 desc-dis">
                   <label class="form-label">Rule description *</label>
-                  <textarea class="form-control" placeholder=""></textarea>
+                  <textarea class="form-control" placeholder="" required></textarea>
                 </div>
               </div>
 
               <div class="col-md-6 sel-config " formArrayName="attributes">
                 <div *ngFor="let i of getAttributeControls(); let j = index" class="attr-config">
                   <div [formGroupName]="j" class="info-control mt-4">
-                    <div>
-                      <label class="form-label">Attribute name *</label>
-                      <select class="form-control inp-control" formControlName="name">
-                        <option *ngFor="let attr of attributes">{{attr}}</option>
-                      </select>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label">Attribute name *</label>
+                        <p-dropdown [options]="attributes" [(ngModel)]="selectedAttribute" placeholder="Select an attribute" [editable]="true" optionLabel="name" ></p-dropdown>
+                      </div>
+
                     </div>
                     <div>
                       <label class="form-label">Attribute percentage *</label>
-                      <input type="text" class="form-control inp-control" formControlName="percentage" placeholder="">
+                      <input type="text" class="form-control inp-control" formControlName="percentage" placeholder="" required>
                     </div>
                     <div>
                       <label class="form-label">Attribute value *</label>
-                      <input type="text" class="form-control inp-control" formControlName="percentage" placeholder="">
+                      <input type="text" class="form-control inp-control" formControlName="percentage" placeholder="" required>
                     </div>
                     <div class=" mt-4 ">
                       <button *ngIf="j === getAttributeControls().length - 1" (click)="addAttribute()" class="btn btn-success btn-config mt-2"><i class="pi pi-fw pi-plus "></i>Add attribute</button>
@@ -51,7 +53,7 @@
           </div>
         </div>
         <div class="gap-3 d-md-flex justify-content-md-end text-center">
-          <button type="submit" class="btn save-conf ">Save rule</button>
+          <button type="submit" class="btn save-conf">Save rule</button>
         </div>
       </form>
     </div>

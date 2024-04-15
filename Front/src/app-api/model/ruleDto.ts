@@ -11,8 +11,15 @@
  */
 
 
-export interface AuthenticationRequest { 
-    email?: string;
-    password?: string;
+export interface RuleDto { 
+    id?: number;
+    name?: string;
+    description?: string;
+    category?: string;
+    enabled?: boolean;
+    createDate?: string;
+    lastModified?: string;
+    createdBy?: number;
+    lastModifiedBy?: number;
 }
 

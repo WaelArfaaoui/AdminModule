@@ -2,8 +2,8 @@ import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/c
 import {MenuItem, OverlayService} from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { OverlayPanel } from 'primeng/overlaypanel';
-import {UserControllerService} from "../../app-api";
 import {Router} from "@angular/router";
+import {UserControllerService} from "../../app-api/api/userController.service";
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'

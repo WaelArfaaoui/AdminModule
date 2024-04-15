@@ -11,8 +11,8 @@
  */
 
 
-export interface AuthenticationRequest { 
-    email?: string;
-    password?: string;
+export interface CategoryDto { 
+    id?: number;
+    name?: string;
 }
 

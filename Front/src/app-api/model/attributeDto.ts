@@ -11,8 +11,10 @@
  */
 
 
-export interface AuthenticationRequest { 
-    email?: string;
-    password?: string;
+export interface AttributeDto { 
+    id?: number;
+    name?: string;
+    percentage?: number;
+    value?: number;
 }
 

@@ -81,7 +81,7 @@ import {InterceptorService} from "./services/interceptor/interceptor.service";
         ChartModule,
         ToastModule,
         DialogModule,
-        AvatarModule
+        AvatarModule ,
 
     ],
   providers: [MessageService,{

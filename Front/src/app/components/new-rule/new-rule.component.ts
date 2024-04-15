@@ -10,11 +10,10 @@ import { MessageService } from 'primeng/api';
 export class NewRuleComponent implements OnInit {
 
   attributeForm!: FormGroup;
-  attributes: string[] = ['Color', 'Size', 'Position'];
-  categories: string[] = ['Vehicles', 'Real Estate', 'Industrial'];
-  selectedCategory: any;
-  selectedAttribute: any;
-
+  attributes!: string[]  ;
+  categories!: string[]  ;
+  selectedCategory!: string;
+  selectedAttribute!: string ;
 
   constructor(private fb: FormBuilder , private messageService:MessageService) { }
 

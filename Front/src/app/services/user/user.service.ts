@@ -7,9 +7,10 @@ import {
     AuthenticationControllerService,
     AuthenticationRequest,
     RegisterDto,
-    UserControllerService, UserDto,
+     UserDto,
 } from "../../../app-api";
 import {Observable} from "rxjs";
+ import {UserControllerService} from "../../../app-api/api/userController.service";
 
 
 @Injectable({

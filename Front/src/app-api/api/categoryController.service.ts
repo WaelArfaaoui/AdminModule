@@ -145,14 +145,14 @@ export class CategoryControllerService {
             localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -215,14 +215,14 @@ export class CategoryControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -285,14 +285,14 @@ export class CategoryControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -351,14 +351,14 @@ export class CategoryControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -421,14 +421,14 @@ export class CategoryControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 

@@ -1,19 +1,19 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AppLayoutModule } from './layout/app.layout.module';
-import { MatInputModule } from '@angular/material/input';
-import { MatStepperModule } from '@angular/material/stepper';
-import {FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { ToastModule } from 'primeng/toast';
-import { StepsModule } from 'primeng/steps';
-import { MessageService } from 'primeng/api';
-import { AllUsersComponent } from './components/all-users/all-users.component';
-import { CheckboxModule } from 'primeng/checkbox';
-import { PasswordModule } from 'primeng/password';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {AppLayoutModule} from './layout/app.layout.module';
+import {MatInputModule} from '@angular/material/input';
+import {MatStepperModule} from '@angular/material/stepper';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {ToastModule} from 'primeng/toast';
+import {StepsModule} from 'primeng/steps';
+import {MessageService} from 'primeng/api';
+import {AllUsersComponent} from './components/all-users/all-users.component';
+import {CheckboxModule} from 'primeng/checkbox';
+import {PasswordModule} from 'primeng/password';
 import {CommonModule} from "@angular/common";
 import {TableModule} from "primeng/table";
 import {FileUploadModule} from "primeng/fileupload";
@@ -27,27 +27,28 @@ import {DropdownModule} from "primeng/dropdown";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {InputNumberModule} from "primeng/inputnumber";
 import {DialogModule} from "primeng/dialog";
-import {Overlay, OverlayModule} from "primeng/overlay";
-import { AllRulesComponent } from './components/all-rules/all-rules.component';
-import { NewRuleComponent } from './components/new-rule/new-rule.component';
+import {OverlayModule} from "primeng/overlay";
+import {AllRulesComponent} from './components/all-rules/all-rules.component';
+import {NewRuleComponent} from './components/new-rule/new-rule.component';
 import {MultiSelectModule} from "primeng/multiselect";
 import {SliderModule} from "primeng/slider";
 import {ToggleButtonModule} from "primeng/togglebutton";
-import { LoginComponent } from './pages/login/login.component';
-import { ParamTableComponent } from './components/param-table/param-table.component';
-import { DashbordComponent } from './components/dashbord/dashbord.component';
+import {LoginComponent} from './pages/login/login.component';
+import {ParamTableComponent} from './components/param-table/param-table.component';
+import {DashbordComponent} from './components/dashbord/dashbord.component';
 import {ChartModule} from "primeng/chart";
-import { AddUserComponent } from './components/add-user/add-user.component';
-import { UpdateUserComponent } from './components/update-user/update-user.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import { LockUserComponent } from './components/lock-user/lock-user.component';
-import { DeleteUserComponent } from './components/delete-user/delete-user.component';
+import {AddUserComponent} from './components/add-user/add-user.component';
+import {UpdateUserComponent} from './components/update-user/update-user.component';
+import {LockUserComponent} from './components/lock-user/lock-user.component';
+import {DeleteUserComponent} from './components/delete-user/delete-user.component';
 import {AvatarModule} from "primeng/avatar";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {InterceptorService} from "./services/interceptor/interceptor.service";
+import {PaginatorModule} from "primeng/paginator";
+import { DisableRuleComponent } from './components/disable-rule/disable-rule.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -62,7 +63,6 @@ import {InterceptorService} from "./services/interceptor/interceptor.service";
         PasswordModule,
         FormsModule,
         CommonModule,
-        TableModule,
         FileUploadModule,
         ButtonModule,
         ToolbarModule,
@@ -81,7 +81,9 @@ import {InterceptorService} from "./services/interceptor/interceptor.service";
         ChartModule,
         ToastModule,
         DialogModule,
-        AvatarModule ,
+        AvatarModule,
+        TableModule,
+        PaginatorModule
 
     ],
   providers: [MessageService,{

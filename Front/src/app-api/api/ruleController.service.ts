@@ -19,9 +19,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { RuleDto } from '../model/ruleDto';
+import { PageRuleDto } from '../model/pageRuleDto';
 // @ts-ignore
-import { SaveRuleRequest } from '../model/saveRuleRequest';
+import { RuleDto } from '../model/ruleDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -137,14 +137,14 @@ export class RuleControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -163,13 +163,25 @@ export class RuleControllerService {
     }
 
     /**
+     * @param page
+     * @param size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAllRules(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<RuleDto>>;
-    public findAllRules(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<RuleDto>>>;
-    public findAllRules(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<RuleDto>>>;
-    public findAllRules(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public findAllRules(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<PageRuleDto>;
+    public findAllRules(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageRuleDto>>;
+    public findAllRules(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageRuleDto>>;
+    public findAllRules(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (size !== undefined && size !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>size, 'size');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -203,21 +215,22 @@ export class RuleControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
         let localVarPath = `/api/rules`;
-        return this.httpClient.request<Array<RuleDto>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PageRuleDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -273,14 +286,14 @@ export class RuleControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -299,16 +312,16 @@ export class RuleControllerService {
     }
 
     /**
-     * @param saveRuleRequest
+     * @param ruleDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public saveRule(saveRuleRequest: SaveRuleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<RuleDto>;
-    public saveRule(saveRuleRequest: SaveRuleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RuleDto>>;
-    public saveRule(saveRuleRequest: SaveRuleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RuleDto>>;
-    public saveRule(saveRuleRequest: SaveRuleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (saveRuleRequest === null || saveRuleRequest === undefined) {
-            throw new Error('Required parameter saveRuleRequest was null or undefined when calling saveRule.');
+    public saveRule(ruleDto: RuleDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<RuleDto>;
+    public saveRule(ruleDto: RuleDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RuleDto>>;
+    public saveRule(ruleDto: RuleDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RuleDto>>;
+    public saveRule(ruleDto: RuleDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (ruleDto === null || ruleDto === undefined) {
+            throw new Error('Required parameter ruleDto was null or undefined when calling saveRule.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -352,14 +365,14 @@ export class RuleControllerService {
             localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -367,7 +380,7 @@ export class RuleControllerService {
         return this.httpClient.request<RuleDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: saveRuleRequest,
+                body: ruleDto,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -433,14 +446,14 @@ export class RuleControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 
@@ -514,14 +527,14 @@ export class RuleControllerService {
         }
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        let responseType_: 'text' | 'json'  = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
             } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
                 responseType_ = 'json';
             } else {
-                responseType_ = 'blob';
+
             }
         }
 

@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AttributeDto } from './attributeDto';
 
 
 export interface RuleDto { 
@@ -21,5 +22,6 @@ export interface RuleDto {
     lastModified?: string;
     createdBy?: number;
     lastModifiedBy?: number;
+    attributeDtos?: Array<AttributeDto>;
 }
 

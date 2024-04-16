@@ -18,9 +18,11 @@ model/authenticationResponse.ts
 model/categoryDto.ts
 model/changePassword.ts
 model/models.ts
+model/pageRuleDto.ts
+model/pageableObject.ts
 model/registerDto.ts
 model/ruleDto.ts
-model/saveRuleRequest.ts
+model/sortObject.ts
 model/updateUserRequest.ts
 model/userDto.ts
 param.ts

@@ -9,15 +9,20 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of data">
-      <td>{{ item.name }}</td>
-      <td>{{ item.description }}</td>
-      <td>{{ item.createdDate | date: 'dd/MM/yyyy' }}</td>
-      <td [ngStyle]="{'color': item.enabled ? 'green' : 'red'}">
-        {{ item.enabled ? 'Enabled' : 'Disabled' }}
+    <tr *ngFor="let rule of rules">
+      <td>{{ rule.name }}</td>
+      <td>{{ rule.description }}</td>
+      <td>{{ rule.createDate | date: 'dd/MM/yyyy' }}</td>
+      <td [ngStyle]="{'color': rule.enabled ? 'green' : 'red'}">
+        {{ rule.enabled ? 'Enabled' : 'Disabled' }}
       </td>
-      <td class="primary details" >Details</td>
+      <td class="primary details" >
+          <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning"></button>
+          <button pButton type="button" icon="pi pi-lock" class="p-button-danger" ></button>
+      </td>
     </tr>
     </tbody>
   </table>
+    <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="120" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+
 </div>

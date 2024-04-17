@@ -47,9 +47,10 @@ import {InterceptorService} from "./services/interceptor/interceptor.service";
 import {PaginatorModule} from "primeng/paginator";
 import { DisableRuleComponent } from './components/disable-rule/disable-rule.component';
 import {DialogService} from "primeng/dynamicdialog";
+import { UpdateRuleComponent } from './components/update-rule/update-rule.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

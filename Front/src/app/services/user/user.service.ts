@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { jwtDecode } from "jwt-decode";
 import { AuthenticationControllerService, AuthenticationRequest, RegisterDto, UserDto } from "../../../app-api";
-import { Observable } from "rxjs";
+import {map, Observable} from "rxjs";
 import { UserControllerService } from "../../../app-api/api/userController.service";
 
 @Injectable({
@@ -83,8 +83,10 @@ export class UserService {
         localStorage.setItem('accessToken', data['access_token']);
     }
 
-    getAllUsers() {
-        return this.userService.getusers();
+    getAllUsers(): Observable<UserDto[]> {
+        return this.userService.getusers().pipe(
+            map(users => users.filter(user => user.active === true))
+        );
     }
 
     updateUser(id: number, registerDto: RegisterDto, file: File): Observable<UserDto> {
@@ -94,4 +96,5 @@ export class UserService {
         console.log(formData) ;
         return this.http.put<UserDto>(`http://localhost:8090/api/users/${id}`, formData);
     }
+
 }

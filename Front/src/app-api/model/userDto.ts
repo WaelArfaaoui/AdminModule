@@ -16,6 +16,8 @@ export interface UserDto {
     firstname?: string;
     lastname?: string;
     email?: string;
+    active?: boolean;
+    nonExpired?: boolean;
     profileImagePath?: string;
     phone?: string;
     company?: string;

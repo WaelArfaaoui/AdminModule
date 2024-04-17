@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import { MessageService } from 'primeng/api';
-import {
-  AttributeControllerService,
-  AttributeDto,
-  CategoryControllerService,
-  CategoryDto,
-  RuleControllerService
-} from "../../../app-api";
+import {MessageService} from 'primeng/api';
+import {AttributeControllerService} from "../../../app-api";
 import {Router} from "@angular/router";
+import {RuleControllerService} from "../../../app-api/api/ruleController.service";
+import {CategoryControllerService} from "../../../app-api/api/categoryController.service";
 
 @Component({
   selector: 'app-new-rule',

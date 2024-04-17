@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {PageRuleDto, RuleControllerService, RuleDto} from "../../../app-api";
+import {PageRuleDto, RuleDto} from "../../../app-api";
 import {DialogService} from "primeng/dynamicdialog";
 import {LockUserComponent} from "../lock-user/lock-user.component";
 import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
+import {RuleControllerService} from "../../../app-api/api/ruleController.service";
 
 interface PageEvent {
     first: number;

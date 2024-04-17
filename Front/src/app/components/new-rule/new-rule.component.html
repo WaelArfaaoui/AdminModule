@@ -37,11 +37,11 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Attribute percentage *</label>
-                                            <input type="number" class="form-control inp-control" formControlName="percentage" placeholder="">
+                                            <input type="number" class="form-control inp-control" formControlName="percentage" placeholder="" min="0" max="100">
                                         </div>
                                         <div>
                                             <label class="form-label">Attribute value *</label>
-                                            <input type="number" class="form-control inp-control" formControlName="value" placeholder="" >
+                                            <input type="number" class="form-control inp-control" formControlName="value" placeholder="" min="0" max="10">
                                         </div>
                                         <div class=" mt-4">
                                             <button *ngIf="i === getAttributeControls().length - 1" (click)="addAttribute()" class="btn btn-success btn-config mt-2">

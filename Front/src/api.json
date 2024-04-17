@@ -27,7 +27,7 @@
     "/api/users/{id}": {
       "put": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "updateUser",
         "parameters": [
@@ -82,7 +82,7 @@
       },
       "delete": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "delete",
         "parameters": [
@@ -106,7 +106,7 @@
     "/api/rules/{id}/status": {
       "put": {
         "tags": [
-          "rule-controller"
+          "Rule"
         ],
         "operationId": "updateStatus",
         "parameters": [
@@ -145,7 +145,7 @@
     "/api/rules/{id}/description": {
       "put": {
         "tags": [
-          "rule-controller"
+          "Rule"
         ],
         "operationId": "updateDescription",
         "parameters": [
@@ -184,7 +184,7 @@
     "/api/users": {
       "get": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "getusers",
         "responses": {
@@ -205,7 +205,7 @@
       },
       "post": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "addUser",
         "requestBody": {
@@ -246,7 +246,7 @@
     "/api/rules": {
       "get": {
         "tags": [
-          "rule-controller"
+          "Rule"
         ],
         "operationId": "findAllRules",
         "parameters": [
@@ -286,7 +286,7 @@
       },
       "post": {
         "tags": [
-          "rule-controller"
+          "Rule"
         ],
         "operationId": "saveRule",
         "requestBody": {
@@ -316,7 +316,7 @@
     "/api/categories": {
       "get": {
         "tags": [
-          "category-controller"
+          "Category"
         ],
         "operationId": "getAllCategories",
         "responses": {
@@ -337,7 +337,7 @@
       },
       "post": {
         "tags": [
-          "category-controller"
+          "Category"
         ],
         "operationId": "createCategory",
         "requestBody": {
@@ -461,7 +461,7 @@
     "/api/users/{id}/unexpire": {
       "patch": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "unexpireUser",
         "parameters": [
@@ -492,7 +492,7 @@
     "/api/users/{id}/expire": {
       "patch": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "expireUser",
         "parameters": [
@@ -523,7 +523,7 @@
     "/api/users/changepassword": {
       "patch": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "changePassword",
         "requestBody": {
@@ -553,7 +553,7 @@
     "/api/users/{email}": {
       "get": {
         "tags": [
-          "User"
+          "user-controller"
         ],
         "operationId": "getUser",
         "parameters": [
@@ -583,7 +583,7 @@
     "/api/rules/{id}": {
       "get": {
         "tags": [
-          "rule-controller"
+          "Rule"
         ],
         "operationId": "findRuleById",
         "parameters": [
@@ -612,7 +612,7 @@
       },
       "delete": {
         "tags": [
-          "rule-controller"
+          "Rule"
         ],
         "operationId": "deleteRule",
         "parameters": [
@@ -636,7 +636,7 @@
     "/api/categories/{id}": {
       "get": {
         "tags": [
-          "category-controller"
+          "Category"
         ],
         "operationId": "getCategoryById",
         "parameters": [
@@ -665,7 +665,7 @@
       },
       "delete": {
         "tags": [
-          "category-controller"
+          "Category"
         ],
         "operationId": "deleteCategory",
         "parameters": [
@@ -689,7 +689,7 @@
     "/api/categories/exists/{name}": {
       "get": {
         "tags": [
-          "category-controller"
+          "Category"
         ],
         "operationId": "doesCategoryExistByName",
         "parameters": [
@@ -1005,16 +1005,6 @@
             "type": "integer",
             "format": "int64"
           },
-          "first": {
-            "type": "boolean"
-          },
-          "last": {
-            "type": "boolean"
-          },
-          "numberOfElements": {
-            "type": "integer",
-            "format": "int32"
-          },
           "size": {
             "type": "integer",
             "format": "int32"
@@ -1031,6 +1021,16 @@
           },
           "sort": {
             "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
           },
           "pageable": {
             "$ref": "#/components/schemas/PageableObject"
@@ -1050,18 +1050,18 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
           "pageSize": {
             "type": "integer",
             "format": "int32"
           },
-          "paged": {
-            "type": "boolean"
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
           },
           "unpaged": {
+            "type": "boolean"
+          },
+          "paged": {
             "type": "boolean"
           }
         }

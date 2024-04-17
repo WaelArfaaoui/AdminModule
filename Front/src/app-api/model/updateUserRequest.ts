@@ -9,11 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RegisterDto } from './registerDto';
 
 
 export interface UpdateUserRequest { 
-    dto?: RegisterDto;
-    file?: Blob;
+    file: Blob;
 }
 

@@ -54,6 +54,11 @@ export class AllUsersComponent implements OnInit {
       contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
         data: this.selectedUser
     });
+      ref.onClose.subscribe((result: any) => {
+          if (result==true) {
+              this.getAllUsers();
+          }
+      });
   }
 
   lockUser(user: any) {

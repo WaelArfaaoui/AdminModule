@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {PageRuleDto, RuleControllerService, RuleDto} from "../../../app-api";
+import {DialogService} from "primeng/dynamicdialog";
+import {LockUserComponent} from "../lock-user/lock-user.component";
+import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
 
 interface PageEvent {
     first: number;
@@ -19,7 +22,7 @@ export class AllRulesComponent implements OnInit {
     rules: Array<RuleDto> | undefined = [];
     totalRecords: number | undefined = 0;
 
-    constructor(private ruleService: RuleControllerService) {}
+    constructor(private ruleService: RuleControllerService  , private dialogService: DialogService) {}
 
     onPageChange(event: PageEvent) {
         this.first = event.first;
@@ -40,6 +43,15 @@ export class AllRulesComponent implements OnInit {
             error: error => {
                 console.error('Error fetching rules:', error);
             }
+        });
+    }
+
+    disableRule() {
+        const ref = this.dialogService.open(DisableRuleComponent, {
+            header: 'Disable rule',
+            width: '500px',
+            contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+
         });
     }
 }

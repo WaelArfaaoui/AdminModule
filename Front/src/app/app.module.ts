@@ -46,6 +46,7 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {InterceptorService} from "./services/interceptor/interceptor.service";
 import {PaginatorModule} from "primeng/paginator";
 import { DisableRuleComponent } from './components/disable-rule/disable-rule.component';
+import {DialogService} from "primeng/dynamicdialog";
 
 @NgModule({
   declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent],
@@ -86,7 +87,7 @@ import { DisableRuleComponent } from './components/disable-rule/disable-rule.com
         PaginatorModule
 
     ],
-  providers: [MessageService,{
+  providers: [MessageService , DialogService,{
     provide: HTTP_INTERCEPTORS,
     useClass: InterceptorService,
     multi: true,

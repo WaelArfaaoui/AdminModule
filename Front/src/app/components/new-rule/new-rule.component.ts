@@ -21,7 +21,6 @@ export class NewRuleComponent implements OnInit {
   attributes!: (string | undefined)[];
   categories!: (string | undefined)[];
   selectedCategory: string | undefined;
-  selectedAttribute: string | undefined;
   selectedAttributes: (string | undefined)[] = [];
 
   constructor(private fb: FormBuilder, private messageService: MessageService,
@@ -83,7 +82,6 @@ export class NewRuleComponent implements OnInit {
   getAttributeControls() {
     return (this.ruleForm.get('attributeDtos') as FormArray).controls;
   }
-
   onSubmit() {
     if (this.ruleForm.valid) {
       // Check for unique attribute names

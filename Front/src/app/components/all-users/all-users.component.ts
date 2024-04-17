@@ -46,20 +46,23 @@ export class AllUsersComponent implements OnInit {
         });
     }
 
-  deleteUser() {
-    const ref = this.dialogService.open(DeleteUserComponent, {
+  deleteUser(user: any) {
+      this.selectedUser = user;
+      const ref = this.dialogService.open(DeleteUserComponent, {
       header: 'Delete User',
       width: '500px',
       contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
-
+        data: this.selectedUser
     });
   }
 
-  lockUser() {
+  lockUser(user: any) {
+    this.selectedUser = user;
     const ref = this.dialogService.open(LockUserComponent, {
       header: 'Lock User',
       width: '500px',
       contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+      data: this.selectedUser
 
     });
   }

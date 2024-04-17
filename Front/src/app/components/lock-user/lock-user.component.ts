@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
+import {MessageService} from "primeng/api";
+import {UserControllerService} from "../../../app-api/api/userController.service";
 
 @Component({
   selector: 'app-lock-user',
@@ -7,12 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LockUserComponent implements OnInit {
 
-  constructor() { }
+  private user: any;
+
+  constructor(public ref: DynamicDialogRef ,public config: DynamicDialogConfig, public messageService:MessageService  , private userService:UserControllerService) { }
 
   ngOnInit(): void {
+    this.user = this.config.data ;
   }
 
   closeDialog() {
+    this.ref.close() ;
+  }
 
+  lockUser() {
+    this.userService._delete(this.user.id) ;
+    this.ref.close();
+    this.messageService.add({severity:'success', summary:'User locked !', detail:'User locked successfully'});
   }
 }

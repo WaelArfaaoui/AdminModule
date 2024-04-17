@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {DynamicDialogRef} from "primeng/dynamicdialog";
 
 @Component({
   selector: 'app-disable-rule',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DisableRuleComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ref: DynamicDialogRef) { }
 
   ngOnInit(): void {
   }
 
+  closeDialog() {
+    this.ref.close() ;
+  }
 }

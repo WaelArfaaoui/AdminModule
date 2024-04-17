@@ -39,17 +39,25 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "dto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
+                "required": [
+                  "file"
+                ],
                 "type": "object",
                 "properties": {
-                  "dto": {
-                    "$ref": "#/components/schemas/RegisterDto"
-                  },
                   "file": {
                     "type": "string",
                     "format": "binary"
@@ -57,8 +65,7 @@
                 }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -451,6 +458,68 @@
         }
       }
     },
+    "/api/users/{id}/unexpire": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "unexpireUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{id}/expire": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "expireUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/changepassword": {
       "patch": {
         "tags": [
@@ -733,37 +802,6 @@
   },
   "components": {
     "schemas": {
-      "RegisterDto": {
-        "type": "object",
-        "properties": {
-          "firstname": {
-            "type": "string"
-          },
-          "lastname": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "company": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "BUSINESSEXPERT",
-              "ADMIN",
-              "CONSULTANT"
-            ]
-          }
-        }
-      },
       "UserDto": {
         "type": "object",
         "properties": {
@@ -779,6 +817,12 @@
           },
           "email": {
             "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "nonExpired": {
+            "type": "boolean"
           },
           "profileImagePath": {
             "type": "string"
@@ -865,6 +909,37 @@
           }
         }
       },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "BUSINESSEXPERT",
+              "ADMIN",
+              "CONSULTANT"
+            ]
+          }
+        }
+      },
       "CategoryDto": {
         "type": "object",
         "properties": {
@@ -922,19 +997,23 @@
       "PageRuleDto": {
         "type": "object",
         "properties": {
-          "totalElements": {
-            "type": "integer",
-            "format": "int64"
-          },
           "totalPages": {
             "type": "integer",
             "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
           },
           "first": {
             "type": "boolean"
           },
           "last": {
             "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
           },
           "size": {
             "type": "integer",
@@ -952,10 +1031,6 @@
           },
           "sort": {
             "$ref": "#/components/schemas/SortObject"
-          },
-          "numberOfElements": {
-            "type": "integer",
-            "format": "int32"
           },
           "pageable": {
             "$ref": "#/components/schemas/PageableObject"
@@ -975,11 +1050,11 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "pageSize": {
+          "pageNumber": {
             "type": "integer",
             "format": "int32"
           },
-          "pageNumber": {
+          "pageSize": {
             "type": "integer",
             "format": "int32"
           },
@@ -997,10 +1072,10 @@
           "empty": {
             "type": "boolean"
           },
-          "sorted": {
+          "unsorted": {
             "type": "boolean"
           },
-          "unsorted": {
+          "sorted": {
             "type": "boolean"
           }
         }

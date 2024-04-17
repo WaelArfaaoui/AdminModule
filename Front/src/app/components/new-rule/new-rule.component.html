@@ -6,13 +6,13 @@
                     <div class="col-xxl-8 mb-xxl-0">
                         <div class="bg-secondary-soft px-4 mt-3 rounded">
                             <div class="row g-3 comp-dis">
-                                <div class="col-md-6">
+                                <div class="col-md-6 rule-name">
                                     <label class="form-label">Rule name *</label>
                                     <input type="text" class="form-control" formControlName="name" placeholder="">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Rule category *</label>
-                                    <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" [editable]="true" formControlName="category">
+                                    <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" [editable]="true" formControlName="category" >
                                         <ng-template let-item pTemplate="item">
                                             {{item}}
                                         </ng-template>
@@ -25,13 +25,15 @@
                             <div class="col-md-6 sel-config" formArrayName="attributeDtos">
                                 <div *ngFor="let attribute of getAttributeControls(); let i = index" class="attr-config">
                                     <div [formGroupName]="i" class="info-control mt-4">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Attribute name *</label>
-                                            <p-dropdown [options]="attributes" [(ngModel)]="selectedAttributes[i]" formControlName="name" [editable]="true">
-                                                <ng-template let-item pTemplate="item">
-                                                    {{item}}
-                                                </ng-template>
-                                            </p-dropdown>
+                                        <div class="attr-cont">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Attribute name *</label>
+                                                <p-dropdown [options]="attributes" [(ngModel)]="selectedAttributes[i]" formControlName="name" [editable]="true">
+                                                    <ng-template let-item pTemplate="item">
+                                                        {{item}}
+                                                    </ng-template>
+                                                </p-dropdown>
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="form-label">Attribute percentage *</label>

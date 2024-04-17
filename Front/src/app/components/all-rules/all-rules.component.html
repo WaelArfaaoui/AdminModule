@@ -6,6 +6,8 @@
       <th>Rule description</th>
       <th>Date created</th>
       <th>Status</th>
+      <th>
+      </th>
     </tr>
     </thead>
     <tbody>
@@ -16,9 +18,14 @@
       <td [ngStyle]="{'color': rule.enabled ? 'green' : 'red'}">
         {{ rule.enabled ? 'Enabled' : 'Disabled' }}
       </td>
-      <td class="primary details" >
-          <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning"></button>
+      <td class="primary details" *ngIf="rule.enabled">
+          <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning" (click)="updateRule(rule)"></button>
           <button pButton type="button" icon="pi pi-lock" class="p-button-danger" (click)="disableRule()"></button>
+      </td>
+      <td class="primary details" *ngIf="!rule.enabled">
+        <div>
+          <button pButton type="button" icon="pi pi-history" class="p-button-secondary hist-button" (click)="openRuleHistory()"> &nbsp;History</button>
+        </div>
       </td>
     </tr>
     </tbody>
@@ -26,3 +33,5 @@
     <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="120" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
 
 </div>
+
+<p-toast></p-toast>

@@ -4,6 +4,8 @@ import {DialogService} from "primeng/dynamicdialog";
 import {LockUserComponent} from "../lock-user/lock-user.component";
 import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
 import {RuleControllerService} from "../../../app-api/api/ruleController.service";
+import {UpdateUserComponent} from "../update-user/update-user.component";
+import {UpdateRuleComponent} from "../update-rule/update-rule.component";
 
 interface PageEvent {
     first: number;
@@ -22,6 +24,7 @@ export class AllRulesComponent implements OnInit {
     rows: number = 10;
     rules: Array<RuleDto> | undefined = [];
     totalRecords: number | undefined = 0;
+    private selectedRule: any;
 
     constructor(private ruleService: RuleControllerService  , private dialogService: DialogService) {}
 
@@ -54,5 +57,21 @@ export class AllRulesComponent implements OnInit {
             contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
 
         });
+    }
+
+    updateRule(rule: RuleDto) {
+        this.selectedRule = rule;
+        const ref = this.dialogService.open(UpdateRuleComponent, {
+            header: 'Update Rule',
+            width: '900px',
+            height: '600px',
+            contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+            data: this.selectedRule
+        });
+
+    }
+
+    openRuleHistory() {
+
     }
 }

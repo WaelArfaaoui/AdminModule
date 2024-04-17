@@ -25,8 +25,7 @@
 }
 
 th {
-  padding: 1.3rem 0 1.6rem 0;
-  font-size: 1.2rem;
+  padding: 1.3rem 0 1rem 0;
 }
 
 
@@ -37,6 +36,9 @@ th {
 
 }
 
+table tbody tr:last-child td {
+  background: rgba(252, 216, 216, 0.89) !important;
+}
 
 .recent-rules a {
   text-align: center;
@@ -66,3 +68,7 @@ mat-paginator {
   padding: 0.2rem 0;
 }
 
+.hist-button {
+  border-radius :10px;
+  padding: 0.4rem;
+}

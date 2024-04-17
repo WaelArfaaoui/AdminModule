@@ -48,9 +48,10 @@ import {PaginatorModule} from "primeng/paginator";
 import { DisableRuleComponent } from './components/disable-rule/disable-rule.component';
 import {DialogService} from "primeng/dynamicdialog";
 import { UpdateRuleComponent } from './components/update-rule/update-rule.component';
+import { RuleHistoryComponent } from './components/rule-history/rule-history.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

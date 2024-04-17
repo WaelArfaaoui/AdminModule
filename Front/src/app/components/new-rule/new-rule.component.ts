@@ -128,14 +128,14 @@ export class NewRuleComponent implements OnInit {
       // Submit formData to your backend service
       this.ruleService.saveRule(formData).subscribe({
         next: response => {
-          console.log('Rule saved successfully');
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Rule saved successfully'
           });
-          this.router.navigate(['rules']) ;
-          // Show success toast message
+          setTimeout(() => {
+            this.router.navigate(['rules']);
+          }, 1000);
 
         },
         error: error => {

@@ -173,7 +173,13 @@ input {
   opacity: 0;
 }
 
+.name-history {
+  display: flex;
+  justify-content: space-between;
+}
 
-
+.hist-button {
+  height: 2.6rem;
+}
 
 

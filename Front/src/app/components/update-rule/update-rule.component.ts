@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import { MessageService } from 'primeng/api' ;
-import {AttributeControllerService, AttributeDto, RuleDto} from "../../../app-api";
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {MessageService} from 'primeng/api';
+import {AttributeControllerService, RuleDto} from "../../../app-api";
 import {RuleControllerService} from "../../../app-api/api/ruleController.service";
 import {CategoryControllerService} from "../../../app-api/api/categoryController.service";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
@@ -131,7 +131,6 @@ export class UpdateRuleComponent implements OnInit {
 
       const formData = this.ruleForm.value;
       console.log(this.ruleForm.value);
-      // Submit formData to your backend service
       this.ruleService.saveRule(formData).subscribe({
         next: response => {
           console.log('Rule saved successfully');
@@ -141,7 +140,6 @@ export class UpdateRuleComponent implements OnInit {
             detail: 'Rule saved successfully'
           });
           this.router.navigate(['rules']) ;
-          // Show success toast message
 
         },
         error: error => {

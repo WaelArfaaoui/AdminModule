@@ -1,1 +1,24 @@
-<p>rule-history works!</p>
+<div class="rule-history ">
+    <table >
+        <thead>
+        <tr>
+            <th>Rule name</th>
+            <th>Rule description</th>
+            <th>Date modified</th>
+            <th>Modified by</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let rule of rules" [ngStyle]="{'background': rule.enabled ? 'white' : 'rgba(250, 229, 229, 0.89)'}">
+            <td>{{ rule.name }}</td>
+            <td>{{ rule.description }}</td>
+            <td>{{ rule.createDate | date: 'dd/MM/yyyy' }}</td>
+            <td [ngStyle]="{'color': rule.enabled ? 'green' : 'red'}">
+                {{ rule.enabled ? 'Enabled' : 'Disabled' }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<p-toast></p-toast>

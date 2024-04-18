@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RuleHistoryComponent implements OnInit {
 
+  rules:any ;
   constructor() { }
 
   ngOnInit(): void {

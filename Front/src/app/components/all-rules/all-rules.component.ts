@@ -6,6 +6,7 @@ import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
 import {RuleControllerService} from "../../../app-api/api/ruleController.service";
 import {UpdateUserComponent} from "../update-user/update-user.component";
 import {UpdateRuleComponent} from "../update-rule/update-rule.component";
+import {RuleHistoryComponent} from "../rule-history/rule-history.component";
 
 interface PageEvent {
     first: number;
@@ -24,7 +25,7 @@ export class AllRulesComponent implements OnInit {
     rows: number = 10;
     rules: Array<RuleDto> | undefined = [];
     totalRecords: number | undefined = 0;
-    private selectedRule: any;
+    private selectedRule!: RuleDto;
 
     constructor(private ruleService: RuleControllerService  , private dialogService: DialogService) {}
 
@@ -50,12 +51,18 @@ export class AllRulesComponent implements OnInit {
         });
     }
 
-    disableRule() {
+    disableRule(rule: RuleDto) {
+        this.selectedRule = rule;
         const ref = this.dialogService.open(DisableRuleComponent, {
             header: 'Disable rule',
             width: '500px',
             contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
-
+            data: this.selectedRule
+        });
+        ref.onClose.subscribe((result: any) => {
+            if (result==true) {
+                this.loadRules();
+            }
         });
     }
 
@@ -71,7 +78,16 @@ export class AllRulesComponent implements OnInit {
 
     }
 
-    openRuleHistory() {
+    openRuleHistory(rule:RuleDto) {
+        this.selectedRule = rule;
+        const ref = this.dialogService.open(RuleHistoryComponent, {
+            header: 'Rule history',
+            width: '900px',
+            height: '600px',
+            contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+            data: this.selectedRule
+        });
 
     }
+
 }

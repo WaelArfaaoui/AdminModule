@@ -36,9 +36,6 @@ th {
 
 }
 
-table tbody tr:last-child td {
-  background: rgba(252, 216, 216, 0.89) !important;
-}
 
 .recent-rules a {
   text-align: center;
@@ -70,5 +67,8 @@ mat-paginator {
 
 .hist-button {
   border-radius :10px;
-  padding: 0.4rem;
+  padding: 0.35rem;
+  background: rgba(250, 245, 245, 0.89) !important;
 }
+
+

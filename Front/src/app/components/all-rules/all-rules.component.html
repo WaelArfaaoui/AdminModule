@@ -11,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let rule of rules">
+    <tr *ngFor="let rule of rules" [ngStyle]="{'background': rule.enabled ? 'white' : 'rgba(250, 229, 229, 0.89)'}">
       <td>{{ rule.name }}</td>
       <td>{{ rule.description }}</td>
       <td>{{ rule.createDate | date: 'dd/MM/yyyy' }}</td>
@@ -20,11 +20,11 @@
       </td>
       <td class="primary details" *ngIf="rule.enabled">
           <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning" (click)="updateRule(rule)"></button>
-          <button pButton type="button" icon="pi pi-lock" class="p-button-danger" (click)="disableRule()"></button>
+          <button pButton type="button" icon="pi pi-lock" class="p-button-danger" (click)="disableRule(rule)"></button>
       </td>
       <td class="primary details" *ngIf="!rule.enabled">
         <div>
-          <button pButton type="button" icon="pi pi-history" class="p-button-secondary hist-button" (click)="openRuleHistory()"> &nbsp;History</button>
+          <button pButton type="button" icon="pi pi-history" class=" hist-button" (click)="openRuleHistory(rule)"> &nbsp;History</button>
         </div>
       </td>
     </tr>

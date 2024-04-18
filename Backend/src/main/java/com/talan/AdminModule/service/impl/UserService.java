@@ -94,6 +94,8 @@ public class UserService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .role(dto.getRole())
                 .profileImagePath(profileImagePath)
+                .active(true)
+                .nonExpired(true)
                 .build();
 
         userRepository.save(user);
@@ -104,10 +106,6 @@ public class UserService {
         return users.stream()
                 .map(this::mapUserToDto)
                 .collect(Collectors.toList());
-    }
-    public void delete (int id){
-        User user =  userRepository.findById(id).orElse(null);
-        userRepository.delete(user);
     }
     public UserDto update(int id, RegisterDto dto, MultipartFile file) throws IOException {
         User user = userRepository.findById(id).orElse(null);
@@ -145,6 +143,33 @@ public class UserService {
     public User findbyemail(String email)
     {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public void delete(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setActive(false);
+            userRepository.save(user);
+        }
+    }
+
+    public void expireUser(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setNonExpired(false);
+            userRepository.save(user);
+        }
+    }
+
+    public void unexpireUser(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setNonExpired(true);
+            userRepository.save(user);
+        }
     }
 
 

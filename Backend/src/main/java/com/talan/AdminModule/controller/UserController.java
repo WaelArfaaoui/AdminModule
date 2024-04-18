@@ -1,5 +1,6 @@
 package com.talan.AdminModule.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.AdminModule.dto.ChangePassword;
 import com.talan.AdminModule.dto.RegisterDto;
 import com.talan.AdminModule.dto.UserDto;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@Tag(name = "User")
+@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserService userservice;
@@ -40,8 +41,13 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable int id, @RequestBody RegisterDto dto, @RequestParam(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable int id,
+                                              @RequestParam("file") MultipartFile file,
+                                              @RequestParam("dto") String dtoJson) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RegisterDto dto = objectMapper.readValue(dtoJson, RegisterDto.class);
+
             UserDto updatedUser = this.userservice.update(id, dto, file);
             if (updatedUser != null) {
                 return ResponseEntity.ok(updatedUser);
@@ -53,6 +59,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
 
 
@@ -76,7 +83,20 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
+        System.out.println("okk");
         userservice.delete(id);
+    }
+
+    @PatchMapping("/{id}/expire")
+    public ResponseEntity<String> expireUser(@PathVariable int id) {
+        userservice.expireUser(id);
+        return ResponseEntity.ok("User expired successfully");
+    }
+
+    @PatchMapping("/{id}/unexpire")
+    public ResponseEntity<String> unexpireUser(@PathVariable int id) {
+        userservice.unexpireUser(id);
+        return ResponseEntity.ok("User unexpired successfully");
     }
 
 

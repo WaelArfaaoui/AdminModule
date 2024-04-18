@@ -1,12 +1,14 @@
 package com.talan.AdminModule.config;
 
 
+import com.talan.AdminModule.auditing.ApplicationAuditAware;
 import com.talan.AdminModule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-
+@RequiredArgsConstructor
 public class ApplicationConfig {
   @Autowired
 
@@ -52,5 +54,8 @@ public class ApplicationConfig {
     return new ModelMapper();
   }
 
-
+  @Bean
+  public AuditorAware<Integer> auditorAware() {
+    return new ApplicationAuditAware();
+  }
 }

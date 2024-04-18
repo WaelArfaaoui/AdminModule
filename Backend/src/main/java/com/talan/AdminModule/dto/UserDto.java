@@ -18,6 +18,8 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private String email;
+    private boolean active ;
+    private boolean nonExpired ;
     private String profileImagePath;
     private String phone;
     private String company ;

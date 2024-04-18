@@ -26,6 +26,7 @@ public class SecurityConfiguration {
     @Autowired
     private LogoutHandler logoutHandler;
     private static final String[] WHITE_LIST_URL = {"/api/auth/**",
+            "/api/users" ,
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",

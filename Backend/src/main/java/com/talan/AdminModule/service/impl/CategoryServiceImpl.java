@@ -1,2 +1,51 @@
-package com.talan.AdminModule.service.impl;public class CategoryServiceImpl {
+package com.talan.AdminModule.service.impl;
+import com.talan.AdminModule.dto.CategoryDto;
+import com.talan.AdminModule.entity.Category;
+import com.talan.AdminModule.repository.CategoryRepository;
+import com.talan.AdminModule.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class CategoryServiceImpl implements CategoryService {
+    private final CategoryRepository categoryRepository;
+
+    @Autowired
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Override
+    public CategoryDto save(CategoryDto categoryDto) {
+        return CategoryDto.fromEntity(categoryRepository.save(CategoryDto.toEntity(categoryDto)));
+    }
+
+    @Override
+    public void delete(Integer id) {
+        this.categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public CategoryDto findById(Integer id) {
+        Category category = this.categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                "No category with ID = " + id + " found in the database")
+        );
+        return CategoryDto.fromEntity(category);
+    }
+
+    @Override
+    public List<CategoryDto> findAll() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean existByName(String name) {
+        return this.categoryRepository.existsByName(name);
+    }
 }

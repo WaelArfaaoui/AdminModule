@@ -19,7 +19,7 @@ export class AppTopBarComponent implements OnInit{
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-  @ViewChild('overlayPanel') overlayPanel: OverlayPanel | undefined;
+    @ViewChild('overlayPanel') overlayPanel: OverlayPanel | undefined;
 
     constructor(public layoutService: LayoutService ,private  router:Router , private userService:UserControllerService) { }
   toggleDropdown(event: Event) {
@@ -56,7 +56,7 @@ export class AppTopBarComponent implements OnInit{
     if (email) {
       this.userService.getUser(email).subscribe(
           (user) => {
-            console.log("User details:", user);
+            localStorage.setItem('connectedUser', JSON.stringify(user));
             this.username = user.firstname;
             this.role = user.role;
             this.profileImagePath=user.profileImagePath;

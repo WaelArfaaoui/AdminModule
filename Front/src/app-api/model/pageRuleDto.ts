@@ -15,8 +15,8 @@ import { SortObject } from './sortObject';
 
 
 export interface PageRuleDto { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<RuleDto>;
     number?: number;

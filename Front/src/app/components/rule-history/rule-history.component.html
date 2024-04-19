@@ -3,18 +3,18 @@
         <thead>
         <tr>
             <th>Rule name</th>
-            <th>Rule description</th>
+            <th>Modification description</th>
             <th>Date modified</th>
             <th>Modified by</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let rule of rules" [ngStyle]="{'background': rule.enabled ? 'white' : 'rgba(250, 229, 229, 0.89)'}">
-            <td>{{ rule.name }}</td>
-            <td>{{ rule.description }}</td>
-            <td>{{ rule.createDate | date: 'dd/MM/yyyy' }}</td>
-            <td [ngStyle]="{'color': rule.enabled ? 'green' : 'red'}">
-                {{ rule.enabled ? 'Enabled' : 'Disabled' }}
+        <tr *ngFor="let rulemod of ruleModifications" >
+            <td>{{ rulemod.ruleName }}</td>
+            <td>{{ rulemod.modificationDescription }}</td>
+            <td>{{ rulemod.modificationDate | date: 'dd/MM/yyyy' }}</td>
+            <td >
+                {{ rulemod.modifiedBy  }}
             </td>
         </tr>
         </tbody>

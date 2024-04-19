@@ -9,11 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RuleDto } from './ruleDto';
 
 
-export interface SortObject { 
-    empty?: boolean;
-    sorted?: boolean;
-    unsorted?: boolean;
+export interface RuleModificationDto { 
+    id?: number;
+    ruleDto?: RuleDto;
+    modificationDate?: string;
+    modifiedBy?: number;
+    ruleName?: string;
+    modificationDescription?: string;
 }
 

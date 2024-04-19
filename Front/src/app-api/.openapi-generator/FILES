@@ -22,6 +22,7 @@ model/pageRuleDto.ts
 model/pageableObject.ts
 model/registerDto.ts
 model/ruleDto.ts
+model/ruleModificationDto.ts
 model/sortObject.ts
 model/updateUserRequest.ts
 model/userDto.ts

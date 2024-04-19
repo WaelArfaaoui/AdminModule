@@ -8,6 +8,7 @@ export * from './pageRuleDto';
 export * from './pageableObject';
 export * from './registerDto';
 export * from './ruleDto';
+export * from './ruleModificationDto';
 export * from './sortObject';
 export * from './updateUserRequest';
 export * from './userDto';

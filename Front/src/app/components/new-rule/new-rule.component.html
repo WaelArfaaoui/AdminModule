@@ -12,11 +12,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Rule category *</label>
-                                    <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" [editable]="true" formControlName="category" >
+                                    <p-dropdown
+                                            [options]="categories"
+                                            [(ngModel)]="selectedCategory"
+                                            [editable]="true"
+                                            formControlName="category"
+                                            [filter]="true">
                                         <ng-template let-item pTemplate="item">
-                                            {{item}}
+                                            {{ item }}
                                         </ng-template>
-                                    </p-dropdown>                                </div>
+                                    </p-dropdown>
+                                </div>
                                 <div class="col-md-6 desc-dis">
                                     <label class="form-label">Rule description *</label>
                                     <textarea class="form-control" formControlName="description" placeholder=""></textarea>

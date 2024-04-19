@@ -19,13 +19,13 @@ export class UpdateRuleComponent implements OnInit {
   selectedCategory: string | undefined;
   selectedAttributes: (string | undefined)[] = [];
   private rule!: RuleDto;
+  private connectedUserId!: number;
 
   constructor(private fb: FormBuilder,
               private attributeService: AttributeControllerService,
               private ruleService: RuleControllerService,
               private categoryService: CategoryControllerService,
               private router:Router,
-              public ref: DynamicDialogRef,
               public config: DynamicDialogConfig ,
               public messageService:MessageService) {
   }
@@ -131,6 +131,13 @@ export class UpdateRuleComponent implements OnInit {
 
       const formData = this.ruleForm.value;
       console.log(this.ruleForm.value);
+      const connectedUserString = localStorage.getItem('connectedUser');
+      if (connectedUserString) {
+        const connectedUser = JSON.parse(connectedUserString);
+        this.connectedUserId =connectedUser.id;
+      } else {
+        console.error("connectedUser not found in localStorage.");
+      }
       this.ruleService.saveRule(formData).subscribe({
         next: response => {
           console.log('Rule saved successfully');

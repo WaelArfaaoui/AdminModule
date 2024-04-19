@@ -30,12 +30,6 @@ public class AuthenticationController {
   private AuthenticationService authenticationService;
 
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-  @Autowired
-  private UserRepository userRepository;
-
-
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(
           @RequestBody AuthenticationRequest request

@@ -1,5 +1,7 @@
 package com.talan.AdminModule.controller;
+
 import com.talan.AdminModule.dto.RuleDto;
+import com.talan.AdminModule.dto.RuleModificationDto;
 import com.talan.AdminModule.service.RuleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class RuleController {
         ruleService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<RuleDto> updateRule(@PathVariable("id") Integer id, @RequestBody RuleDto updatedRuleDto) {
-        RuleDto updatedRule = ruleService.updateRule(id, updatedRuleDto);
+    @PutMapping("/{modDescription}/{id}/{modifiedBy}")
+    public ResponseEntity<RuleDto> updateRule(@PathVariable("modifiedBy") Integer modifiedBy ,@PathVariable("id") Integer id,@PathVariable("modDescription") String modDescription, @RequestBody RuleDto updatedRuleDto) {
+        RuleDto updatedRule = ruleService.updateRule(id, updatedRuleDto,modDescription , modifiedBy);
         if (updatedRule != null) {
             return new ResponseEntity<>(updatedRule, HttpStatus.OK);
         } else {
@@ -62,6 +63,12 @@ public class RuleController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    @GetMapping("/{id}/history")
+    public ResponseEntity<List<RuleModificationDto>> getModificationsByRuleId(@PathVariable Integer id) {
+        List<RuleModificationDto> modifications = ruleService.getModificationsByRuleId(id);
+
+        return new ResponseEntity<>(modifications, HttpStatus.OK);
     }
 
     @GetMapping

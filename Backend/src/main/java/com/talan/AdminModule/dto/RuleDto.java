@@ -1,6 +1,7 @@
 package com.talan.AdminModule.dto;
 
 import com.talan.AdminModule.entity.Rule;
+import com.talan.AdminModule.entity.RuleModification;
 import lombok.Builder;
 import lombok.Data;
 import org.w3c.dom.Attr;

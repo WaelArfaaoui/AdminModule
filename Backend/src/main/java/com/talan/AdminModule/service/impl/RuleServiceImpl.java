@@ -1,10 +1,9 @@
 package com.talan.AdminModule.service.impl;
 import com.talan.AdminModule.dto.AttributeDto;
 import com.talan.AdminModule.dto.RuleDto;
+import com.talan.AdminModule.dto.RuleModificationDto;
 import com.talan.AdminModule.entity.*;
-import com.talan.AdminModule.repository.AttributeRepository;
-import com.talan.AdminModule.repository.CategoryRepository;
-import com.talan.AdminModule.repository.RuleRepository;
+import com.talan.AdminModule.repository.*;
 import com.talan.AdminModule.service.RuleService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleServiceImpl implements RuleService {
@@ -22,12 +22,16 @@ public class RuleServiceImpl implements RuleService {
     private final RuleRepository ruleRepository;
     private final AttributeRepository attributeRepository;
     private final CategoryRepository categoryRepository;
+    private final RuleModificationRepository ruleModificationRepository ;
+    private final RuleAttributeRepository  ruleAttributeRepository ;
 
     @Autowired
-    public RuleServiceImpl(RuleRepository ruleRepository, AttributeRepository attributeRepository, CategoryRepository categoryRepository) {
+    public RuleServiceImpl(RuleRepository ruleRepository, AttributeRepository attributeRepository, CategoryRepository categoryRepository, RuleModificationRepository ruleModificationRepository, RuleAttributeRepository ruleAttributeRepository) {
         this.ruleRepository = ruleRepository;
         this.attributeRepository = attributeRepository;
         this.categoryRepository = categoryRepository;
+        this.ruleModificationRepository = ruleModificationRepository;
+        this.ruleAttributeRepository = ruleAttributeRepository;
     }
 
     @Override
@@ -40,15 +44,21 @@ public class RuleServiceImpl implements RuleService {
         // Check if the category exists by name
         Category category = categoryRepository.findByName(ruleDto.getCategory());
         if (category == null) {
-            // If category doesn't exist, create it
-            category = new Category();
-            category.setName(ruleDto.getCategory());
-            category = categoryRepository.save(category);
+            Category newCategory = new Category() ;
+            newCategory.setName(ruleDto.getCategory());
+            category = categoryRepository.save(newCategory);
         }
 
         rule.setCategory(category);
 
-        rule = ruleRepository.save(rule); // Save the rule to get its ID
+        rule = ruleRepository.save(rule);
+        RuleModification ruleModification = new RuleModification();
+        ruleModification.setRule(rule);
+        ruleModification.setModificationDate(rule.getLastModified());
+        ruleModification.setModifiedBy(rule.getCreatedBy());
+        ruleModification.setRuleName(rule.getName());
+        ruleModification.setModificationDescription("Rule created");
+        this.ruleModificationRepository.save(ruleModification) ;
 
         List<RuleAttribute> ruleAttributes = new ArrayList<>();
         for (AttributeDto attributeDto : ruleDto.getAttributeDtos()) {
@@ -89,7 +99,7 @@ public class RuleServiceImpl implements RuleService {
     }
     @Override
     @Transactional
-    public RuleDto updateRule(Integer id, RuleDto updatedRuleDto) {
+    public RuleDto updateRule(Integer id, RuleDto updatedRuleDto, String modDescription, Integer modifiedBy){
         Rule existingRule = ruleRepository.findById(id).orElse(null);
         if (existingRule != null) {
             existingRule.setName(updatedRuleDto.getName());
@@ -103,6 +113,10 @@ public class RuleServiceImpl implements RuleService {
                 category = categoryRepository.save(category);
             }
             existingRule.setCategory(category);
+
+            // Delete existing RuleAttributes related to the rule
+            ruleAttributeRepository.deleteByRule(existingRule);
+
             List<RuleAttribute> updatedRuleAttributes = new ArrayList<>();
             for (AttributeDto attributeDto : updatedRuleDto.getAttributeDtos()) {
                 Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName());
@@ -120,14 +134,20 @@ public class RuleServiceImpl implements RuleService {
             }
             existingRule.setRuleAttributes(updatedRuleAttributes);
             existingRule = ruleRepository.save(existingRule);
+            System.out.println(existingRule.getLastModifiedBy());
             RuleModification ruleModification = new RuleModification();
             ruleModification.setRule(existingRule);
             ruleModification.setModificationDate(existingRule.getLastModified());
             ruleModification.setModifiedBy(existingRule.getLastModifiedBy());
+            ruleModification.setRuleName(existingRule.getName());
+            ruleModification.setModificationDescription(modDescription);
+            this.ruleModificationRepository.save(ruleModification) ;
+
             return RuleDto.fromEntity(existingRule);
         }
         return null;
     }
+
 
 
     @Override
@@ -145,5 +165,18 @@ public class RuleServiceImpl implements RuleService {
     public Page<RuleDto> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ruleRepository.findAll(pageable).map(RuleDto::fromEntity);
+    }
+
+    @Override
+    public List<RuleModificationDto> getModificationsByRuleId(Integer id) {
+        Rule rule = ruleRepository.findById(id).orElse(null);
+        if (rule != null) {
+            List<RuleModification> modifications = ruleModificationRepository.findByRuleOrderByModificationDateDesc(rule);
+            List<RuleModificationDto> modificationDtos = modifications.stream()
+                    .map(RuleModificationDto::fromEntity)
+                    .collect(Collectors.toList());
+            return modificationDtos ;
+        }
+        return null;
     }
 }

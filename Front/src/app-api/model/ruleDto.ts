@@ -9,19 +9,20 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AttributeDto } from './attributeDto';
+import { CategoryDto } from './categoryDto';
+import { AttributeDataDto } from './attributeDataDto';
 
 
 export interface RuleDto { 
     id?: number;
     name?: string;
     description?: string;
-    category?: string;
+    category?: CategoryDto;
     enabled?: boolean;
     createDate?: string;
     lastModified?: string;
     createdBy?: number;
     lastModifiedBy?: number;
-    attributeDtos?: Array<AttributeDto>;
+    attributeDtos?: Array<AttributeDataDto>;
 }
 

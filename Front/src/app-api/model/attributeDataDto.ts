@@ -9,10 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AttributeDto } from './attributeDto';
 
 
-export interface AttributeDto {
+export interface AttributeDataDto {
     id?: number;
-    name?: string;
+    name?: AttributeDto;
+    percentage?: number;
+    value?: number;
 }
 

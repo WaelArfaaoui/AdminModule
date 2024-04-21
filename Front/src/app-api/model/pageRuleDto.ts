@@ -21,9 +21,9 @@ export interface PageRuleDto {
     content?: Array<RuleDto>;
     number?: number;
     sort?: SortObject;
+    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     pageable?: PageableObject;
     empty?: boolean;
 }

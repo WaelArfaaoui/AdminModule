@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MessageService } from 'primeng/api';
-import {AttributeControllerService, CategoryService, RuleService} from "../../../app-api";
+import {AttributeControllerService, AttributeDto, CategoryDto, CategoryService, RuleService} from "../../../app-api";
 import { Router } from "@angular/router";
 
 @Component({
@@ -12,10 +12,14 @@ import { Router } from "@angular/router";
 export class NewRuleComponent implements OnInit {
 
   ruleForm!: FormGroup;
-  attributes!: (string | undefined)[];
-  categories!: (string | undefined)[];
-  selectedCategory: string | undefined;
-  selectedAttributes: string[] = [];
+  attributes!: AttributeDto[];
+  categories!: CategoryDto[];
+  selectedCategory!: CategoryDto;
+  selectedAttributes!: AttributeDto[];
+  categoryVisible: boolean = false;
+  attributeVisible: boolean = false;
+  newCategoryName: string = '';
+  newAttributeName: string = '';
 
   constructor(
       private fb: FormBuilder,
@@ -42,33 +46,11 @@ export class NewRuleComponent implements OnInit {
 
     this.addAttribute();
   }
-  onSubmit() {
-    if (this.ruleForm.valid) {
-      if (!this.validateAttributeNames() || !this.validateAttributeValues() || !this.validateAttributePercentages()) {
-        return;
-      }
-      const formData = this.ruleForm.value;
-      this.ruleService.saveRule(formData).subscribe({
-        next: response => {
-          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Rule saved successfully'});
-          setTimeout(() => {
-            this.router.navigate(['rules']);
-          }, 1000);
-        },
-        error: error => {
-          console.error('Error saving rule:', error);
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to save rule. Please try again.'});
-        }
-      });
-    } else {
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'Please fill all required fields correctly.'});
-    }
-  }
 
   loadCategories() {
     this.categoryService.getAllCategories().subscribe({
       next: data => {
-        this.categories = data.map(category => category.name);
+        this.categories = data;
       },
       error: error => {
         console.error('Error loading categories:', error);
@@ -79,7 +61,7 @@ export class NewRuleComponent implements OnInit {
   loadAttributes() {
     this.attributeService.getAllAttributes().subscribe({
       next: data => {
-        this.attributes = data.map(attribute => attribute.name);
+        this.attributes = data;
         this.selectedAttributes = new Array(this.attributes.length);
       },
       error: error => {
@@ -162,4 +144,68 @@ export class NewRuleComponent implements OnInit {
     }
     return true;
   }
+
+  showDialog(type:string) {
+    if (type == 'category'){
+      this.categoryVisible = true ;
+    }
+    else this.attributeVisible =true ;
+  }
+
+  addNewAttribute() {
+    if (this.newAttributeName.trim() !== '') {
+      const attributeExists = this.attributes.some(attr => attr.name === this.newAttributeName);
+      if (!attributeExists) {
+        const newAttribute: AttributeDto = {
+          name: this.newAttributeName
+        };
+        this.attributes.push(newAttribute);
+        this.attributeVisible =false ;
+        this.messageService.add({severity: 'success', summary: 'success', detail: 'Attribute added'});
+      } else {
+        this.messageService.add({severity: 'error', summary: 'error', detail: 'Attribute exists '});
+      }
+    }
+  }
+
+  addNewCategory() {
+    if (this.newCategoryName.trim() !== '') {
+      const categoryExists = this.categories.some(cat => cat.name === this.newCategoryName);
+      if (!categoryExists) {
+        const newCategory: CategoryDto = {
+          name: this.newCategoryName
+        };
+        this.categories.push(newCategory);
+        this.categoryVisible = false;
+        this.messageService.add({severity: 'success', summary: 'success', detail: 'Category added'});
+      } else {
+        this.messageService.add({severity: 'error', summary: 'error', detail: 'Category exists '});
+      }
+    }
+  }
+  onSubmit() {
+    const formData = this.ruleForm.value;
+    console.log(formData) ;
+    if (this.ruleForm.valid) {
+      if (!this.validateAttributeNames() || !this.validateAttributeValues() || !this.validateAttributePercentages()) {
+        return;
+      }
+      const formData = this.ruleForm.value;
+      this.ruleService.saveRule(formData).subscribe({
+        next: response => {
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Rule saved successfully'});
+          setTimeout(() => {
+            this.router.navigate(['rules']);
+          }, 1000);
+        },
+        error: error => {
+          console.error('Error saving rule:', error);
+          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to save rule. Please try again.'});
+        }
+      });
+    } else {
+      this.messageService.add({severity: 'error', summary: 'Error', detail: 'Please fill all required fields correctly.'});
+    }
+  }
+
 }

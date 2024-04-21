@@ -12,6 +12,7 @@ encoder.ts
 git_push.sh
 index.ts
 model/addUserRequest.ts
+model/attributeDataDto.ts
 model/attributeDto.ts
 model/authenticationRequest.ts
 model/authenticationResponse.ts

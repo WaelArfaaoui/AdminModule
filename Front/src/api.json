@@ -899,6 +899,22 @@
           }
         }
       },
+      "AttributeDataDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/AttributeDto"
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
       "AttributeDto": {
         "type": "object",
         "properties": {
@@ -919,6 +935,18 @@
           }
         }
       },
+      "CategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "RuleDto": {
         "type": "object",
         "properties": {
@@ -933,7 +961,7 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "$ref": "#/components/schemas/CategoryDto"
           },
           "enabled": {
             "type": "boolean"
@@ -957,7 +985,7 @@
           "attributeDtos": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AttributeDto"
+              "$ref": "#/components/schemas/AttributeDataDto"
             }
           }
         }
@@ -990,18 +1018,6 @@
               "ADMIN",
               "CONSULTANT"
             ]
-          }
-        }
-      },
-      "CategoryDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },
@@ -1075,15 +1091,15 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
           "first": {
             "type": "boolean"
           },
           "last": {
             "type": "boolean"
-          },
-          "numberOfElements": {
-            "type": "integer",
-            "format": "int32"
           },
           "pageable": {
             "$ref": "#/components/schemas/PageableObject"
@@ -1103,18 +1119,18 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
           "pageSize": {
             "type": "integer",
             "format": "int32"
           },
-          "unpaged": {
-            "type": "boolean"
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
           },
           "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
             "type": "boolean"
           }
         }

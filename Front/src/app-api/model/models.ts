@@ -1,4 +1,5 @@
 export * from './addUserRequest';
+export * from './attributeDataDto';
 export * from './attributeDto';
 export * from './authenticationRequest';
 export * from './authenticationResponse';

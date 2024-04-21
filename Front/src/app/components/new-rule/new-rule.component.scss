@@ -101,7 +101,7 @@ input {
 
 
 .btn-config {
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
   color: white;
   font-size: 1.2rem;
@@ -135,6 +135,7 @@ input {
   color: white;
   width: 9rem;
   font-size: 1.2rem;
+
 
 
 }
@@ -174,5 +175,18 @@ input {
 
 
 
+.flex-disp {
+  display: flex !important;
+  gap: 0.4rem;
+}
 
+.cat-flex {
+  display: flex;
+  justify-content: center;
+}
 
+.cat-buttons {
+  display: flex !important;
+  justify-content: center;
+
+}

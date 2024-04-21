@@ -1,4 +1,5 @@
 package com.talan.AdminModule.service.impl;
+import com.talan.AdminModule.dto.AttributeDataDto;
 import com.talan.AdminModule.dto.AttributeDto;
 import com.talan.AdminModule.dto.RuleDto;
 import com.talan.AdminModule.dto.RuleModificationDto;
@@ -40,17 +41,13 @@ public class RuleServiceImpl implements RuleService {
         Rule rule = new Rule();
         rule.setName(ruleDto.getName());
         rule.setDescription(ruleDto.getDescription());
-
-        // Check if the category exists by name
-        Category category = categoryRepository.findByName(ruleDto.getCategory());
+        Category category = categoryRepository.findByName(ruleDto.getCategory().getName());
         if (category == null) {
             Category newCategory = new Category() ;
-            newCategory.setName(ruleDto.getCategory());
+            newCategory.setName(ruleDto.getCategory().getName());
             category = categoryRepository.save(newCategory);
         }
-
         rule.setCategory(category);
-
         rule = ruleRepository.save(rule);
         RuleModification ruleModification = new RuleModification();
         ruleModification.setRule(rule);
@@ -59,14 +56,13 @@ public class RuleServiceImpl implements RuleService {
         ruleModification.setRuleName(rule.getName());
         ruleModification.setModificationDescription("Rule created");
         this.ruleModificationRepository.save(ruleModification) ;
-
         List<RuleAttribute> ruleAttributes = new ArrayList<>();
-        for (AttributeDto attributeDto : ruleDto.getAttributeDtos()) {
-            Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName());
+        for (AttributeDataDto attributeDto : ruleDto.getAttributeDtos()) {
+            Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName().getName());
             if (attribute == null) {
                 // Create a new attribute if it doesn't exist
                 attribute = new Attribute();
-                attribute.setName(attributeDto.getName());
+                attribute.setName(attributeDto.getName().getName());
                 // Set other properties of the attribute if needed
                 attribute = attributeRepository.save(attribute);
             }
@@ -106,10 +102,10 @@ public class RuleServiceImpl implements RuleService {
             existingRule.setDescription(updatedRuleDto.getDescription());
             existingRule.setEnabled(updatedRuleDto.isEnabled());
 
-            Category category = categoryRepository.findByName(updatedRuleDto.getCategory());
+            Category category = categoryRepository.findByName(updatedRuleDto.getCategory().getName());
             if (category == null) {
                 category = new Category();
-                category.setName(updatedRuleDto.getCategory());
+                category.setName(updatedRuleDto.getCategory().getName());
                 category = categoryRepository.save(category);
             }
             existingRule.setCategory(category);
@@ -118,11 +114,11 @@ public class RuleServiceImpl implements RuleService {
             ruleAttributeRepository.deleteByRule(existingRule);
 
             List<RuleAttribute> updatedRuleAttributes = new ArrayList<>();
-            for (AttributeDto attributeDto : updatedRuleDto.getAttributeDtos()) {
-                Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName());
+            for (AttributeDataDto attributeDto : updatedRuleDto.getAttributeDtos()) {
+                Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName().getName());
                 if (attribute == null) {
                     attribute = new Attribute();
-                    attribute.setName(attributeDto.getName());
+                    attribute.setName(attributeDto.getName().getName());
                     attribute = attributeRepository.save(attribute);
                 }
                 RuleAttribute ruleAttribute = new RuleAttribute();
@@ -158,7 +154,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public RuleDto findById(Integer id) {
-        return ruleRepository.findById(id).map(RuleDto::fromEntity).orElse(null);
+        return ruleRepository.findByIdWithAttributes(id).map(RuleDto::fromEntity).orElse(null);
     }
 
     @Override

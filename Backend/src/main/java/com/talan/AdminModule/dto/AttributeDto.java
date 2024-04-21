@@ -12,9 +12,6 @@ public class AttributeDto{
 
     private String name;
 
-    private Double percentage ;
-    private Double value ;
-
     public static AttributeDto fromEntity(Attribute attribute) {
         if (attribute == null) {
             return null;

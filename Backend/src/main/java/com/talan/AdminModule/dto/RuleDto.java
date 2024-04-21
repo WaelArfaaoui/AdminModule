@@ -8,6 +8,7 @@ import org.w3c.dom.Attr;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -16,19 +17,20 @@ public class RuleDto {
     private Integer id;
     private String name;
     private String description;
-    private String category ;
+    private CategoryDto category ;
     private boolean enabled;
     private LocalDateTime createDate;
     private LocalDateTime lastModified;
     private Integer createdBy;
     private Integer lastModifiedBy;
-    private List<AttributeDto> attributeDtos ;
+    private List<AttributeDataDto> attributeDtos ;
+
 
     public static RuleDto fromEntity(Rule rule) {
         if (rule == null) {
             return null;
         }
-        return RuleDto.builder()
+        RuleDto ruleDto = RuleDto.builder()
                 .id(rule.getId())
                 .name(rule.getName())
                 .description(rule.getDescription())
@@ -38,7 +40,21 @@ public class RuleDto {
                 .createdBy(rule.getCreatedBy())
                 .lastModifiedBy(rule.getLastModifiedBy())
                 .build();
+
+        List<AttributeDataDto> attributeDtos = rule.getRuleAttributes().stream()
+                .map(ruleAttribute -> AttributeDataDto.builder()
+                        .id(ruleAttribute.getAttribute().getId())
+                        .name(AttributeDto.builder().id(ruleAttribute.getAttribute().getId()).name(ruleAttribute.getAttribute().getName()).build())
+                        .percentage(ruleAttribute.getPercentage())
+                        .value(ruleAttribute.getValue())
+                        .build())
+                .collect(Collectors.toList());
+
+        ruleDto.setAttributeDtos(attributeDtos);
+
+        return ruleDto;
     }
+
 
     public static Rule toEntity(RuleDto ruleDTO) {
         if (ruleDTO == null) {

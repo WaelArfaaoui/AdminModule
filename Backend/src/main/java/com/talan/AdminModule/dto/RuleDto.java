@@ -39,6 +39,7 @@ public class RuleDto {
                 .lastModified(rule.getLastModified())
                 .createdBy(rule.getCreatedBy())
                 .lastModifiedBy(rule.getLastModifiedBy())
+                .category(CategoryDto.fromEntity(rule.getCategory()))
                 .build();
 
         List<AttributeDataDto> attributeDtos = rule.getRuleAttributes().stream()

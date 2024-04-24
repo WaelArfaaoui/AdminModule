@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {PageRuleDto, RuleDto} from "../../../app-api";
+import {Component, OnInit} from '@angular/core';
+import {PageRuleDto, RuleDto, RuleService} from "../../../open-api";
 import {DialogService} from "primeng/dynamicdialog";
-import {LockUserComponent} from "../lock-user/lock-user.component";
 import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
-import {RuleControllerService} from "../../../app-api/api/ruleController.service";
-import {UpdateUserComponent} from "../update-user/update-user.component";
 import {UpdateRuleComponent} from "../update-rule/update-rule.component";
 import {RuleHistoryComponent} from "../rule-history/rule-history.component";
 
@@ -23,22 +20,25 @@ interface PageEvent {
 export class AllRulesComponent implements OnInit {
     first: number = 0;
     rows: number = 10;
+    searchQuery: string = '';
     rules: Array<RuleDto> | undefined = [];
     totalRecords: number | undefined = 0;
     private selectedRule!: RuleDto;
 
-    constructor(private ruleService: RuleControllerService  , private dialogService: DialogService) {}
+    constructor(private ruleService: RuleService  , private dialogService: DialogService) {}
 
     onPageChange(event: PageEvent) {
         this.first = event.first;
         this.rows = event.rows;
         this.loadRules();
     }
-
     ngOnInit(): void {
         this.loadRules();
     }
-
+    search() {
+      this.first = 0;
+      this.searchRules();
+    }
     loadRules() {
         this.ruleService.findAllRules(this.first, this.rows).subscribe({
             next: (response: PageRuleDto) => {
@@ -50,7 +50,17 @@ export class AllRulesComponent implements OnInit {
             }
         });
     }
-
+    searchRules() {
+      this.ruleService.searchRules(this.first, this.rows, this.searchQuery).subscribe({
+        next: (response: PageRuleDto) => {
+          this.rules = response.content;
+          this.totalRecords = response.totalElements;
+        },
+        error: error => {
+          console.error('Error fetching rules:', error);
+        }
+      });
+    }
     disableRule(rule: RuleDto) {
         this.selectedRule = rule;
         const ref = this.dialogService.open(DisableRuleComponent, {

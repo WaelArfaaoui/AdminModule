@@ -9,12 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AttributeDto } from './attributeDto';
-import { RuleDto } from './ruleDto';
 
 
-export interface SaveRuleRequest { 
-    ruleDto?: RuleDto;
-    attributeDtos?: Array<AttributeDto>;
+export interface AttributeDto { 
+    id?: number;
+    name?: string;
 }
 

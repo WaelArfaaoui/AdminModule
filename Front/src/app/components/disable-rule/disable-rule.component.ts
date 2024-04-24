@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
-import {RuleDto, RuleService} from "../../../app-api";
 import {MessageService} from "primeng/api";
+import {RuleDto, RuleService} from "../../../open-api";
 
 @Component({
   selector: 'app-disable-rule',

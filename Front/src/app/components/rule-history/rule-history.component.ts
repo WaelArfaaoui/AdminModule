@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {RuleDto, RuleModificationDto, RuleService} from "../../../app-api";
 import {DynamicDialogConfig} from "primeng/dynamicdialog";
+import {RuleDto, RuleModificationDto, RuleService} from "../../../open-api";
 
 @Component({
   selector: 'app-rule-history',

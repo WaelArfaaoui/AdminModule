@@ -1,7 +1,6 @@
 package com.talan.AdminModule.controller;
 
 import com.talan.AdminModule.dto.AttributeDto;
-import com.talan.AdminModule.service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {MessageService} from "primeng/api";
-import {UserControllerService} from "../../../app-api/api/userController.service";
+import {UserControllerService} from "../../../open-api";
 
 @Component({
   selector: 'app-lock-user',

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../../services/user/user.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import {UserControllerService} from "../../../open-api";
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService , private userControllerService:UserControllerService
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +47,7 @@ export class LoginComponent implements OnInit {
 
   connectUser(data: any) {
     this.userService.setConnectedUser(this.userService.getUserDetails());
+    let email = this.userService.getUserDetails().email ;
     this.router.navigate(['/']);
   }
 }

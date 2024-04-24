@@ -1,100 +1,112 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { jwtDecode } from "jwt-decode";
-import { AuthenticationControllerService, AuthenticationRequest, RegisterDto, UserDto } from "../../../app-api";
-import {map, Observable} from "rxjs";
-import { UserControllerService } from "../../../app-api/api/userController.service";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Router} from "@angular/router";
+import {jwtDecode} from "jwt-decode";
+import {catchError, Observable} from "rxjs";
+import {
+  AuthenticationService,
+  AuthenticationRequest,
+  UserControllerService,
+  UserDto,
+  RegisterDto
+} from "../../../open-api";
+
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class UserService {
 
-    token!: any;
-    email!: string;
-    name!: string;
-    id!: number;
-    private baseUrl = 'http://localhost:8090/api';
+  token!: any;
+  email!: string;
+  name!: string;
+  id!: number;
 
-    constructor(
-        private authenticationService: AuthenticationControllerService,
-        private http: HttpClient,
-        private router: Router,
-        private userService: UserControllerService
-    ) { }
+  constructor(private authenticationService: AuthenticationService, private http: HttpClient,
+              private router: Router, private userService: UserControllerService
+  ) {
+  }
 
-    login(authenticationRequest: AuthenticationRequest) {
-        return this.authenticationService.authenticate(authenticationRequest);
+  login(authenticationRequest: AuthenticationRequest) {
+    return this.authenticationService.authenticate(authenticationRequest);
+  }
+
+  addUser(dto: any, file: File): Observable<UserDto> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    Object.keys(dto).forEach(key => formData.append(key, dto[key]));
+
+    return this.http.post<any>('http://localhost:8090/api/users', formData);
+  }
+
+  getUserDetails() {
+    this.token = localStorage.getItem('accessToken')
+    let decodedJwt: any = jwtDecode(this.token);
+    console.log(decodedJwt) ;
+    this.email = decodedJwt.sub;
+    return {
+      'email': this.email,
+    }
+  }
+
+  setConnectedUser(user: any): void {
+    localStorage.setItem('connectedUser', JSON.stringify(user));
+
+  }
+
+  isUserLoggedAndAccessTokenValid(): boolean {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      if (this.isValidAccessToken(accessToken)) {
+        return true;
+      }
+    }
+    localStorage.clear();
+    this.router.navigate(['/signIn']);
+    return false;
+  }
+
+  isValidAccessToken(token: string): boolean {
+    try {
+      const tokenData = JSON.parse(atob(token.split('.')[1]));
+
+      const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+      if (tokenData.exp && tokenData.exp > currentTimeInSeconds) {
+        return true;
+
+      }
+    } catch (error) {
     }
 
-    addUser(dto: any, file: File): Observable<UserDto> {
-        const formData: FormData = new FormData();
-        formData.append('file', file);
-        Object.keys(dto).forEach(key => formData.append(key, dto[key]));
+    return false;
+  }
 
-        return this.http.post<any>('http://localhost:8090/api/users', formData);
-    }
 
-    getUserDetails() {
-        this.token = localStorage.getItem('accessToken')
-        let decodedJwt: any = jwtDecode(this.token);
-        console.log(decodedJwt);
-        this.email = decodedJwt.sub;
-        return {
-            'email': this.email,
-        }
-    }
+  setToken(data: any) {
+    console.log("access token set")
+    localStorage.setItem('accessToken', data['access_token']);
+  }
 
-    setConnectedUser(user: any): void {
-        localStorage.setItem('connectedUser', JSON.stringify(user));
-        console.log(localStorage.getItem('connectedUser'));
-    }
+  getAllUsers() {
+    return this.userService.getusers();
+  }
+  updateUser(id: number, registerDto: RegisterDto, file: File): Observable<UserDto> {
+    const formData = new FormData();
+    formData.append('dto', JSON.stringify(registerDto));
+    formData.append('file', file);
 
-    isUserLoggedAndAccessTokenValid(): boolean {
-        const accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-            if (this.isValidAccessToken(accessToken)) {
-                return true;
-            }
-        }
-        localStorage.clear();
-        this.router.navigate(['/signIn']);
-        return false;
-    }
+    // Set headers explicitly
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
 
-    isValidAccessToken(token: string): boolean {
-        try {
-            const tokenData = JSON.parse(atob(token.split('.')[1]));
-
-            const currentTimeInSeconds = Math.floor(Date.now() / 1000);
-            if (tokenData.exp && tokenData.exp > currentTimeInSeconds) {
-                return true;
-
-            }
-        } catch (error) {
-        }
-
-        return false;
-    }
-
-    setToken(data: any) {
-        console.log("access token set")
-        localStorage.setItem('accessToken', data['access_token']);
-    }
-
-    getAllUsers(): Observable<UserDto[]> {
-        return this.userService.getusers().pipe(
-            map(users => users.filter(user => user.active === true))
+    return this.http.put<UserDto>(`http://localhost:8090/api/users/${id}`, formData, { headers: headers })
+        .pipe(
+            catchError((error: any) => {
+              console.error('An error occurred:', error); // Handle errors here
+              throw error; // Rethrow the error to be caught by the caller
+            })
         );
-    }
-
-    updateUser(id: number, registerDto: RegisterDto, file: File): Observable<UserDto> {
-        const formData = new FormData();
-        formData.append('dto', JSON.stringify(registerDto)); // Changed this line
-        formData.append('file', file);
-        console.log(formData) ;
-        return this.http.put<UserDto>(`http://localhost:8090/api/users/${id}`, formData);
-    }
+  }
 
 }
+

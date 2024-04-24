@@ -9,15 +9,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PageableObject } from './pageableObject';
+import { RuleDto } from './ruleDto';
 import { SortObject } from './sortObject';
 
 
-export interface PageableObject { 
-    offset?: number;
+export interface PageRuleDto { 
+    totalPages?: number;
+    totalElements?: number;
+    size?: number;
+    content?: Array<RuleDto>;
+    number?: number;
     sort?: SortObject;
-    pageSize?: number;
-    pageNumber?: number;
-    paged?: boolean;
-    unpaged?: boolean;
+    first?: boolean;
+    last?: boolean;
+    numberOfElements?: number;
+    pageable?: PageableObject;
+    empty?: boolean;
 }
 

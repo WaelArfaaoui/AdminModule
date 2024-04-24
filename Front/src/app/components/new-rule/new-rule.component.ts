@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MessageService } from 'primeng/api';
-import {AttributeControllerService, AttributeDto, CategoryDto, CategoryService, RuleService} from "../../../app-api";
 import { Router } from "@angular/router";
+import {AttributeDto, AttributeService, CategoryDto, CategoryService, RuleService} from "../../../open-api";
 
 @Component({
   selector: 'app-new-rule',
@@ -24,7 +24,7 @@ export class NewRuleComponent implements OnInit {
   constructor(
       private fb: FormBuilder,
       private messageService: MessageService,
-      private attributeService: AttributeControllerService,
+      private attributeService: AttributeService,
       private ruleService: RuleService,
       private categoryService: CategoryService,
       private router: Router
@@ -185,7 +185,6 @@ export class NewRuleComponent implements OnInit {
   }
   onSubmit() {
     const formData = this.ruleForm.value;
-    console.log(formData) ;
     if (this.ruleForm.valid) {
       if (!this.validateAttributeNames() || !this.validateAttributeValues() || !this.validateAttributePercentages()) {
         return;

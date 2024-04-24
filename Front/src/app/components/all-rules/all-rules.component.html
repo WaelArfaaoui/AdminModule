@@ -1,4 +1,9 @@
 <div class="recent-rules ">
+<!--  <span class="p-input-icon-left m-3">-->
+<!--    <i class="pi pi-search"></i>-->
+<!--    <input type="text" pInputText [(ngModel)]="searchQuery" />-->
+<!--    <button type="button" (click)="search()" class="m-3">Search</button>-->
+<!--</span>-->
   <table >
     <thead>
     <tr>
@@ -19,8 +24,9 @@
         {{ rule.enabled ? 'Enabled' : 'Disabled' }}
       </td>
       <td class="primary details" *ngIf="rule.enabled">
-          <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning" (click)="updateRule(rule)"></button>
-          <button pButton type="button" icon="pi pi-lock" class="p-button-danger" (click)="disableRule(rule)"></button>
+          <button pButton type="button" icon="pi pi-pencil" style="margin-right:10px" class="p-button-warning" (click)="updateRule(rule)"></button>
+          <button pButton type="button" icon="pi pi-lock" style="margin-right:10px" class="p-button-danger" (click)="disableRule(rule)"></button>
+         <button pButton type="button" icon="pi pi-history" style="margin-right:-40px" class="p-button-info" (click)="openRuleHistory(rule)"></button>
       </td>
       <td class="primary details" *ngIf="!rule.enabled">
         <div>

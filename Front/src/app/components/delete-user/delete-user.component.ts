@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
-import {UserControllerService} from "../../../app-api/api/userController.service";
 import {MessageService} from "primeng/api";
 import {Router} from "@angular/router";
+import {UserControllerService} from "../../../open-api";
 
 @Component({
   selector: 'app-delete-user',
@@ -38,7 +38,6 @@ export class DeleteUserComponent implements OnInit {
                 },
                 error => {
                     console.error('Error deleting user:', error);
-                    // Handle error, show error message, etc.
                 }
             );
     }

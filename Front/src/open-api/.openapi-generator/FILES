@@ -1,9 +1,10 @@
 .gitignore
+.openapi-generator-ignore
 README.md
 api.module.ts
 api/api.ts
-api/attributeController.service.ts
-api/authenticationController.service.ts
+api/attribute.service.ts
+api/authentication.service.ts
 api/category.service.ts
 api/rule.service.ts
 api/userController.service.ts

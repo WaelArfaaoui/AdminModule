@@ -1,27 +1,8 @@
 
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¬á
-^
-java:S2259‚"BA "NullPointerException" could be thrown; "user" is nullable here.(Ÿ¿­Õÿÿÿÿÿ
-X
-java:S2259"BA "NullPointerException" could be thrown; "user" is nullable here.(¹Óè¶
-X
-java:S2259|"BA "NullPointerException" could be thrown; "user" is nullable here.(ææïä
-]
-java:S2259v"BA "NullPointerException" could be thrown; "user" is nullable here.(É’ ‡şÿÿÿÿ
-^
-java:S2259‰"BA "NullPointerException" could be thrown; "user" is nullable here.(µ•‚©úÿÿÿÿ
-Y
-java:S2259…"BA "NullPointerException" could be thrown; "user" is nullable here.(şÔ†Ÿ
-]
-java:S2259y"BA "NullPointerException" could be thrown; "user" is nullable here.(™¾Œøÿÿÿÿ
-«
-java:S4449D"Annotate the parameter with @javax.annotation.Nullable in method 'cleanPath' declaration, or make sure that null can not be passed as argument.(îùíûùÿÿÿÿ
-£
-java:S4449q"ŒAnnotate the parameter with @javax.annotation.Nullable in method 'delete' declaration, or make sure that null can not be passed as argument.(õÏçõ
-§
-java:S4449‹"ŠAnnotate the parameter with @javax.annotation.Nullable in method 'save' declaration, or make sure that null can not be passed as argument.(İÙ¿Ùúÿÿÿÿ
-V	java:S107s"<Method has 8 parameters, which is greater than 7 authorized.(ù÷Ÿıÿÿÿÿ
-D
-java:S1481A".Remove this unused "imagePath" local variable.( Şü¼
-h
-java:S6204m"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¬á8äÒ¹µğ1
+ª
+java:S4449p"ŒAnnotate the parameter with @javax.annotation.Nullable in method 'delete' declaration, or make sure that null can not be passed as argument.(õÏçõ8¨Ó¹µğ1
+K
+java:S1481?".Remove this unused "imagePath" local variable.( Şü¼8­Ó¹µğ1
+Z
+java:S1128"8Remove this unused import 'java.util.stream.Collectors'.(Óóº´úÿÿÿÿ8üÂ‰Õñ1

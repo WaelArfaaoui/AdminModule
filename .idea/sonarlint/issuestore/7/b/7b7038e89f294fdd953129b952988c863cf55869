@@ -1,31 +1,5 @@
 
-h	java:S112ß"FDefine and throw a dedicated exception instead of using a generic one.(ׂ‚ׂיüÿÿÿÿ8בקאקל1
-h	java:S112²"FDefine and throw a dedicated exception instead of using a generic one.(ׂ‚ׂיüÿÿÿÿ8בקאקל1
-f
-java:S6208י"CMerge the previous cases into this one using comma-separated label.(–׃װֵ‎ÿÿÿÿ8´€üל1
-f
-java:S6208ם"CMerge the previous cases into this one using comma-separated label.(¹״שÿÿÿÿ8´€üל1
-f
-java:S6208ס"CMerge the previous cases into this one using comma-separated label.(־ֻ˜™‏ÿÿÿÿ8µ€üל1
-d
-java:S1192N"GDefine a constant instead of duplicating this literal "active" 3 times.(ם™ֶÊ8דקאקל1
-k
-java:S1192ֳ"HDefine a constant instead of duplicating this literal "message" 9 times.(¡ֻ‏ף‏ÿÿÿÿ8דקאקל1
-h
-java:S11925"KDefine a constant instead of duplicating this literal "columnName" 4 times.(®װÙ’8דקאקל1
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¬ב8וקאקל1
-o
-java:S2259ּ"LA "NullPointerException" could be thrown; "getDataSource()" can return null.(־ׂ„÷üÿÿÿÿ8זשאקל1
-
-java:S1130["nRemove the declaration of thrown exception 'java.sql.SQLException', as it cannot be thrown from method's body.(¥©¡ּûÿÿÿÿ8ןשאקל1
-H
-java:S1168c"+Return an empty collection instead of null.(¥¹ן8נשאקל1
-t
-java:S3776h"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(ױÜÝמüÿÿÿÿ8נשאקל1
-W
-java:S2864­"4Iterate over the "entrySet" instead of the "keySet".(¬ץףצתÿÿÿÿ8צשאקל1
-H	java:S106ש"+Replace this use of System.out by a logger.(‡…־8ûשאקל1
-H	java:S106‡"+Replace this use of System.out by a logger.(“¶אֵ8üשאקל1
-M	java:S106ˆ"+Replace this use of System.out by a logger.(₪מלüÿÿÿÿ8üשאקל1
-M	java:S106‘"+Replace this use of System.out by a logger.(ַָ‏‏ÿÿÿÿ8‎שאקל1
-H	java:S106—"+Replace this use of System.out by a logger.(גû¯ר8‎שאקל1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¬ב8מˆûװס1
+e
+java:S2637„"GParameter 1 to this call is marked "@NonNull" but null could be passed.(™עÛ˜8…ß‎װס1
+]	java:S125l"<This block of commented-out lines of code should be removed.(ןָ—רÿÿÿÿ8¢‰ûװס1

@@ -1,9 +1,6 @@
 package com.talan.AdminModule.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 @Getter
@@ -13,8 +10,9 @@ import java.util.List;
 public class TableInfo {
     private String name;
     private String type;
-    private String pk;
-    private String remarks;
+    @NonNull
+    private ColumnInfo pk;
+    private Long totalRows;
     private List<ColumnInfo> columns;
 
 

@@ -43,9 +43,15 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { LockUserComponent } from './components/lock-user/lock-user.component';
 import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 import {AvatarModule} from "primeng/avatar";
+import { DeleteParamComponent } from './components/delete-param/delete-param.component';
+import { ListParamTablesComponent } from './components/list-param-tables/list-param-tables.component';
+import {InterceptorService} from "./services/interceptor/interceptor.service";
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {DialogService} from "primeng/dynamicdialog";
+import { ParamHistoryComponent } from './components/param-history/param-history.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DeleteParamComponent, ListParamTablesComponent, ParamHistoryComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -82,7 +88,11 @@ import {AvatarModule} from "primeng/avatar";
         AvatarModule
 
     ],
-  providers: [MessageService],
+  providers: [MessageService , DialogService,ParamTableComponent,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: InterceptorService,
+    multi: true,
+  },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

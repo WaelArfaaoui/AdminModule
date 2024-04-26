@@ -64,3 +64,7 @@
   text-align: center;
   border-radius: 20px;
 }
+.user-avatar img {
+  max-width: 100%; /* Ensure image does not exceed container width */
+  height: auto; /* Maintain aspect ratio */
+}

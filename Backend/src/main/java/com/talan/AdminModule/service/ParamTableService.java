@@ -84,12 +84,12 @@ private ParamAuditRepository paramAuditRepository;
 
 // ALL COLUMNS BEL ACTIVE !!!
     public List<ColumnInfo> getAllColumns(String tableName) {
-        Optional<TableInfo> tableInfoOptional=allTablesWithColumns.getAllTablesWithColumns().stream()
+        TableInfo tableInfoOptional=allTablesWithColumns.getAllTablesWithColumns().stream()
                 .filter(table -> table.getName().equals(tableName))
-                .findFirst();
+                .findFirst().orElse(null);
         List<ColumnInfo> alltablecolumns=new ArrayList<>();
-        if (tableInfoOptional.isPresent()){
-            alltablecolumns  = tableInfoOptional.get().getColumns();
+        if (tableInfoOptional!=null){
+            alltablecolumns  = tableInfoOptional.getColumns();
         }
        return alltablecolumns;
     }
@@ -211,8 +211,9 @@ List<String> updatedRequestsData =new ArrayList<>();
         List<Object> params = new ArrayList<>();
 
         for (ColumnInfo column : allColumns) {
-            String dataValue = instanceData.get(column.getName().toLowerCase());
-            if (dataValue != null && !column.getName().equalsIgnoreCase(primaryKeyDetails(tableName).getName())) {
+            if (!column.getName().equalsIgnoreCase(primaryKeyDetails(tableName).getName())) {
+                String dataValue = instanceData.get(column.getName());
+
                 params.add(convertToDataType(dataValue, column.getType()));
                 columns.append(column.getName()).append(",");
                 values.append("?,");

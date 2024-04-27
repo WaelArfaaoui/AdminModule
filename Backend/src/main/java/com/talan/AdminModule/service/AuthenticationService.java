@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.AdminModule.config.JwtService;
 import com.talan.AdminModule.dto.AuthenticationRequest;
 import com.talan.AdminModule.dto.AuthenticationResponse;
+import com.talan.AdminModule.entity.User;
 import com.talan.AdminModule.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        User user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         logger.info("User found ");
         var jwtToken = jwtService.generateToken(user);

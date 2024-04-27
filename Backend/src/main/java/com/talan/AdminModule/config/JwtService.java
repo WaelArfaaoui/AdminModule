@@ -35,7 +35,7 @@ public class JwtService {
     return claimsResolver.apply(claims);
   }
 
-  public String generateToken(UserDetails userDetails) {
+  public String generateToken(User userDetails) {
     Map<String, Object> extraClaims = extractExtraClaims(userDetails);
     return buildToken(extraClaims, userDetails, jwtExpiration);
   }

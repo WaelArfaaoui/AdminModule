@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-
+@Data
 @NoArgsConstructor
 public class ColumnInfo {
     @NonNull

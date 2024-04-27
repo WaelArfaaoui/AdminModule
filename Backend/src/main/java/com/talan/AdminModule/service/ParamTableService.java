@@ -2,6 +2,7 @@ package com.talan.AdminModule.service;
 
 import com.talan.AdminModule.config.DatabaseInitializer;
 import com.talan.AdminModule.dto.*;
+import com.talan.AdminModule.dto.ColumnInfo;
 import com.talan.AdminModule.entity.ParamAudit;
 import com.talan.AdminModule.repository.ParamAuditRepository;
 import jakarta.annotation.PostConstruct;
@@ -103,9 +104,7 @@ private ParamAuditRepository paramAuditRepository;
 List<String> deletedRequestsData =new ArrayList<>();
 List<String> updatedRequestsData =new ArrayList<>();
         dataFromTable.setData (jdbcTemplate.queryForList(String.valueOf(sqlQuery)));
-            /*    .stream()
-                 .map(this::convertRowToStrings)
-                .toList());*/
+
 
         for (Map<String, Object> row : dataFromTable.getData()) {
             String primaryKeyValue = row.get(primaryKeyDetails(tableName).getName()).toString();

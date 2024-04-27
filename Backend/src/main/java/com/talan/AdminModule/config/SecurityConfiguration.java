@@ -1,5 +1,4 @@
 package com.talan.AdminModule.config;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,12 +18,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthFilter;
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-    @Autowired
-    private LogoutHandler logoutHandler;
     private static final String[] WHITE_LIST_URL = {"/api/**","/api/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",
@@ -39,7 +32,7 @@ public class SecurityConfiguration {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter,AuthenticationProvider authenticationProvider,LogoutHandler logoutHandler) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->

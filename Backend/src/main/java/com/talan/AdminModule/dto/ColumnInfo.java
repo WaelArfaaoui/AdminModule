@@ -4,18 +4,23 @@ import lombok.*;
 
 
 @Setter
-@Getter
-@NoArgsConstructor
+@NonNull
 public class ColumnInfo {
-    @NonNull
+
     private String name;
     private String type;
 
-    public ColumnInfo(@NonNull String name, String type) {
+    public ColumnInfo(String name, String type) {
         this.name = name;
         this.type = type;
     }
+public  ColumnInfo(){}
 
-
+    public String getName() {
+        return name;
+    }
+    public String getType(){
+        return type;
+    }
 }
 

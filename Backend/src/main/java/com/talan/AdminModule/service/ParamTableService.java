@@ -146,7 +146,7 @@ List<String> updatedRequestsData =new ArrayList<>();
     //STEP 1 SQLREQUEST FETCH DATA SELECT IF COLUMNS EMPTY APPEND ALL SELECTCOLUMNS
     public StringBuilder buildSelectClause(String tableName, TableDataRequest request) {
         StringBuilder selectClause = new StringBuilder("SELECT ");
-        List<String> columns = getAllColumns(tableName).stream()
+        List<String> columns = getAllColumns(tableName).stream().filter(Objects::nonNull)
                 .map(ColumnInfo::getName)
                 .filter(column -> !column.contains(ACTIVE))
                 .toList();

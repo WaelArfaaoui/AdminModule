@@ -1,4 +1,4 @@
-package com.talan.AdminModule.exception;
+package com.talan.adminmodule.exception;
 
 import lombok.Getter;
 

@@ -1,11 +1,11 @@
-package com.talan.AdminModule.service.impl;
+package com.talan.adminmodule.service.impl;
 
 
-import com.talan.AdminModule.dto.ChangePassword;
-import com.talan.AdminModule.dto.RegisterDto;
-import com.talan.AdminModule.dto.UserDto;
-import com.talan.AdminModule.entity.User;
-import com.talan.AdminModule.repository.UserRepository;
+import com.talan.adminmodule.dto.ChangePassword;
+import com.talan.adminmodule.dto.RegisterDto;
+import com.talan.adminmodule.dto.UserDto;
+import com.talan.adminmodule.entity.User;
+import com.talan.adminmodule.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

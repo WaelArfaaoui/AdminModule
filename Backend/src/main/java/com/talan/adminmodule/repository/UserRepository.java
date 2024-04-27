@@ -1,7 +1,7 @@
-package com.talan.AdminModule.repository;
+package com.talan.adminmodule.repository;
 
 
-import com.talan.AdminModule.entity.User;
+import com.talan.adminmodule.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

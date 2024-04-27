@@ -1,7 +1,7 @@
-package com.talan.AdminModule.repository;
+package com.talan.adminmodule.repository;
 
-import com.talan.AdminModule.entity.Rule;
-import com.talan.AdminModule.entity.RuleModification;
+import com.talan.adminmodule.entity.Rule;
+import com.talan.adminmodule.entity.RuleModification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

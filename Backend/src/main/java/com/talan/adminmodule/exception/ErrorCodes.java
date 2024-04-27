@@ -1,4 +1,4 @@
-package com.talan.AdminModule.exception;
+package com.talan.adminmodule.exception;
 public enum ErrorCodes {
 
     RULE_NOT_FOUND(1000),

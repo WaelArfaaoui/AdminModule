@@ -1,4 +1,4 @@
-package com.talan.AdminModule;
+package com.talan.adminmodule;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

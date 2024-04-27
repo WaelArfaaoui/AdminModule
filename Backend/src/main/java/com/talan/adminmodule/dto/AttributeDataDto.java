@@ -1,6 +1,5 @@
-package com.talan.AdminModule.dto;
+package com.talan.adminmodule.dto;
 
-import com.talan.AdminModule.entity.Attribute;
 import lombok.Builder;
 import lombok.Data;
 

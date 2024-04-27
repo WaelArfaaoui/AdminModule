@@ -1,8 +1,7 @@
-package com.talan.AdminModule.repository;
+package com.talan.adminmodule.repository;
 
-import com.talan.AdminModule.entity.Category;
-import com.talan.AdminModule.entity.Rule;
-import com.talan.AdminModule.entity.RuleAttribute;
+import com.talan.adminmodule.entity.Rule;
+import com.talan.adminmodule.entity.RuleAttribute;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

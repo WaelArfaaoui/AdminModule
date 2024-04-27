@@ -1,7 +1,6 @@
-package com.talan.AdminModule.service;
+package com.talan.adminmodule.service;
 
-import com.talan.AdminModule.dto.AttributeDto;
-import com.talan.AdminModule.entity.Attribute;
+import com.talan.adminmodule.dto.AttributeDto;
 
 import java.util.List;
 

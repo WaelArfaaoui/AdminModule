@@ -1,4 +1,4 @@
-package com.talan.AdminModule.entity;
+package com.talan.adminmodule.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

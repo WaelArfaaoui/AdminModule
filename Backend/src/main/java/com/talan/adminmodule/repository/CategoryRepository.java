@@ -1,7 +1,6 @@
-package com.talan.AdminModule.repository;
+package com.talan.adminmodule.repository;
 
-import com.talan.AdminModule.entity.Category;
-import com.talan.AdminModule.entity.Rule;
+import com.talan.adminmodule.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {

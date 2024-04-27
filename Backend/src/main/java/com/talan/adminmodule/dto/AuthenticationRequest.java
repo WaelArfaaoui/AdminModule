@@ -1,4 +1,4 @@
-package com.talan.AdminModule.dto;
+package com.talan.adminmodule.dto;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.talan.AdminModule.dto;
+package com.talan.adminmodule.dto;
 
-import com.talan.AdminModule.entity.RuleModification;
+import com.talan.adminmodule.entity.RuleModification;
 import lombok.Builder;
 import lombok.Data;
 

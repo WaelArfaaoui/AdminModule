@@ -1,12 +1,11 @@
-package com.talan.AdminModule.controller;
+package com.talan.adminmodule.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talan.AdminModule.dto.ChangePassword;
-import com.talan.AdminModule.dto.RegisterDto;
-import com.talan.AdminModule.dto.UserDto;
-import com.talan.AdminModule.entity.User;
-import com.talan.AdminModule.service.impl.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.talan.adminmodule.dto.ChangePassword;
+import com.talan.adminmodule.dto.RegisterDto;
+import com.talan.adminmodule.dto.UserDto;
+import com.talan.adminmodule.entity.User;
+import com.talan.adminmodule.service.impl.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +21,15 @@ import java.util.List;
 @RequestMapping("/api/users")
 @CrossOrigin("*")
 public class UserController {
+
+    private final UserService userservice;
+    private final ModelMapper modelMapper;
+
     @Autowired
-    private UserService userservice;
-    @Autowired
-    private ModelMapper modelMapper;
+    public UserController(UserService userservice, ModelMapper modelMapper) {
+        this.userservice = userservice;
+        this.modelMapper = modelMapper;
+    }
 
 
     @GetMapping()
@@ -83,7 +87,6 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-        System.out.println("okk");
         userservice.delete(id);
     }
 

@@ -1,5 +1,6 @@
-package com.talan.AdminModule.controller;
-import com.talan.AdminModule.dto.CategoryDto;
+package com.talan.adminmodule.controller;
+import com.talan.adminmodule.dto.CategoryDto;
+import com.talan.adminmodule.service.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

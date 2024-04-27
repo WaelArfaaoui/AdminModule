@@ -1,15 +1,14 @@
-package com.talan.AdminModule.service.impl;
+package com.talan.adminmodule.service.impl;
 
-import com.talan.AdminModule.dto.AttributeDto;
-import com.talan.AdminModule.entity.Attribute;
-import com.talan.AdminModule.repository.AttributeRepository;
-import com.talan.AdminModule.service.AttributeService;
+import com.talan.adminmodule.dto.AttributeDto;
+import com.talan.adminmodule.entity.Attribute;
+import com.talan.adminmodule.repository.AttributeRepository;
+import com.talan.adminmodule.service.AttributeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

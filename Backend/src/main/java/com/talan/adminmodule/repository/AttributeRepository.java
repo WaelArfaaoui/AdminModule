@@ -1,6 +1,6 @@
-package com.talan.AdminModule.repository;
+package com.talan.adminmodule.repository;
 
-import com.talan.AdminModule.entity.Attribute;
+import com.talan.adminmodule.entity.Attribute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

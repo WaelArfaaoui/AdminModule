@@ -1,4 +1,4 @@
-package com.talan.AdminModule.config;
+package com.talan.adminmodule.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;

@@ -1,8 +1,8 @@
-package com.talan.AdminModule.config;
+package com.talan.adminmodule.config;
 
 
-import com.talan.AdminModule.auditing.ApplicationAuditAware;
-import com.talan.AdminModule.repository.UserRepository;
+import com.talan.adminmodule.auditing.ApplicationAuditAware;
+import com.talan.adminmodule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

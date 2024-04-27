@@ -1,4 +1,4 @@
-package com.talan.AdminModule.entity;
+package com.talan.adminmodule.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

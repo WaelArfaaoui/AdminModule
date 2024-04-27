@@ -1,14 +1,7 @@
-package com.talan.AdminModule.controller;
-
-
-
-import com.talan.AdminModule.dto.AuthenticationRequest;
-import com.talan.AdminModule.dto.AuthenticationResponse;
-import com.talan.AdminModule.entity.Role;
-import com.talan.AdminModule.entity.User;
-import com.talan.AdminModule.repository.UserRepository;
-import com.talan.AdminModule.service.impl.AuthenticationService;
-import com.talan.AdminModule.service.impl.UserService;
+package com.talan.adminmodule.controller;
+import com.talan.adminmodule.dto.AuthenticationRequest;
+import com.talan.adminmodule.dto.AuthenticationResponse;
+import com.talan.adminmodule.service.impl.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,17 +10,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "*")
+@Tag(name = "Authentication")
 @RequestMapping("/api/auth")
 public class AuthenticationController {
+
+  private final AuthenticationService authenticationService;
+
   @Autowired
-  private AuthenticationService authenticationService;
+  public AuthenticationController(AuthenticationService authenticationService) {
+    this.authenticationService = authenticationService;
+  }
 
 
   @PostMapping("/authenticate")

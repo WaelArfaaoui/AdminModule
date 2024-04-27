@@ -1,10 +1,10 @@
-package com.talan.AdminModule.service.impl;
+package com.talan.adminmodule.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talan.AdminModule.config.JwtService;
-import com.talan.AdminModule.dto.AuthenticationRequest;
-import com.talan.AdminModule.dto.AuthenticationResponse;
-import com.talan.AdminModule.repository.UserRepository;
+import com.talan.adminmodule.config.JwtService;
+import com.talan.adminmodule.dto.AuthenticationRequest;
+import com.talan.adminmodule.dto.AuthenticationResponse;
+import com.talan.adminmodule.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;

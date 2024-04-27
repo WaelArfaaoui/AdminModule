@@ -1,8 +1,8 @@
-package com.talan.AdminModule.controller;
+package com.talan.adminmodule.controller;
 
-import com.talan.AdminModule.dto.RuleDto;
-import com.talan.AdminModule.dto.RuleModificationDto;
-import com.talan.AdminModule.service.RuleService;
+import com.talan.adminmodule.dto.RuleDto;
+import com.talan.adminmodule.dto.RuleModificationDto;
+import com.talan.adminmodule.service.RuleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +38,6 @@ public class RuleController {
         return new ResponseEntity<>(updatedRule, HttpStatus.OK);
     }
 
-    // Implement other endpoints similarly
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRule(@PathVariable("id") Integer id) {
@@ -76,6 +75,15 @@ public class RuleController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<RuleDto> rules = ruleService.findAll(page, size);
+        return new ResponseEntity<>(rules, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<RuleDto>> searchRules(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String query) {
+        Page<RuleDto> rules = ruleService.searchRules(page, size, query);
         return new ResponseEntity<>(rules, HttpStatus.OK);
     }
 }

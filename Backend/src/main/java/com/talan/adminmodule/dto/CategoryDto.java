@@ -1,18 +1,22 @@
-package com.talan.AdminModule.dto;
-import com.talan.AdminModule.entity.Category;
-import lombok.AllArgsConstructor;
+package com.talan.adminmodule.dto;
+import com.talan.adminmodule.entity.Category;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class CategoryDto {
     private Integer id;
     private String name;
 
     public static CategoryDto fromEntity(Category category) {
-        return new CategoryDto(category.getId(), category.getName());
+        if (category == null) {
+            return null;
+        }
+        return CategoryDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build() ;
     }
 
     public static Category toEntity(CategoryDto categoryDto) {

@@ -1,6 +1,6 @@
-package com.talan.AdminModule.config;
+package com.talan.adminmodule.config;
 
-import com.talan.AdminModule.entity.User;
+import com.talan.adminmodule.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

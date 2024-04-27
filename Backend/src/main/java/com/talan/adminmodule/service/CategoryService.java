@@ -1,6 +1,6 @@
-package com.talan.AdminModule.service;
+package com.talan.adminmodule.service;
 
-import com.talan.AdminModule.dto.CategoryDto;
+import com.talan.adminmodule.dto.CategoryDto;
 
 import java.util.List;
 

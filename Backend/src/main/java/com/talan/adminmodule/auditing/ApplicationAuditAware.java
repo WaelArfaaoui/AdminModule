@@ -1,5 +1,5 @@
-package com.talan.AdminModule.auditing;
-import com.talan.AdminModule.entity.User;
+package com.talan.adminmodule.auditing;
+import com.talan.adminmodule.entity.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

@@ -1,16 +1,14 @@
-package com.talan.AdminModule.service.impl;
-import com.talan.AdminModule.dto.AttributeDataDto;
-import com.talan.AdminModule.dto.AttributeDto;
-import com.talan.AdminModule.dto.RuleDto;
-import com.talan.AdminModule.dto.RuleModificationDto;
-import com.talan.AdminModule.entity.*;
-import com.talan.AdminModule.repository.*;
-import com.talan.AdminModule.service.RuleService;
+package com.talan.adminmodule.service.impl;
+import com.talan.adminmodule.dto.*;
+import com.talan.adminmodule.entity.*;
+import com.talan.adminmodule.repository.*;
+import com.talan.adminmodule.service.RuleService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -100,51 +98,49 @@ public class RuleServiceImpl implements RuleService {
         if (existingRule != null) {
             existingRule.setName(updatedRuleDto.getName());
             existingRule.setDescription(updatedRuleDto.getDescription());
-            existingRule.setEnabled(updatedRuleDto.isEnabled());
-
             Category category = categoryRepository.findByName(updatedRuleDto.getCategory().getName());
             if (category == null) {
-                category = new Category();
-                category.setName(updatedRuleDto.getCategory().getName());
+                category = CategoryDto.toEntity(updatedRuleDto.getCategory()) ;
                 category = categoryRepository.save(category);
             }
             existingRule.setCategory(category);
-
-            // Delete existing RuleAttributes related to the rule
             ruleAttributeRepository.deleteByRule(existingRule);
-
             List<RuleAttribute> updatedRuleAttributes = new ArrayList<>();
             for (AttributeDataDto attributeDto : updatedRuleDto.getAttributeDtos()) {
                 Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName().getName());
                 if (attribute == null) {
-                    attribute = new Attribute();
-                    attribute.setName(attributeDto.getName().getName());
+                    attribute = AttributeDto.toEntity(attributeDto.getName()) ;
                     attribute = attributeRepository.save(attribute);
                 }
-                RuleAttribute ruleAttribute = new RuleAttribute();
-                ruleAttribute.setRule(existingRule);
-                ruleAttribute.setAttribute(attribute);
-                ruleAttribute.setPercentage(attributeDto.getPercentage());
-                ruleAttribute.setValue(attributeDto.getValue());
+                RuleAttribute ruleAttribute = this.addRuleAttribute(attribute , existingRule ,attributeDto);
                 updatedRuleAttributes.add(ruleAttribute);
             }
             existingRule.setRuleAttributes(updatedRuleAttributes);
             existingRule = ruleRepository.save(existingRule);
-            System.out.println(existingRule.getLastModifiedBy());
-            RuleModification ruleModification = new RuleModification();
-            ruleModification.setRule(existingRule);
-            ruleModification.setModificationDate(existingRule.getLastModified());
-            ruleModification.setModifiedBy(existingRule.getLastModifiedBy());
-            ruleModification.setRuleName(existingRule.getName());
-            ruleModification.setModificationDescription(modDescription);
-            this.ruleModificationRepository.save(ruleModification) ;
-
+            this.saveRuleModification(existingRule , modDescription);
             return RuleDto.fromEntity(existingRule);
         }
         return null;
     }
 
+    public void saveRuleModification(Rule existingRule , String modDescription){
+        RuleModification ruleModification = new RuleModification();
+        ruleModification.setRule(existingRule);
+        ruleModification.setModificationDate(existingRule.getLastModified());
+        ruleModification.setModifiedBy(existingRule.getLastModifiedBy());
+        ruleModification.setRuleName(existingRule.getName());
+        ruleModification.setModificationDescription(modDescription);
+        this.ruleModificationRepository.save(ruleModification) ;
+    }
 
+    public RuleAttribute addRuleAttribute(Attribute attribute , Rule existingRule ,AttributeDataDto attributeDto ){
+        RuleAttribute ruleAttribute = new RuleAttribute();
+        ruleAttribute.setRule(existingRule);
+        ruleAttribute.setAttribute(attribute);
+        ruleAttribute.setPercentage(attributeDto.getPercentage());
+        ruleAttribute.setValue(attributeDto.getValue());
+        return ruleAttribute;
+    }
 
     @Override
     @Transactional
@@ -156,13 +152,11 @@ public class RuleServiceImpl implements RuleService {
     public RuleDto findById(Integer id) {
         return ruleRepository.findByIdWithAttributes(id).map(RuleDto::fromEntity).orElse(null);
     }
-
     @Override
     public Page<RuleDto> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ruleRepository.findAll(pageable).map(RuleDto::fromEntity);
     }
-
     @Override
     public List<RuleModificationDto> getModificationsByRuleId(Integer id) {
         Rule rule = ruleRepository.findById(id).orElse(null);
@@ -174,5 +168,10 @@ public class RuleServiceImpl implements RuleService {
             return modificationDtos ;
         }
         return null;
+    }
+    @Override
+    public Page<RuleDto> searchRules(int page, int size, String query) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ruleRepository.search(query, pageable).map(RuleDto::fromEntity);
     }
 }

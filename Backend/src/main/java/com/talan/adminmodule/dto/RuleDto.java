@@ -1,10 +1,8 @@
-package com.talan.AdminModule.dto;
+package com.talan.adminmodule.dto;
 
-import com.talan.AdminModule.entity.Rule;
-import com.talan.AdminModule.entity.RuleModification;
+import com.talan.adminmodule.entity.Rule;
 import lombok.Builder;
 import lombok.Data;
-import org.w3c.dom.Attr;
 
 import java.time.LocalDateTime;
 import java.util.List;

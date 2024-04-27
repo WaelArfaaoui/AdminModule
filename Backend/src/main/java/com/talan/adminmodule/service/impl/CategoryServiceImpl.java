@@ -1,8 +1,8 @@
-package com.talan.AdminModule.service.impl;
-import com.talan.AdminModule.dto.CategoryDto;
-import com.talan.AdminModule.entity.Category;
-import com.talan.AdminModule.repository.CategoryRepository;
-import com.talan.AdminModule.service.CategoryService;
+package com.talan.adminmodule.service.impl;
+import com.talan.adminmodule.dto.CategoryDto;
+import com.talan.adminmodule.entity.Category;
+import com.talan.adminmodule.repository.CategoryRepository;
+import com.talan.adminmodule.service.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

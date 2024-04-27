@@ -76,7 +76,7 @@ public class DatabaseInitializer {
                 TableInfo tableInfo = new TableInfo();
                 tableInfo.setName(tableName);
                 tableInfo.setColumns(columns);
-                tableInfo.setPk(primaryKeyColumn); // Set primary key column info
+                tableInfo.setPk(primaryKeyColumn);
                 tableInfo.setTotalRows(totalRows);
 
                 tablesWithColumnsList.add(tableInfo);

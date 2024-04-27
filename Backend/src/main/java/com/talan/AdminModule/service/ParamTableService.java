@@ -232,8 +232,9 @@ List<String> updatedRequestsData =new ArrayList<>();
 
         ParamAudit audit = ParamAudit.constructForInsertion(tableName, "ADDED", version, instanceData.toString(), username);
         paramAuditRepository.save(audit);
-
-        return new ResponseDto("Record added successfully", null);
+ResponseDto responseDto = new ResponseDto();
+        responseDto.setSuccess("Record added successfully");
+        return responseDto;
     }
 
     public String getUsernameFromSecurityContext() {

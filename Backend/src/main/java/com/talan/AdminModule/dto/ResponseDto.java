@@ -12,4 +12,9 @@ import lombok.*;
 public class ResponseDto {
     private String success;
     private String error;
+
+    public ResponseDto(String success) {
+        this.success = success;
+    }
+
 }

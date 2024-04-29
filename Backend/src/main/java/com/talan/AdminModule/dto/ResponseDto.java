@@ -15,8 +15,5 @@ public class ResponseDto {
     public ResponseDto() {
     }
 
-    public ResponseDto(String success) {
-        this.success = success;
-    }
 
 }

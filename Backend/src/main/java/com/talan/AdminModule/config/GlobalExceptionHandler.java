@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto> handleDataAccessException(DataAccessException ex, WebRequest request) {
         String requestDetails =request.getDescription(false) ;
         LOGGER.error("Data Access error {}: {}",requestDetails, ex.getMessage(), ex);
-        responseDto.setError("An error occurred while processing the request.");
+        responseDto.setError("An error occurred while accessing data.");
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
         Throwable rootCause = ex.getRootCause();
         String detailedError = (rootCause instanceof PSQLException)
-                ? "PostgreSQL error: " + rootCause.getMessage()
+                ? "PostgresSQL error: " + rootCause.getMessage()
                 : "Data integrity violation: " + ex.getMessage();
 String requestWithoutClientInfo =request.getDescription(false) ;
         LOGGER.error("{} - Details: {}" ,detailedError ,requestWithoutClientInfo);

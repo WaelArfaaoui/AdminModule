@@ -66,10 +66,9 @@ private ParamAuditRepository paramAuditRepository;
     public TablesWithColumns retrieveAllTablesWithFilteredColumns(int limit, int offset) {
         List<TableInfo> paginatedTables = new ArrayList<>();
         TablesWithColumns tablesWithColumns = new TablesWithColumns();
-        // Calculate the end index for the sublist
         int endIndex = (int) Math.min(allTablesWithColumns.getNumberTables(), offset + (long)limit);
 
-        // Iterate over the original list and add the filtered tables to the paginated list
+
         for (int i = offset; i < endIndex; i++) {
             TableInfo originalTable = allTablesWithColumns.getAllTablesWithColumns().get(i);
             List<ColumnInfo> columns = originalTable.getColumns();
@@ -180,10 +179,11 @@ List<String> updatedRequestsData =new ArrayList<>();
 
 
     public String orderByClause(String tableName, TableDataRequest request) {
-        String orderByColumn = request.getSortByColumn() != null && !request.getSortByColumn().equals("null") && !request.getSortByColumn().isEmpty()
+        String sortByColumn = request.getSortByColumn() != null && !request.getSortByColumn().equals("null") && !request.getSortByColumn().isEmpty()
                 ? request.getSortByColumn()
                 : primaryKeyDetails(tableName).getName();
-        return " ORDER BY " + orderByColumn;
+        String order= request.getSortOrder()!=null &&!request.getSortOrder().equals("null") &&!request.getSortOrder().isEmpty()&& sortByColumn.equals(request.getSortByColumn()) ? request.getSortOrder() :" " ;
+        return " ORDER BY " + sortByColumn +" "+order;
     }
 
 

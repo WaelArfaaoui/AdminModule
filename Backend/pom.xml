@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.talan</groupId>
 	<artifactId>Admin-module</artifactId>
@@ -15,6 +15,8 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
+		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -59,7 +61,7 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.11</version>
+			<version>0.8.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -110,23 +112,23 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.11</version>
+				<version>0.8.8</version>
 				<executions>
 					<execution>
-						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>report</id>
+						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
+
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

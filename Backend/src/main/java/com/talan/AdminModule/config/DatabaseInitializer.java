@@ -68,7 +68,7 @@ public class DatabaseInitializer {
                             .filter(column -> column.getName().equals(primaryKeyColumnName))
                             .findFirst()
                             .map(ColumnInfo::getType)
-                            .orElse(""); // Provide a default value if the column is not found
+                            .orElse("");
                     primaryKeyColumn.setName(primaryKeyColumnName);
                     primaryKeyColumn.setType(primaryKeyColumnType);
                 }

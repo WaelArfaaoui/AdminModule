@@ -232,9 +232,7 @@ export class UpdateRuleComponent implements OnInit {
       this.ruleService.updateRule(2, ruleId, formData.updateDescription, formData).subscribe({
         next: response => {
           this.messageService.add({severity: 'success', summary: 'Success', detail: 'Rule updated successfully'});
-          setTimeout(() => {
-            this.router.navigate(['rules']);
-          }, 1000);
+          this.ref.close();
         },
         error: error => {
           console.error('Error saving rule:', error);

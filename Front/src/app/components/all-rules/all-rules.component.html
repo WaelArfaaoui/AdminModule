@@ -1,9 +1,4 @@
 <div class="recent-rules ">
-<!--  <span class="p-input-icon-left m-3">-->
-<!--    <i class="pi pi-search"></i>-->
-<!--    <input type="text" pInputText [(ngModel)]="searchQuery" />-->
-<!--    <button type="button" (click)="search()" class="m-3">Search</button>-->
-<!--</span>-->
   <table >
     <thead>
     <tr>
@@ -11,8 +6,14 @@
       <th>Rule description</th>
       <th>Date created</th>
       <th>Status</th>
-      <th>
+      <th style="width: 20%; padding-left: 4rem;">
+        <span class="">
+            <input type="text" style="width: 120px;margin-left: -1rem;" pInputText [(ngModel)]="searchQuery" (input)="search()" />
+            <i class="pi pi-search search-btn" style="color:gray ;"></i>
+        </span>
       </th>
+
+
     </tr>
     </thead>
     <tbody>
@@ -21,7 +22,7 @@
       <td>{{ rule.description }}</td>
       <td>{{ rule.createDate | date: 'dd/MM/yyyy' }}</td>
       <td [ngStyle]="{'color': rule.enabled ? 'green' : 'red'}">
-        {{ rule.enabled ? 'Enabled' : 'Disabled' }}
+        {{ rule.enabled ? 'Enabled' : 'Deleted' }}
       </td>
       <td class="primary details" *ngIf="rule.enabled">
           <button pButton type="button" icon="pi pi-pencil" style="margin-right:10px" class="p-button-warning" (click)="updateRule(rule)"></button>
@@ -29,14 +30,14 @@
          <button pButton type="button" icon="pi pi-history" style="margin-right:-40px" class="p-button-info" (click)="openRuleHistory(rule)"></button>
       </td>
       <td class="primary details" *ngIf="!rule.enabled">
-        <div>
+        <div class="hist-btn">
           <button pButton type="button" icon="pi pi-history" class=" hist-button" (click)="openRuleHistory(rule)"> &nbsp;History</button>
         </div>
       </td>
     </tr>
     </tbody>
   </table>
-    <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="120" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+    <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="120" [rowsPerPageOptions]="[10, 20, 30 , 40 ,50,60 ,70]"></p-paginator>
 
 </div>
 

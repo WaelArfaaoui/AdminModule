@@ -65,10 +65,22 @@ mat-paginator {
   padding: 0.2rem 0;
 }
 
+.hist-btn {
+  padding-left: 45px;
+}
+
 .hist-button {
   border-radius :10px;
   padding: 0.35rem;
   background: rgba(250, 245, 245, 0.89) !important;
+}
+
+.search-btn {
+  width: 3rem;
+  height: 3rem;
+  padding-top: 1rem;
+  margin-left: -3rem;
+
 }
 
 

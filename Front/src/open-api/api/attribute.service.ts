@@ -11,20 +11,25 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
-        }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
-import { Observable }                                        from 'rxjs';
+import {Inject, Injectable, Optional} from '@angular/core';
+import {
+    HttpClient,
+    HttpContext,
+    HttpEvent,
+    HttpHeaders,
+    HttpParameterCodec,
+    HttpParams,
+    HttpResponse
+} from '@angular/common/http';
+import {CustomHttpParameterCodec} from '../encoder';
+import {Observable} from 'rxjs';
 
 // @ts-ignore
-import { AttributeDto } from '../model/attributeDto';
+import {AttributeDto} from '../model/attributeDto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
-import { Configuration }                                     from '../configuration';
-
+import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
+import {Configuration} from '../configuration';
 
 
 @Injectable({

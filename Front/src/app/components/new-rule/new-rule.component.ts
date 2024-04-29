@@ -192,6 +192,7 @@ export class NewRuleComponent implements OnInit {
       const formData = this.ruleForm.value;
       this.ruleService.saveRule(formData).subscribe({
         next: response => {
+          console.log(response) ;
           this.messageService.add({severity: 'success', summary: 'Success', detail: 'Rule saved successfully'});
           setTimeout(() => {
             this.router.navigate(['rules']);

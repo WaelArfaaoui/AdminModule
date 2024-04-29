@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AppLayoutModule} from './layout/app.layout.module';
@@ -49,9 +48,14 @@ import { DisableRuleComponent } from './components/disable-rule/disable-rule.com
 import {DialogService} from "primeng/dynamicdialog";
 import { UpdateRuleComponent } from './components/update-rule/update-rule.component';
 import { RuleHistoryComponent } from './components/rule-history/rule-history.component';
+import {NgApexchartsModule} from "ng-apexcharts";
+import { HeatmapComponent } from './components/heatmap/heatmap.component';
+import { DonutComponent } from './components/donut/donut.component';
+import { StackedColumnsComponent } from './components/stacked-columns/stacked-columns.component';
+
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -86,7 +90,8 @@ import { RuleHistoryComponent } from './components/rule-history/rule-history.com
         DialogModule,
         AvatarModule,
         TableModule,
-        PaginatorModule
+        PaginatorModule ,
+        NgApexchartsModule
 
     ],
   providers: [MessageService , DialogService,{

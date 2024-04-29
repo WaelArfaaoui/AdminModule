@@ -71,3 +71,12 @@ p-dialog-header {
   background: var(--color-info-light)  !important;
 }
 
+.apexcharts-datalabels {
+  display: none !important;
+}
+
+
+app-stacked-columns .apexcharts-legend-series {
+  display: none !important;
+}
+

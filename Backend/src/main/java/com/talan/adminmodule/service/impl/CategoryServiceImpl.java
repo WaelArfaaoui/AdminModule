@@ -41,11 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDto> findAll() {
         return categoryRepository.findAll().stream()
                 .map(CategoryDto::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean existByName(String name) {
-        return this.categoryRepository.existsByName(name);
+                .toList();
     }
 }

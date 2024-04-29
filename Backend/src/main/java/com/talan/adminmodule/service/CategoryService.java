@@ -12,6 +12,4 @@ public interface CategoryService {
     CategoryDto findById(Integer id);
 
     List<CategoryDto> findAll();
-
-    boolean existByName(String name);
 }

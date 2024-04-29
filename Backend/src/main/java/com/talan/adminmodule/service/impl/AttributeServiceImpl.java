@@ -1,15 +1,14 @@
 package com.talan.adminmodule.service.impl;
-
 import com.talan.adminmodule.dto.AttributeDto;
 import com.talan.adminmodule.entity.Attribute;
+import com.talan.adminmodule.exception.EntityNotFoundException;
+import com.talan.adminmodule.exception.ErrorCodes;
+import com.talan.adminmodule.exception.InvalidEntityException;
 import com.talan.adminmodule.repository.AttributeRepository;
 import com.talan.adminmodule.service.AttributeService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AttributeServiceImpl implements AttributeService {
@@ -19,21 +18,31 @@ public class AttributeServiceImpl implements AttributeService {
     public AttributeServiceImpl(AttributeRepository attributeRepository) {
         this.attributeRepository = attributeRepository;
     }
+
     @Override
     public AttributeDto save(AttributeDto attributeDTO) {
-        return AttributeDto.fromEntity(attributeRepository.save(AttributeDto.toEntity(attributeDTO)));
+        if (attributeDTO == null) {
+            throw new InvalidEntityException("Attribute is null", ErrorCodes.ATTRIBUTE_NOT_VALID);
+        }
+
+        Attribute attribute = AttributeDto.toEntity(attributeDTO);
+        attribute = attributeRepository.save(attribute);
+        return AttributeDto.fromEntity(attribute);
     }
 
     @Override
     public void delete(Integer id) {
-        this.attributeRepository.deleteById(id);
+        Attribute attribute = attributeRepository.findById(id).orElse(null);
+        if (attribute == null) {
+            throw new EntityNotFoundException("Attribute with ID = " + id + " not found in the database" , ErrorCodes.ATTRIBUTE_NOT_FOUND);
+        }
+        attributeRepository.deleteById(id);
     }
 
     @Override
     public AttributeDto findById(Integer id) {
-
-        Attribute attribute  = this.attributeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                "No attribute with ID = " + id + " found in the database")
+        Attribute attribute = attributeRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Attribute with ID = " + id + " not found in the database", ErrorCodes.ATTRIBUTE_NOT_FOUND)
         );
         return AttributeDto.fromEntity(attribute);
     }
@@ -42,13 +51,11 @@ public class AttributeServiceImpl implements AttributeService {
     public List<AttributeDto> findAll() {
         return attributeRepository.findAll().stream()
                 .map(AttributeDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public boolean existByName(String name) {
-        return this.attributeRepository.existsByName(name);
+        return attributeRepository.existsByName(name);
     }
-
-
 }

@@ -2,8 +2,8 @@ package com.talan.adminmodule.controller;
 
 import static org.mockito.Mockito.when;
 
-import com.talan.adminmodule.dto.AttributeDto;
-import com.talan.adminmodule.service.AttributeService;
+import com.talan.adminmodule.dto.CategoryDto;
+import com.talan.adminmodule.service.CategoryService;
 
 import java.util.ArrayList;
 
@@ -19,23 +19,23 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ContextConfiguration(classes = {AttributeController.class})
+@ContextConfiguration(classes = {CategoryController.class})
 @ExtendWith(SpringExtension.class)
-class AttributeControllerTest {
+class CategoryControllerTest {
     @Autowired
-    private AttributeController attributeController;
+    private CategoryController categoryController;
 
     @MockBean
-    private AttributeService attributeService;
+    private CategoryService categoryService;
 
     /**
-     * Method under test: {@link AttributeController#getAllAttributes()}
+     * Method under test: {@link CategoryController#getAllCategories()}
      */
     @Test
-    void testGetAllAttributes() throws Exception {
-        when(attributeService.findAll()).thenReturn(new ArrayList<>());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/attributes");
-        MockMvcBuilders.standaloneSetup(attributeController)
+    void testGetAllCategories() throws Exception {
+        when(categoryService.findAll()).thenReturn(new ArrayList<>());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/categories");
+        MockMvcBuilders.standaloneSetup(categoryController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -44,14 +44,14 @@ class AttributeControllerTest {
     }
 
     /**
-     * Method under test: {@link AttributeController#getAttributeById(Integer)}
+     * Method under test: {@link CategoryController#getCategoryById(Integer)}
      */
     @Test
-    void testGetAttributeById() throws Exception {
-        when(attributeService.findById(Mockito.<Integer>any()))
-                .thenReturn(AttributeDto.builder().id(1).name("Name").build());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/attributes/{id}", 1);
-        MockMvcBuilders.standaloneSetup(attributeController)
+    void testGetCategoryById() throws Exception {
+        when(categoryService.findById(Mockito.<Integer>any()))
+                .thenReturn(CategoryDto.builder().id(1).name("Name").build());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/categories/{id}", 1);
+        MockMvcBuilders.standaloneSetup(categoryController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())

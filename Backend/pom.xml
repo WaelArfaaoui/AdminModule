@@ -16,7 +16,8 @@
 	<properties>
 		<java.version>17</java.version>
 		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-
+		<sonar.login>admin</sonar.login>
+		<sonar.password>sonar</sonar.password>
 	</properties>
 	<dependencies>
 		<dependency>

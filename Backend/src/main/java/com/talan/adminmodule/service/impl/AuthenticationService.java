@@ -1,5 +1,4 @@
 package com.talan.adminmodule.service.impl;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.adminmodule.config.JwtService;
 import com.talan.adminmodule.dto.AuthenticationRequest;
@@ -7,14 +6,11 @@ import com.talan.adminmodule.dto.AuthenticationResponse;
 import com.talan.adminmodule.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 
 @Service
@@ -29,9 +25,6 @@ public class AuthenticationService {
         this.jwtService = jwtService ;
         this.authenticationManager = authenticationManager ;
     }
-
-
-
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         authenticationManager.authenticate(

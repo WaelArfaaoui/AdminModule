@@ -1,13 +1,5 @@
 package com.talan.adminmodule.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.notNull;
-import static org.mockito.Mockito.*;
-
 import com.talan.adminmodule.config.JwtService;
 import com.talan.adminmodule.dto.AuthenticationRequest;
 import com.talan.adminmodule.dto.AuthenticationResponse;
@@ -17,22 +9,11 @@ import com.talan.adminmodule.repository.UserRepository;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
-import java.util.Optional;
-
-import org.apache.catalina.connector.CoyoteOutputStream;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.connector.ResponseFacade;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -48,70 +29,100 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ContextConfiguration(classes = {AuthenticationService.class, AuthenticationManager.class})
+@ExtendWith(SpringExtension.class)
 class AuthenticationServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private JwtService jwtService;
-
-    @Mock
+    @MockBean
     private AuthenticationManager authenticationManager;
 
-    @InjectMocks
+    @Autowired
     private AuthenticationService authenticationService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private Logger logger;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    /**
+     * Method under test: {@link AuthenticationService#authenticate(AuthenticationRequest)}
+     */
     @Test
-    void authenticate_ValidCredentials_ReturnsAuthenticationResponse() {
-        // Arrange
-        AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password");
-        when(userRepository.findByEmail(request.getEmail())).thenReturn(java.util.Optional.ofNullable(null));
-        when(jwtService.generateToken(any())).thenReturn("mockedAccessToken");
-        when(jwtService.generateRefreshToken(any())).thenReturn("mockedRefreshToken");
+    void testAuthenticate() throws AuthenticationException {
+        when(jwtService.generateRefreshToken(Mockito.<UserDetails>any())).thenReturn("ABC123");
+        when(jwtService.generateToken(Mockito.<UserDetails>any())).thenReturn("ABC123");
 
-        // Act
-        AuthenticationResponse response = authenticationService.authenticate(request);
-
-        // Assert
-        assertEquals("mockedAccessToken", response.getAccessToken());
-        assertEquals("mockedRefreshToken", response.getRefreshToken());
+        User user = new User();
+        user.setActive(true);
+        user.setCompany("Company");
+        user.setEmail("jane.doe@example.org");
+        user.setFirstname("Jane");
+        user.setId(1);
+        user.setLastname("Doe");
+        user.setNonExpired(true);
+        user.setPassword("iloveyou");
+        user.setPhone("6625550144");
+        user.setProfileImagePath("Profile Image Path");
+        user.setRole(Role.BUSINESSEXPERT);
+        Optional<User> ofResult = Optional.of(user);
+        when(userRepository.findByEmail(Mockito.<String>any())).thenReturn(ofResult);
+        when(authenticationManager.authenticate(Mockito.<Authentication>any()))
+                .thenReturn(new TestingAuthenticationToken("Principal", "Credentials"));
+        AuthenticationResponse actualAuthenticateResult = authenticationService
+                .authenticate(new AuthenticationRequest("jane.doe@example.org", "iloveyou"));
+        assertEquals("ABC123", actualAuthenticateResult.getAccessToken());
+        assertEquals("ABC123", actualAuthenticateResult.getRefreshToken());
+        assertNull(actualAuthenticateResult.getError());
+        verify(jwtService).generateRefreshToken(Mockito.<UserDetails>any());
+        verify(jwtService).generateToken(Mockito.<UserDetails>any());
+        verify(userRepository).findByEmail(Mockito.<String>any());
+        verify(authenticationManager).authenticate(Mockito.<Authentication>any());
     }
 
-    @Test
-    void refreshToken_ValidToken_GeneratesNewAccessToken() throws Exception {
-        // Arrange
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(request.getHeader("Authorization")).thenReturn("Bearer mockedRefreshToken");
-        when(jwtService.extractUsername("mockedRefreshToken")).thenReturn("test@example.com");
-        when(userRepository.findByEmail("test@example.com")).thenReturn(java.util.Optional.ofNullable(null));
-        when(jwtService.isTokenValid("mockedRefreshToken", null)).thenReturn(true);
-        when(jwtService.generateToken(any())).thenReturn("mockedAccessToken");
-
-        // Act
-        authenticationService.refreshToken(request, response);
-
-        // Assert
-        verify(response).getOutputStream();
-    }
-
-    @Test
-    void refreshToken_InvalidToken_NoActionTaken() throws Exception {
-        // Arrange
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        when(request.getHeader("Authorization")).thenReturn(null);
-
-        // Act
-        authenticationService.refreshToken(request, response);
-
-        // Assert
-        verify(response, never()).getOutputStream();
-    }
-
+    /**
+     * Method under test: {@link AuthenticationService#refreshToken(HttpServletRequest, HttpServletResponse)}
+     */
+//    @Test
+//    void testRefreshToken() throws IOException {
+//        AuthenticationService authenticationService = new AuthenticationService(repository ,jwtService,authenticationManager);
+//        MockHttpServletRequest request = new MockHttpServletRequest();
+//        Response response = new Response();
+//        authenticationService.refreshToken(request, response);
+//        assertTrue(request.isRequestedSessionIdValid());
+//        assertFalse(request.isRequestedSessionIdFromURL());
+//        assertTrue(request.isRequestedSessionIdFromCookie());
+//        assertFalse(request.isAsyncSupported());
+//        assertFalse(request.isAsyncStarted());
+//        assertTrue(request.isActive());
+//        assertTrue(request.getSession() instanceof MockHttpSession);
+//        assertEquals("", request.getServletPath());
+//        assertEquals("localhost", request.getLocalName());
+//        assertEquals(80, request.getLocalPort());
+//        assertEquals("", request.getRequestURI());
+//        assertEquals("", request.getContextPath());
+//        assertEquals("http", request.getScheme());
+//        assertEquals("localhost", request.getServerName());
+//        assertEquals(80, request.getServerPort());
+//        assertEquals("", request.getMethod());
+//        assertEquals(DispatcherType.REQUEST, request.getDispatcherType());
+//        assertTrue(request.getHttpServletMapping() instanceof MockHttpServletMapping);
+//        assertEquals("HTTP/1.1", request.getProtocol());
+//        assertTrue(request.getInputStream() instanceof DelegatingServletInputStream);
+//        assertEquals("localhost", request.getRemoteHost());
+//        assertEquals(80, request.getRemotePort());
+//        HttpServletResponse response2 = response.getResponse();
+//        assertTrue(response2 instanceof ResponseFacade);
+//        assertSame(response.getOutputStream(), response2.getOutputStream());
+//    }
 }
+

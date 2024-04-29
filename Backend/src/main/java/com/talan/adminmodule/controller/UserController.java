@@ -6,7 +6,6 @@ import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.UserDto;
 import com.talan.adminmodule.entity.User;
 import com.talan.adminmodule.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin("*")
-@Tag(name = "User")
 public class UserController {
+
+    private final UserService userservice;
+    private final ModelMapper modelMapper;
+
     @Autowired
-    private UserService userservice;
-    @Autowired
-    private ModelMapper modelMapper;
+    public UserController(UserService userservice, ModelMapper modelMapper) {
+        this.userservice = userservice;
+        this.modelMapper = modelMapper;
+    }
 
 
     @GetMapping()
@@ -36,14 +39,14 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<UserDto> addUser(@ModelAttribute RegisterDto dto,
-                                           @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+                                           @RequestParam("file") MultipartFile file) throws IOException {
 
         UserDto userDto = this.userservice.addUser(dto, file);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable int id,
-                                              @RequestParam(value = "file", required = false) MultipartFile file,
+                                              @RequestParam("file") MultipartFile file,
                                               @RequestParam("dto") String dtoJson) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -85,6 +88,18 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
         userservice.delete(id);
+    }
+
+    @PatchMapping("/{id}/expire")
+    public ResponseEntity<String> expireUser(@PathVariable int id) {
+        userservice.expireUser(id);
+        return ResponseEntity.ok("User expired successfully");
+    }
+
+    @PatchMapping("/{id}/unexpire")
+    public ResponseEntity<String> unexpireUser(@PathVariable int id) {
+        userservice.unexpireUser(id);
+        return ResponseEntity.ok("User unexpired successfully");
     }
 
 

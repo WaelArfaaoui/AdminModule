@@ -22,22 +22,26 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+
     @Autowired
-    private  ModelMapper modelMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    public UserService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
+
     public UserDto mapUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
     public ChangePassword changePassword(ChangePassword request, Principal connectedUser) {
 
-        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         // check if the current password is correct
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
@@ -53,15 +57,16 @@ public class UserService {
         // update the password
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
+        // save the new password
         userRepository.save(user);
         return ChangePassword.builder()
                 .message("Password Changed").build();
     }
     public String storeProfileImage(MultipartFile profileImage) throws IOException {
-        String imagePath = null;
+        String imagePath = "";
         String path ="";
         if (profileImage != null && !profileImage.isEmpty()) {
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(profileImage.getOriginalFilename()));
+            String fileName = StringUtils.cleanPath(profileImage.getOriginalFilename());
             String currentDir = System.getProperty("user.dir");
             Path uploadDir = Paths.get(currentDir,"..","Front", "src","assets","demo","images", "user-profiles");
             Path storeDir = Paths.get("assets","demo","images","user-profiles",fileName);
@@ -93,6 +98,8 @@ public class UserService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .role(dto.getRole())
                 .profileImagePath(profileImagePath)
+                .active(true)
+                .nonExpired(true)
                 .build();
 
         userRepository.save(user);
@@ -103,11 +110,6 @@ public class UserService {
         return users.stream()
                 .map(this::mapUserToDto)
                 .toList();
-    }
-    public void delete (int id){
-        User user =  userRepository.findById(id).orElse(null);
-
-        userRepository.delete(user);
     }
     public UserDto update(int id, RegisterDto dto, MultipartFile file) throws IOException {
         User user = userRepository.findById(id).orElse(null);
@@ -145,6 +147,33 @@ public class UserService {
     public User findbyemail(String email)
     {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public void delete(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setActive(false);
+            userRepository.save(user);
+        }
+    }
+
+    public void expireUser(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setNonExpired(false);
+            userRepository.save(user);
+        }
+    }
+
+    public void unexpireUser(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setNonExpired(true);
+            userRepository.save(user);
+        }
     }
 
 

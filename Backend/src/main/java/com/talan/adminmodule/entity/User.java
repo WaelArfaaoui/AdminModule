@@ -20,8 +20,7 @@ public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
+  private Integer id;
   private String firstname;
   private String lastname;
   @Column(unique=true)
@@ -32,6 +31,8 @@ public class User implements UserDetails {
   private String phone;
   @Enumerated(EnumType.STRING)
   private Role role;
+  private  boolean active = true;
+  private  boolean nonExpired  = true;
 
 
   @Override
@@ -66,6 +67,6 @@ public class User implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return true ;
   }
 }

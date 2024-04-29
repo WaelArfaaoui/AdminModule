@@ -1,4 +1,5 @@
 package com.talan.adminmodule.service.impl;
+
 import com.talan.adminmodule.dto.CategoryDto;
 import com.talan.adminmodule.entity.Category;
 import com.talan.adminmodule.repository.CategoryRepository;
@@ -6,9 +7,7 @@ import com.talan.adminmodule.service.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {

@@ -45,8 +45,6 @@ public class JwtService {
     // Add extra claims based on user details attributes
     if (userDetails instanceof User) {
       User customUserDetails = (User) userDetails;
-
-
       extraClaims.put("role", customUserDetails.getRole());
       extraClaims.put("email", customUserDetails.getEmail());
 

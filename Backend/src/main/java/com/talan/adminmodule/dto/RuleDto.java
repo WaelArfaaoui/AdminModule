@@ -47,7 +47,7 @@ public class RuleDto {
                         .percentage(ruleAttribute.getPercentage())
                         .value(ruleAttribute.getValue())
                         .build())
-                .collect(Collectors.toList());
+                .toList();
 
         ruleDto.setAttributeDtos(attributeDtos);
 

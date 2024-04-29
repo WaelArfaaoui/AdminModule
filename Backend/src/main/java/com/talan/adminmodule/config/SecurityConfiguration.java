@@ -19,12 +19,9 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthFilter;
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-    @Autowired
-    private LogoutHandler logoutHandler;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final LogoutHandler logoutHandler;
     private static final String[] WHITE_LIST_URL = {"/api/auth/**",
             "/api/users" ,
             "/v2/api-docs",
@@ -37,6 +34,13 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html"};
+
+    @Autowired
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider, LogoutHandler logoutHandler) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.authenticationProvider = authenticationProvider;
+        this.logoutHandler = logoutHandler;
+    }
 
 
     @Bean

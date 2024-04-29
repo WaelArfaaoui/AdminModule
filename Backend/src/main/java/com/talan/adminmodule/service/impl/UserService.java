@@ -22,16 +22,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+
     @Autowired
-    private  ModelMapper modelMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    public UserService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
+
     public UserDto mapUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
@@ -59,7 +63,7 @@ public class UserService {
                 .message("Password Changed").build();
     }
     public String storeProfileImage(MultipartFile profileImage) throws IOException {
-        String imagePath = null;
+        String imagePath = "";
         String path ="";
         if (profileImage != null && !profileImage.isEmpty()) {
             String fileName = StringUtils.cleanPath(profileImage.getOriginalFilename());
@@ -105,7 +109,7 @@ public class UserService {
         List<User>  users= userRepository.findAll();
         return users.stream()
                 .map(this::mapUserToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
     public UserDto update(int id, RegisterDto dto, MultipartFile file) throws IOException {
         User user = userRepository.findById(id).orElse(null);

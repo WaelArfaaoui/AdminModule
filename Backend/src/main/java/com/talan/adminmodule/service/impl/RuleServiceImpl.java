@@ -25,6 +25,9 @@ public class RuleServiceImpl implements RuleService {
     private final CategoryRepository categoryRepository;
     private final RuleModificationRepository ruleModificationRepository ;
     private final RuleAttributeRepository  ruleAttributeRepository ;
+    private String ruleMessage = "Rule with ID :" ;
+    private String ruleNotFound = "not found" ;
+    
 
     @Autowired
     public RuleServiceImpl(RuleRepository ruleRepository, AttributeRepository attributeRepository, CategoryRepository categoryRepository, RuleModificationRepository ruleModificationRepository, RuleAttributeRepository ruleAttributeRepository) {
@@ -92,7 +95,7 @@ public class RuleServiceImpl implements RuleService {
     public RuleDto updateStatus(Integer id, boolean enabled) {
         Rule rule = ruleRepository.findById(id).orElse(null);
         if (rule == null) {
-            throw new EntityNotFoundException("Rule with ID " + id + " not found", ErrorCodes.RULE_NOT_FOUND);
+            throw new EntityNotFoundException(ruleMessage + id + ruleNotFound, ErrorCodes.RULE_NOT_FOUND);
         }
 
         rule.setEnabled(enabled);
@@ -105,7 +108,7 @@ public class RuleServiceImpl implements RuleService {
     public RuleDto updateRule(Integer id, RuleDto updatedRuleDto, String modDescription, Integer modifiedBy) {
         Rule existingRule = ruleRepository.findById(id).orElse(null);
         if (existingRule == null) {
-            throw new EntityNotFoundException("Rule with ID " + id + " not found", ErrorCodes.RULE_NOT_FOUND);
+            throw new EntityNotFoundException(ruleMessage + id + ruleNotFound, ErrorCodes.RULE_NOT_FOUND);
         }
 
         List<String> errors = RuleValidator.validate(updatedRuleDto);
@@ -162,7 +165,7 @@ public class RuleServiceImpl implements RuleService {
     public void delete(Integer id) {
         Rule rule = ruleRepository.findById(id).orElse(null);
         if (rule == null) {
-            throw new EntityNotFoundException("Rule with ID " + id + " not found", ErrorCodes.RULE_NOT_FOUND);
+            throw new EntityNotFoundException(ruleMessage + id + ruleNotFound, ErrorCodes.RULE_NOT_FOUND);
         }
         ruleRepository.deleteById(id);
     }
@@ -182,7 +185,7 @@ public class RuleServiceImpl implements RuleService {
     public List<RuleModificationDto> getModificationsByRuleId(Integer id) {
         Rule rule = ruleRepository.findById(id).orElse(null);
         if (rule == null) {
-            throw new EntityNotFoundException("Rule with ID " + id + " not found", ErrorCodes.RULE_NOT_FOUND);
+            throw new EntityNotFoundException(ruleMessage + id + ruleNotFound, ErrorCodes.RULE_NOT_FOUND);
         }
 
         List<RuleModification> modifications = ruleModificationRepository.findByRuleOrderByModificationDateDesc(rule);

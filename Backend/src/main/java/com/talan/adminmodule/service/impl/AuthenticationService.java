@@ -19,14 +19,17 @@ import java.io.IOException;
 
 @Service
 public class AuthenticationService {
+    private final UserRepository repository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+
     @Autowired
-    private UserRepository repository;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+    public AuthenticationService(UserRepository repository , JwtService jwtService , AuthenticationManager authenticationManager) {
+        this.repository = repository;
+        this.jwtService = jwtService ;
+        this.authenticationManager = authenticationManager ;
+    }
+
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -40,7 +43,6 @@ public class AuthenticationService {
         System.out.println(request.getEmail());
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        logger.info("User found ");
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()

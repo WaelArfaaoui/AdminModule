@@ -41,14 +41,9 @@ public class JwtService {
   }
   private Map<String, Object> extractExtraClaims(UserDetails userDetails) {
     Map<String, Object> extraClaims = new HashMap<>();
-
-    // Add extra claims based on user details attributes
-    if (userDetails instanceof User) {
-      User customUserDetails = (User) userDetails;
+    if (userDetails instanceof User customUserDetails) {
       extraClaims.put("role", customUserDetails.getRole());
       extraClaims.put("email", customUserDetails.getEmail());
-
-
     }
 
     return extraClaims;

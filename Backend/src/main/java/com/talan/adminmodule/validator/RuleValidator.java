@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RuleValidator {
+    private RuleValidator(){
+
+    }
     public static List<String> validate(RuleDto dto) {
         List<String> errors = new ArrayList<>();
 

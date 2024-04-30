@@ -6,6 +6,7 @@ import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.UserDto;
 import com.talan.adminmodule.entity.User;
 import com.talan.adminmodule.repository.UserRepository;
+import io.micrometer.common.lang.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -62,22 +64,20 @@ public class UserService {
         return ChangePassword.builder()
                 .message("Password Changed").build();
     }
-    public String storeProfileImage(MultipartFile profileImage) throws IOException {
-        String imagePath = "";
-        String path ="";
+    public String storeProfileImage(@Nullable MultipartFile profileImage) throws IOException {
+        String path = "";
         if (profileImage != null && !profileImage.isEmpty()) {
-            String fileName = StringUtils.cleanPath(profileImage.getOriginalFilename());
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(profileImage.getOriginalFilename()));
             String currentDir = System.getProperty("user.dir");
-            Path uploadDir = Paths.get(currentDir,"..","Front", "src","assets","demo","images", "user-profiles");
-            Path storeDir = Paths.get("assets","demo","images","user-profiles",fileName);
+            Path uploadDir = Paths.get(currentDir, "..", "Front", "src", "assets", "demo", "images", "user-profiles");
+            Path storeDir = Paths.get("assets", "demo", "images", "user-profiles", fileName);
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }
             try (InputStream inputStream = profileImage.getInputStream()) {
                 Path filePath = uploadDir.resolve(fileName);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                imagePath = filePath.toAbsolutePath().toString();
-                path= storeDir.toString();
+                path = storeDir.toString();
             } catch (IOException ex) {
                 throw new IOException("Could not store file " + fileName + ". Please try again!", ex);
             }

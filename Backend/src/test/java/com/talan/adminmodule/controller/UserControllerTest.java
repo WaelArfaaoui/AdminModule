@@ -1,4 +1,4 @@
-package com.talan.adminmodule.service;
+package com.talan.adminmodule.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,6 +27,8 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
 import java.security.Principal;
 import java.util.ArrayList;
+
+import com.talan.adminmodule.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;

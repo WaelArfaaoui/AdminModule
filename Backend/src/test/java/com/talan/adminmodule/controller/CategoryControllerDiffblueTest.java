@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,7 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ContextConfiguration(classes = {CategoryController.class})
 @ExtendWith(SpringExtension.class)
-class CategoryControllerTest {
+@DisabledInAotMode
+class CategoryControllerDiffblueTest {
     @Autowired
     private CategoryController categoryController;
 
@@ -33,8 +35,11 @@ class CategoryControllerTest {
      */
     @Test
     void testGetAllCategories() throws Exception {
+        // Arrange
         when(categoryService.findAll()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/categories");
+
+        // Act and Assert
         MockMvcBuilders.standaloneSetup(categoryController)
                 .build()
                 .perform(requestBuilder)
@@ -48,9 +53,12 @@ class CategoryControllerTest {
      */
     @Test
     void testGetCategoryById() throws Exception {
-        when(categoryService.findById(Mockito.<Integer>any()))
-                .thenReturn(CategoryDto.builder().id(1).name("Name").build());
+        // Arrange
+        CategoryDto buildResult = CategoryDto.builder().id(1).name("Name").build();
+        when(categoryService.findById(Mockito.<Integer>any())).thenReturn(buildResult);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/categories/{id}", 1);
+
+        // Act and Assert
         MockMvcBuilders.standaloneSetup(categoryController)
                 .build()
                 .perform(requestBuilder)
@@ -59,4 +67,3 @@ class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("{\"id\":1,\"name\":\"Name\"}"));
     }
 }
-

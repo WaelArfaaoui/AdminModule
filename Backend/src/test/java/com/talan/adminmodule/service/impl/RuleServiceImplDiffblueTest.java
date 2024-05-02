@@ -164,7 +164,7 @@ class RuleServiceImplDiffblueTest {
         RuleDto actualSaveResult = ruleServiceImpl.save(ruleDto);
 
         // Assert
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
         LocalTime expectedToLocalTimeResult = actualSaveResult.getLastModified().toLocalTime();
@@ -225,7 +225,7 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(InvalidEntityException.class, () -> ruleServiceImpl.save(ruleDto));
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
     }
@@ -381,16 +381,16 @@ class RuleServiceImplDiffblueTest {
         verify(rule2).isEnabled();
         verify(rule2).setCategory(isA(Category.class));
         verify(rule2).setCreateDate(isA(LocalDateTime.class));
-        verify(rule2).setCreatedBy(eq(1));
-        verify(rule2).setDescription(eq("The characteristics of someone or something"));
-        verify(rule2).setEnabled(eq(true));
-        verify(rule2).setId(eq(1));
+        verify(rule2).setCreatedBy(1);
+        verify(rule2).setDescription("The characteristics of someone or something");
+        verify(rule2).setEnabled(true);
+        verify(rule2).setId(1);
         verify(rule2).setLastModified(isA(LocalDateTime.class));
-        verify(rule2).setLastModifiedBy(eq(1));
-        verify(rule2).setName(eq("Name"));
+        verify(rule2).setLastModifiedBy(1);
+        verify(rule2).setName("Name");
         verify(rule2, atLeast(1)).setRuleAttributes(isA(List.class));
         verify(rule2).setRuleModifications(isA(List.class));
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
         LocalTime expectedToLocalTimeResult = actualSaveResult.getLastModified().toLocalTime();
@@ -579,16 +579,16 @@ class RuleServiceImplDiffblueTest {
         verify(rule3).isEnabled();
         verify(rule3).setCategory(isA(Category.class));
         verify(rule3).setCreateDate(isA(LocalDateTime.class));
-        verify(rule3).setCreatedBy(eq(1));
-        verify(rule3).setDescription(eq("The characteristics of someone or something"));
-        verify(rule3).setEnabled(eq(true));
-        verify(rule3).setId(eq(1));
+        verify(rule3).setCreatedBy(1);
+        verify(rule3).setDescription("The characteristics of someone or something");
+        verify(rule3).setEnabled(true);
+        verify(rule3).setId(1);
         verify(rule3).setLastModified(isA(LocalDateTime.class));
-        verify(rule3).setLastModifiedBy(eq(1));
-        verify(rule3).setName(eq("Name"));
+        verify(rule3).setLastModifiedBy(1);
+        verify(rule3).setName("Name");
         verify(rule3, atLeast(1)).setRuleAttributes(isA(List.class));
         verify(rule3).setRuleModifications(isA(List.class));
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
         assertEquals("1970-01-01", actualSaveResult.getCreateDate().toLocalDate().toString());
@@ -669,7 +669,7 @@ class RuleServiceImplDiffblueTest {
         RuleDto actualUpdateStatusResult = ruleServiceImpl.updateStatus(1, true);
 
         // Assert
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
         LocalTime expectedToLocalTimeResult = actualUpdateStatusResult.getLastModified().toLocalTime();
         assertSame(expectedToLocalTimeResult, actualUpdateStatusResult.getCreateDate().toLocalTime());
@@ -704,7 +704,7 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(InvalidEntityException.class, () -> ruleServiceImpl.updateStatus(1, true));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
     }
 
@@ -827,16 +827,16 @@ class RuleServiceImplDiffblueTest {
         verify(rule3).isEnabled();
         verify(rule3).setCategory(isA(Category.class));
         verify(rule3).setCreateDate(isA(LocalDateTime.class));
-        verify(rule3).setCreatedBy(eq(1));
-        verify(rule3).setDescription(eq("The characteristics of someone or something"));
-        verify(rule3).setEnabled(eq(true));
-        verify(rule3).setId(eq(1));
+        verify(rule3).setCreatedBy(1);
+        verify(rule3).setDescription("The characteristics of someone or something");
+        verify(rule3).setEnabled(true);
+        verify(rule3).setId(1);
         verify(rule3).setLastModified(isA(LocalDateTime.class));
-        verify(rule3).setLastModifiedBy(eq(1));
-        verify(rule3).setName(eq("Name"));
+        verify(rule3).setLastModifiedBy(1);
+        verify(rule3).setName("Name");
         verify(rule3).setRuleAttributes(isA(List.class));
         verify(rule3).setRuleModifications(isA(List.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
         LocalTime expectedToLocalTimeResult = actualUpdateStatusResult.getLastModified().toLocalTime();
         assertSame(expectedToLocalTimeResult, actualUpdateStatusResult.getCreateDate().toLocalTime());
@@ -992,16 +992,16 @@ class RuleServiceImplDiffblueTest {
         verify(rule4).isEnabled();
         verify(rule4).setCategory(isA(Category.class));
         verify(rule4).setCreateDate(isA(LocalDateTime.class));
-        verify(rule4).setCreatedBy(eq(1));
-        verify(rule4).setDescription(eq("The characteristics of someone or something"));
-        verify(rule4).setEnabled(eq(true));
-        verify(rule4).setId(eq(1));
+        verify(rule4).setCreatedBy(1);
+        verify(rule4).setDescription("The characteristics of someone or something");
+        verify(rule4).setEnabled(true);
+        verify(rule4).setId(1);
         verify(rule4).setLastModified(isA(LocalDateTime.class));
-        verify(rule4).setLastModifiedBy(eq(1));
-        verify(rule4).setName(eq("Name"));
+        verify(rule4).setLastModifiedBy(1);
+        verify(rule4).setName("Name");
         verify(rule4).setRuleAttributes(isA(List.class));
         verify(rule4).setRuleModifications(isA(List.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
         assertEquals("1970-01-01", actualUpdateStatusResult.getCreateDate().toLocalDate().toString());
         assertEquals("1970-01-01", actualUpdateStatusResult.getLastModified().toLocalDate().toString());
@@ -1073,16 +1073,16 @@ class RuleServiceImplDiffblueTest {
         assertThrows(EntityNotFoundException.class, () -> ruleServiceImpl.updateStatus(1, true));
         verify(rule).setCategory(isA(Category.class));
         verify(rule).setCreateDate(isA(LocalDateTime.class));
-        verify(rule).setCreatedBy(eq(1));
-        verify(rule).setDescription(eq("The characteristics of someone or something"));
-        verify(rule).setEnabled(eq(true));
-        verify(rule).setId(eq(1));
+        verify(rule).setCreatedBy(1);
+        verify(rule).setDescription("The characteristics of someone or something");
+        verify(rule).setEnabled(true);
+        verify(rule).setId(1);
         verify(rule).setLastModified(isA(LocalDateTime.class));
-        verify(rule).setLastModifiedBy(eq(1));
-        verify(rule).setName(eq("Name"));
+        verify(rule).setLastModifiedBy(1);
+        verify(rule).setName("Name");
         verify(rule).setRuleAttributes(isA(List.class));
         verify(rule).setRuleModifications(isA(List.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1114,7 +1114,7 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(InvalidEntityException.class, () -> ruleServiceImpl.updateRule(1, null, "Mod Description", 1));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1129,7 +1129,7 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> ruleServiceImpl.updateRule(1, null, "Mod Description", 1));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1235,9 +1235,9 @@ class RuleServiceImplDiffblueTest {
         RuleDto actualUpdateRuleResult = ruleServiceImpl.updateRule(1, updatedRuleDto, "Mod Description", 1);
 
         // Assert
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleAttributeRepository).deleteByRule(isA(Rule.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
         LocalTime expectedToLocalTimeResult = actualUpdateRuleResult.getLastModified().toLocalTime();
@@ -1295,9 +1295,9 @@ class RuleServiceImplDiffblueTest {
         // Act and Assert
         assertThrows(InvalidEntityException.class,
                 () -> ruleServiceImpl.updateRule(1, updatedRuleDto, "Mod Description", 1));
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleAttributeRepository).deleteByRule(isA(Rule.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1473,18 +1473,18 @@ class RuleServiceImplDiffblueTest {
         verify(rule3).isEnabled();
         verify(rule3).setCategory(isA(Category.class));
         verify(rule3).setCreateDate(isA(LocalDateTime.class));
-        verify(rule3).setCreatedBy(eq(1));
-        verify(rule3).setDescription(eq("The characteristics of someone or something"));
-        verify(rule3).setEnabled(eq(true));
-        verify(rule3).setId(eq(1));
+        verify(rule3).setCreatedBy(1);
+        verify(rule3).setDescription("The characteristics of someone or something");
+        verify(rule3).setEnabled(true);
+        verify(rule3).setId(1);
         verify(rule3).setLastModified(isA(LocalDateTime.class));
-        verify(rule3).setLastModifiedBy(eq(1));
-        verify(rule3).setName(eq("Name"));
+        verify(rule3).setLastModifiedBy(1);
+        verify(rule3).setName("Name");
         verify(rule3).setRuleAttributes(isA(List.class));
         verify(rule3).setRuleModifications(isA(List.class));
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleAttributeRepository).deleteByRule(isA(Rule.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
         LocalTime expectedToLocalTimeResult = actualUpdateRuleResult.getLastModified().toLocalTime();
@@ -1695,18 +1695,18 @@ class RuleServiceImplDiffblueTest {
         verify(rule4).isEnabled();
         verify(rule4).setCategory(isA(Category.class));
         verify(rule4).setCreateDate(isA(LocalDateTime.class));
-        verify(rule4).setCreatedBy(eq(1));
-        verify(rule4).setDescription(eq("The characteristics of someone or something"));
-        verify(rule4).setEnabled(eq(true));
-        verify(rule4).setId(eq(1));
+        verify(rule4).setCreatedBy(1);
+        verify(rule4).setDescription("The characteristics of someone or something");
+        verify(rule4).setEnabled(true);
+        verify(rule4).setId(1);
         verify(rule4).setLastModified(isA(LocalDateTime.class));
-        verify(rule4).setLastModifiedBy(eq(1));
-        verify(rule4).setName(eq("Name"));
+        verify(rule4).setLastModifiedBy(1);
+        verify(rule4).setName("Name");
         verify(rule4).setRuleAttributes(isA(List.class));
         verify(rule4).setRuleModifications(isA(List.class));
-        verify(categoryRepository).findByName(eq("Name"));
+        verify(categoryRepository).findByName("Name");
         verify(ruleAttributeRepository).deleteByRule(isA(Rule.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         verify(ruleRepository).save(isA(Rule.class));
         verify(ruleModificationRepository).save(isA(RuleModification.class));
         assertEquals("1970-01-01", actualUpdateRuleResult.getCreateDate().toLocalDate().toString());
@@ -1899,8 +1899,8 @@ class RuleServiceImplDiffblueTest {
         ruleServiceImpl.delete(1);
 
         // Assert that nothing has changed
-        verify(ruleRepository).deleteById(eq(1));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).deleteById(1);
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1932,8 +1932,8 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(InvalidEntityException.class, () -> ruleServiceImpl.delete(1));
-        verify(ruleRepository).deleteById(eq(1));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).deleteById(1);
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1947,7 +1947,7 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> ruleServiceImpl.delete(1));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -1980,7 +1980,7 @@ class RuleServiceImplDiffblueTest {
         RuleDto actualFindByIdResult = ruleServiceImpl.findById(1);
 
         // Assert
-        verify(ruleRepository).findByIdWithAttributes(eq(1));
+        verify(ruleRepository).findByIdWithAttributes(1);
         LocalTime expectedToLocalTimeResult = actualFindByIdResult.getLastModified().toLocalTime();
         assertSame(expectedToLocalTimeResult, actualFindByIdResult.getCreateDate().toLocalTime());
     }
@@ -2085,16 +2085,16 @@ class RuleServiceImplDiffblueTest {
         verify(rule2).isEnabled();
         verify(rule2).setCategory(isA(Category.class));
         verify(rule2).setCreateDate(isA(LocalDateTime.class));
-        verify(rule2).setCreatedBy(eq(1));
-        verify(rule2).setDescription(eq("The characteristics of someone or something"));
-        verify(rule2).setEnabled(eq(true));
-        verify(rule2).setId(eq(1));
+        verify(rule2).setCreatedBy(1);
+        verify(rule2).setDescription("The characteristics of someone or something");
+        verify(rule2).setEnabled(true);
+        verify(rule2).setId(1);
         verify(rule2).setLastModified(isA(LocalDateTime.class));
-        verify(rule2).setLastModifiedBy(eq(1));
-        verify(rule2).setName(eq("Name"));
+        verify(rule2).setLastModifiedBy(1);
+        verify(rule2).setName("Name");
         verify(rule2).setRuleAttributes(isA(List.class));
         verify(rule2).setRuleModifications(isA(List.class));
-        verify(ruleRepository).findByIdWithAttributes(eq(1));
+        verify(ruleRepository).findByIdWithAttributes(1);
         LocalTime expectedToLocalTimeResult = actualFindByIdResult.getLastModified().toLocalTime();
         assertSame(expectedToLocalTimeResult, actualFindByIdResult.getCreateDate().toLocalTime());
     }
@@ -2230,16 +2230,16 @@ class RuleServiceImplDiffblueTest {
         verify(rule3).isEnabled();
         verify(rule3).setCategory(isA(Category.class));
         verify(rule3).setCreateDate(isA(LocalDateTime.class));
-        verify(rule3).setCreatedBy(eq(1));
-        verify(rule3).setDescription(eq("The characteristics of someone or something"));
-        verify(rule3).setEnabled(eq(true));
-        verify(rule3).setId(eq(1));
+        verify(rule3).setCreatedBy(1);
+        verify(rule3).setDescription("The characteristics of someone or something");
+        verify(rule3).setEnabled(true);
+        verify(rule3).setId(1);
         verify(rule3).setLastModified(isA(LocalDateTime.class));
-        verify(rule3).setLastModifiedBy(eq(1));
-        verify(rule3).setName(eq("Name"));
+        verify(rule3).setLastModifiedBy(1);
+        verify(rule3).setName("Name");
         verify(rule3).setRuleAttributes(isA(List.class));
         verify(rule3).setRuleModifications(isA(List.class));
-        verify(ruleRepository).findByIdWithAttributes(eq(1));
+        verify(ruleRepository).findByIdWithAttributes(1);
         assertEquals("1970-01-01", actualFindByIdResult.getCreateDate().toLocalDate().toString());
         assertEquals("1970-01-01", actualFindByIdResult.getLastModified().toLocalDate().toString());
         List<AttributeDataDto> attributeDtos = actualFindByIdResult.getAttributeDtos();
@@ -2282,7 +2282,7 @@ class RuleServiceImplDiffblueTest {
         RuleDto actualFindByIdResult = ruleServiceImpl.findById(1);
 
         // Assert
-        verify(ruleRepository).findByIdWithAttributes(eq(1));
+        verify(ruleRepository).findByIdWithAttributes(1);
         assertNull(actualFindByIdResult);
     }
 
@@ -2511,13 +2511,13 @@ class RuleServiceImplDiffblueTest {
         verify(rule2).isEnabled();
         verify(rule2).setCategory(isA(Category.class));
         verify(rule2).setCreateDate(isA(LocalDateTime.class));
-        verify(rule2).setCreatedBy(eq(1));
-        verify(rule2).setDescription(eq("The characteristics of someone or something"));
-        verify(rule2).setEnabled(eq(true));
-        verify(rule2).setId(eq(1));
+        verify(rule2).setCreatedBy(1);
+        verify(rule2).setDescription("The characteristics of someone or something");
+        verify(rule2).setEnabled(true);
+        verify(rule2).setId(1);
         verify(rule2).setLastModified(isA(LocalDateTime.class));
-        verify(rule2).setLastModifiedBy(eq(1));
-        verify(rule2).setName(eq("Name"));
+        verify(rule2).setLastModifiedBy(1);
+        verify(rule2).setName("Name");
         verify(rule2).setRuleAttributes(isA(List.class));
         verify(rule2).setRuleModifications(isA(List.class));
         verify(ruleRepository).findAll(isA(Pageable.class));
@@ -2658,13 +2658,13 @@ class RuleServiceImplDiffblueTest {
         verify(rule3).isEnabled();
         verify(rule3).setCategory(isA(Category.class));
         verify(rule3).setCreateDate(isA(LocalDateTime.class));
-        verify(rule3).setCreatedBy(eq(1));
-        verify(rule3).setDescription(eq("The characteristics of someone or something"));
-        verify(rule3).setEnabled(eq(true));
-        verify(rule3).setId(eq(1));
+        verify(rule3).setCreatedBy(1);
+        verify(rule3).setDescription("The characteristics of someone or something");
+        verify(rule3).setEnabled(true);
+        verify(rule3).setId(1);
         verify(rule3).setLastModified(isA(LocalDateTime.class));
-        verify(rule3).setLastModifiedBy(eq(1));
-        verify(rule3).setName(eq("Name"));
+        verify(rule3).setLastModifiedBy(1);
+        verify(rule3).setName("Name");
         verify(rule3).setRuleAttributes(isA(List.class));
         verify(rule3).setRuleModifications(isA(List.class));
         verify(ruleRepository).findAll(isA(Pageable.class));
@@ -2704,7 +2704,7 @@ class RuleServiceImplDiffblueTest {
 
         // Assert
         verify(ruleModificationRepository).findByRuleOrderByModificationDateDesc(isA(Rule.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
         assertTrue(actualModificationsByRuleId.isEmpty());
     }
 
@@ -2739,7 +2739,7 @@ class RuleServiceImplDiffblueTest {
         // Act and Assert
         assertThrows(InvalidEntityException.class, () -> ruleServiceImpl.getModificationsByRuleId(1));
         verify(ruleModificationRepository).findByRuleOrderByModificationDateDesc(isA(Rule.class));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -2753,7 +2753,7 @@ class RuleServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> ruleServiceImpl.getModificationsByRuleId(1));
-        verify(ruleRepository).findById(eq(1));
+        verify(ruleRepository).findById(1);
     }
 
     /**
@@ -2983,13 +2983,13 @@ class RuleServiceImplDiffblueTest {
         verify(rule2).isEnabled();
         verify(rule2).setCategory(isA(Category.class));
         verify(rule2).setCreateDate(isA(LocalDateTime.class));
-        verify(rule2).setCreatedBy(eq(1));
-        verify(rule2).setDescription(eq("The characteristics of someone or something"));
-        verify(rule2).setEnabled(eq(true));
-        verify(rule2).setId(eq(1));
+        verify(rule2).setCreatedBy(1);
+        verify(rule2).setDescription("The characteristics of someone or something");
+        verify(rule2).setEnabled(true);
+        verify(rule2).setId(1);
         verify(rule2).setLastModified(isA(LocalDateTime.class));
-        verify(rule2).setLastModifiedBy(eq(1));
-        verify(rule2).setName(eq("Name"));
+        verify(rule2).setLastModifiedBy(1);
+        verify(rule2).setName("Name");
         verify(rule2).setRuleAttributes(isA(List.class));
         verify(rule2).setRuleModifications(isA(List.class));
         verify(ruleRepository).search(eq("Query"), isA(Pageable.class));
@@ -3130,13 +3130,13 @@ class RuleServiceImplDiffblueTest {
         verify(rule3).isEnabled();
         verify(rule3).setCategory(isA(Category.class));
         verify(rule3).setCreateDate(isA(LocalDateTime.class));
-        verify(rule3).setCreatedBy(eq(1));
-        verify(rule3).setDescription(eq("The characteristics of someone or something"));
-        verify(rule3).setEnabled(eq(true));
-        verify(rule3).setId(eq(1));
+        verify(rule3).setCreatedBy(1);
+        verify(rule3).setDescription("The characteristics of someone or something");
+        verify(rule3).setEnabled(true);
+        verify(rule3).setId(1);
         verify(rule3).setLastModified(isA(LocalDateTime.class));
-        verify(rule3).setLastModifiedBy(eq(1));
-        verify(rule3).setName(eq("Name"));
+        verify(rule3).setLastModifiedBy(1);
+        verify(rule3).setName("Name");
         verify(rule3).setRuleAttributes(isA(List.class));
         verify(rule3).setRuleModifications(isA(List.class));
         verify(ruleRepository).search(eq("Query"), isA(Pageable.class));

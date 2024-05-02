@@ -58,7 +58,7 @@ public class DatabaseInitializer {
                     columns.add(new ColumnInfo(columnName, columnType));
                 }
 
-                // Fetch primary key details
+
                 ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
                 ColumnInfo primaryKeyColumn = new ColumnInfo();
                 if (primaryKeys.next()) {
@@ -84,7 +84,6 @@ public class DatabaseInitializer {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle SQLException appropriately
         }
 
         tablesWithColumns.setAllTablesWithColumns(tablesWithColumnsList);

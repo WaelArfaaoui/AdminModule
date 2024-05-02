@@ -101,7 +101,7 @@ public class ParamTableService {
         DataFromTable dataFromTable =new DataFromTable();
 List<String> deletedRequestsData =new ArrayList<>();
 List<String> updatedRequestsData =new ArrayList<>();
-        dataFromTable.setData (jdbcTemplate.queryForList(String.valueOf(sqlQuery)));
+        dataFromTable.setData (jdbcTemplate.queryForList(sqlQuery.toString()));
 
 
         for (Map<String, Object> row : dataFromTable.getData()) {
@@ -222,7 +222,7 @@ List<String> updatedRequestsData =new ArrayList<>();
             columns.deleteCharAt(columns.length() - 1);
             values.deleteCharAt(values.length() - 1);
         }
-
+        StringBuilder sqlQuery = new StringBuilder();
         String sql = String.format("INSERT INTO %s (%s) VALUES (%s)", tableName, columns, values);
         jdbcTemplate.update(sql, params.toArray());
 
@@ -303,12 +303,16 @@ public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
 
                 List<ColumnInfo> allColumns = getAllColumns(updateRequest.getTableName());
                 StringBuilder setClause = new StringBuilder();
+                StringBuilder sqlQuery = new StringBuilder();
+
                 List<Object> params = new ArrayList<>();
 
                 String primaryKeyColumn = primaryKeyDetails(updateRequest.getTableName()).getName();
+                sqlQuery.append("UPDATE ")
+                        .append(updateRequest.getTableName()) ;
 
 
-                Object primaryKeyValue = null;
+                Object primaryKeyValue = new Object();
                 for (ColumnInfo columnMap : allColumns) {
                     String columnName = columnMap.getName();
                     String columnType = columnMap.getType();
@@ -326,13 +330,22 @@ public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
                     }
                 }
                 setClause.delete(setClause.length() - 2, setClause.length());
-                int rowsUpdated = jdbcTemplate.update("UPDATE " + updateRequest.getTableName() + " SET " + setClause + " WHERE " + primaryKeyColumn + " = " + primaryKeyValue, params.toArray());
-                if (rowsUpdated > 0) {
-                    responseDto.setSuccess("Instance updated successfully");
+                sqlQuery.append(" SET ")
+                        .append(setClause)
+                        .append(" WHERE ")
+                        .append(primaryKeyColumn);
+                if (primaryKeyValue!=null){
+                    sqlQuery.append(" = ")
+                            .append(primaryKeyValue);
+                }
 
-                    assert primaryKeyValue != null;
-                    ParamAudit paramAudit = ParamAudit.constructForUpdate(updateRequest.getTableName(),primaryKeyValue.toString(),updateRequest.getInstanceData().toString(),"EDITED",version, updateRequest.getUsername());
-                    paramAuditRepository.save(paramAudit);
+                int rowsUpdated = jdbcTemplate.update(sqlQuery.toString(), params.toArray());
+                if (rowsUpdated > 0 && primaryKeyValue!=null) {
+                    responseDto.setSuccess("Instance updated successfully");
+                ParamAudit paramAudit = ParamAudit.constructForUpdate(updateRequest.getTableName(), primaryKeyValue.toString(), updateRequest.getInstanceData().toString(), "EDITED", version, updateRequest.getUsername());
+
+                paramAuditRepository.save(paramAudit);
+
                 } else {
                     responseDto.setError( "message No records updated");
                 }

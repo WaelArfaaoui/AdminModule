@@ -72,7 +72,7 @@ class AuthenticationServiceTest {
         user.setCompany("Company");
         user.setEmail("jane.doe@example.org");
         user.setFirstname("Jane");
-        user.setId(1L);
+        user.setId(1);
         user.setLastname("Doe");
         user.setPassword("123");
         user.setPhone("6625550144");
@@ -97,10 +97,7 @@ class AuthenticationServiceTest {
         assertNull(actualAuthenticateResult.getError());
     }
 
-    /**
-     * Method under test:
-     * {@link AuthenticationService#refreshToken(HttpServletRequest, HttpServletResponse)}
-     */
+
     @Test
     void testRefreshToken() throws IOException {
         // Arrange
@@ -139,10 +136,7 @@ class AuthenticationServiceTest {
         assertSame(expectedOutputStream, response2.getOutputStream());
     }
 
-    /**
-     * Method under test:
-     * {@link AuthenticationService#refreshToken(HttpServletRequest, HttpServletResponse)}
-     */
+
     @Test
     void testRefreshToken2() throws IOException {
         // Arrange
@@ -161,18 +155,16 @@ class AuthenticationServiceTest {
         assertSame(expectedOutputStream, response2.getOutputStream());
     }
 
-    /**
-     * Method under test:
-     * {@link AuthenticationService#refreshToken(HttpServletRequest, HttpServletResponse)}
-     */
-    @Test
+
+
+ @Test
     void testRefreshToken3() throws IOException {
         // Arrange
         User user = new User();
         user.setCompany("Company");
         user.setEmail("jane.doe@example.org");
         user.setFirstname("Jane");
-        user.setId(1L);
+        user.setId(1);
         user.setLastname("Doe");
         user.setPassword("1234");
         user.setPhone("6625550144");
@@ -186,10 +178,8 @@ class AuthenticationServiceTest {
         HttpServletRequestWrapper request = mock(HttpServletRequestWrapper.class);
         when(request.getHeader(Mockito.<String>any())).thenReturn("Bearer ");
 
-        // Act
         authenticationService.refreshToken(request, new MockHttpServletResponse());
 
-        // Assert
         verify(jwtService).extractUsername(eq(""));
         verify(jwtService).generateToken(Mockito.<User>any());
         verify(jwtService).isTokenValid(eq(""), Mockito.<UserDetails>any());
@@ -197,10 +187,6 @@ class AuthenticationServiceTest {
         verify(request).getHeader(eq("Authorization"));
     }
 
-    /**
-     * Method under test:
-     * {@link AuthenticationService#refreshToken(HttpServletRequest, HttpServletResponse)}
-     */
     @Test
     void testRefreshToken4() throws IOException {
         // Arrange
@@ -208,7 +194,7 @@ class AuthenticationServiceTest {
         user.setCompany("Company");
         user.setEmail("jane.doe@example.org");
         user.setFirstname("Jane");
-        user.setId(1L);
+        user.setId(1);
         user.setLastname("Doe");
         user.setPassword("1234");
         user.setPhone("6625550144");
@@ -230,4 +216,5 @@ class AuthenticationServiceTest {
         verify(userRepository).findByEmail(eq("janedoe"));
         verify(request).getHeader(eq("Authorization"));
     }
+
 }

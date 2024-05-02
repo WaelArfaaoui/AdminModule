@@ -31,8 +31,10 @@ public class User implements UserDetails {
   private String phone;
   @Enumerated(EnumType.STRING)
   private Role role;
-  private  boolean active = true;
-  private  boolean nonExpired  = true;
+  @Builder.Default
+  private  Boolean active = true;
+  @Builder.Default
+  private  Boolean nonExpired  = true;
 
 
   @Override

@@ -764,7 +764,7 @@ class UserServiceDiffblueTest {
             // Assert
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(eq(1));
+            verify(userRepository).findById(1);
             verify(userRepository).save(isA(User.class));
             assertEquals("6625550144", actualUpdateResult.getPhone());
             assertEquals("Company", actualUpdateResult.getCompany());
@@ -837,7 +837,7 @@ class UserServiceDiffblueTest {
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(eq(1));
+            verify(userRepository).findById(1);
             verify(userRepository).save(isA(User.class));
             assertEquals("6625550144", actualUpdateResult.getPhone());
             assertEquals("Company", actualUpdateResult.getCompany());
@@ -923,7 +923,7 @@ class UserServiceDiffblueTest {
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
             verify(modelMapper).map(isA(Object.class), isA(Class.class));
-            verify(userRepository).findById(eq(1));
+            verify(userRepository).findById(1);
             verify(userRepository).save(isA(User.class));
         }
     }
@@ -976,7 +976,7 @@ class UserServiceDiffblueTest {
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))));
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(eq(1));
+            verify(userRepository).findById(1);
         }
     }
 
@@ -1028,7 +1028,7 @@ class UserServiceDiffblueTest {
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))));
             mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(eq(1));
+            verify(userRepository).findById(1);
         }
     }
 
@@ -1088,20 +1088,20 @@ class UserServiceDiffblueTest {
             // Act and Assert
             assertThrows(IOException.class, () -> userService.update(1, dto,
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))));
-            verify(user).setActive(eq(true));
-            verify(user).setCompany(eq("Company"));
-            verify(user, atLeast(1)).setEmail(eq("jane.doe@example.org"));
-            verify(user, atLeast(1)).setFirstname(eq("Jane"));
-            verify(user).setId(eq(1));
-            verify(user, atLeast(1)).setLastname(eq("Doe"));
-            verify(user).setNonExpired(eq(true));
+            verify(user).setActive(true);
+            verify(user).setCompany("Company");
+            verify(user, atLeast(1)).setEmail("jane.doe@example.org");
+            verify(user, atLeast(1)).setFirstname("Jane");
+            verify(user).setId(1);
+            verify(user, atLeast(1)).setLastname("Doe");
+            verify(user).setNonExpired(true);
             verify(user, atLeast(1)).setPassword(Mockito.<String>any());
-            verify(user, atLeast(1)).setPhone(eq("6625550144"));
-            verify(user).setProfileImagePath(eq("Profile Image Path"));
-            verify(user, atLeast(1)).setRole(eq(Role.BUSINESSEXPERT));
+            verify(user, atLeast(1)).setPhone("6625550144");
+            verify(user).setProfileImagePath("Profile Image Path");
+            verify(user, atLeast(1)).setRole(Role.BUSINESSEXPERT);
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(eq(1));
+            verify(userRepository).findById(1);
         }
     }
 
@@ -1165,7 +1165,7 @@ class UserServiceDiffblueTest {
         UserDto actualUpdateResult = userService.update(1, dto, null);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
         assertEquals("6625550144", actualUpdateResult.getPhone());
         assertEquals("Company", actualUpdateResult.getCompany());
@@ -1233,7 +1233,7 @@ class UserServiceDiffblueTest {
                 .findbyemail("jane.doe@example.org");
 
         // Assert
-        verify(userRepository).findByEmail(eq("jane.doe@example.org"));
+        verify(userRepository).findByEmail("jane.doe@example.org");
         assertSame(user, actualFindbyemailResult);
     }
 
@@ -1299,7 +1299,7 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).delete(1);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
 
@@ -1358,17 +1358,17 @@ class UserServiceDiffblueTest {
 
         // Assert
         verify(user, atLeast(1)).setActive(anyBoolean());
-        verify(user).setCompany(eq("Company"));
-        verify(user).setEmail(eq("jane.doe@example.org"));
-        verify(user).setFirstname(eq("Jane"));
-        verify(user).setId(eq(1));
-        verify(user).setLastname(eq("Doe"));
-        verify(user).setNonExpired(eq(true));
-        verify(user).setPassword(eq("iloveyou"));
-        verify(user).setPhone(eq("6625550144"));
-        verify(user).setProfileImagePath(eq("Profile Image Path"));
-        verify(user).setRole(eq(Role.BUSINESSEXPERT));
-        verify(userRepository).findById(eq(1));
+        verify(user).setCompany("Company");
+        verify(user).setEmail("jane.doe@example.org");
+        verify(user).setFirstname("Jane");
+        verify(user).setId(1);
+        verify(user).setLastname("Doe");
+        verify(user).setNonExpired(true);
+        verify(user).setPassword("iloveyou");
+        verify(user).setPhone("6625550144");
+        verify(user).setProfileImagePath("Profile Image Path");
+        verify(user).setRole(Role.BUSINESSEXPERT);
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
 
@@ -1389,7 +1389,7 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).delete(1);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
     }
 
     /**
@@ -1454,7 +1454,7 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).expireUser(1);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
 
@@ -1512,18 +1512,18 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).expireUser(1);
 
         // Assert
-        verify(user).setActive(eq(true));
-        verify(user).setCompany(eq("Company"));
-        verify(user).setEmail(eq("jane.doe@example.org"));
-        verify(user).setFirstname(eq("Jane"));
-        verify(user).setId(eq(1));
-        verify(user).setLastname(eq("Doe"));
+        verify(user).setActive(true);
+        verify(user).setCompany("Company");
+        verify(user).setEmail("jane.doe@example.org");
+        verify(user).setFirstname("Jane");
+        verify(user).setId(1);
+        verify(user).setLastname("Doe");
         verify(user, atLeast(1)).setNonExpired(anyBoolean());
-        verify(user).setPassword(eq("iloveyou"));
-        verify(user).setPhone(eq("6625550144"));
-        verify(user).setProfileImagePath(eq("Profile Image Path"));
-        verify(user).setRole(eq(Role.BUSINESSEXPERT));
-        verify(userRepository).findById(eq(1));
+        verify(user).setPassword("iloveyou");
+        verify(user).setPhone("6625550144");
+        verify(user).setProfileImagePath("Profile Image Path");
+        verify(user).setRole(Role.BUSINESSEXPERT);
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
 
@@ -1544,7 +1544,7 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).expireUser(1);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
     }
 
     /**
@@ -1609,7 +1609,7 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).unexpireUser(1);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
 
@@ -1667,18 +1667,18 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).unexpireUser(1);
 
         // Assert
-        verify(user).setActive(eq(true));
-        verify(user).setCompany(eq("Company"));
-        verify(user).setEmail(eq("jane.doe@example.org"));
-        verify(user).setFirstname(eq("Jane"));
-        verify(user).setId(eq(1));
-        verify(user).setLastname(eq("Doe"));
-        verify(user, atLeast(1)).setNonExpired(eq(true));
-        verify(user).setPassword(eq("iloveyou"));
-        verify(user).setPhone(eq("6625550144"));
-        verify(user).setProfileImagePath(eq("Profile Image Path"));
-        verify(user).setRole(eq(Role.BUSINESSEXPERT));
-        verify(userRepository).findById(eq(1));
+        verify(user).setActive(true);
+        verify(user).setCompany("Company");
+        verify(user).setEmail("jane.doe@example.org");
+        verify(user).setFirstname("Jane");
+        verify(user).setId(1);
+        verify(user).setLastname("Doe");
+        verify(user, atLeast(1)).setNonExpired(true);
+        verify(user).setPassword("iloveyou");
+        verify(user).setPhone("6625550144");
+        verify(user).setProfileImagePath("Profile Image Path");
+        verify(user).setRole(Role.BUSINESSEXPERT);
+        verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
 
@@ -1699,7 +1699,7 @@ class UserServiceDiffblueTest {
         (new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository)).unexpireUser(1);
 
         // Assert
-        verify(userRepository).findById(eq(1));
+        verify(userRepository).findById(1);
     }
 
     /**

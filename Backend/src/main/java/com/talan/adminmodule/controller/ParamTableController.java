@@ -76,8 +76,5 @@ public ResponseDto canceldeleterequest(@PathVariable String tableName, @PathVari
         return tableService.paramHistory(tableName);
     }
 
-  /*  @GetMapping("/search")
-    public List<Map<String,String>> dynamicSearch(@RequestBody SearchRequest searchRequest){
-        return tableService.dynamicSearch(searchRequest);
-    }*/
+
         }

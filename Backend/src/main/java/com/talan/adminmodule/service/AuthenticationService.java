@@ -63,7 +63,7 @@ public class AuthenticationService {
         if (userEmail != null) {
             var user = this.repository.findByEmail(userEmail)
                     .orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, user)) {
+            if (jwtService.isTokenValid(refreshToken)) {
                 var accessToken = jwtService.generateToken(user);
 
                 var authResponse = AuthenticationResponse.builder()

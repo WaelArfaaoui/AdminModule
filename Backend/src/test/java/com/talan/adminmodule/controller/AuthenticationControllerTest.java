@@ -2,7 +2,6 @@ package com.talan.adminmodule.controller;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talan.adminmodule.controller.AuthenticationController;
 import com.talan.adminmodule.dto.AuthenticationRequest;
 import com.talan.adminmodule.dto.AuthenticationResponse;
 import com.talan.adminmodule.service.AuthenticationService;
@@ -32,7 +31,10 @@ class AuthenticationControllerTest {
     private AuthenticationController authenticationController;
     @MockBean
     private AuthenticationService authenticationService;
-
+    /**
+     * Method under test:
+     * {@link AuthenticationController#authenticate(AuthenticationRequest)}
+     */
     @Test
     void testAuthenticate() throws Exception {
         // Arrange

@@ -24,10 +24,6 @@ import java.io.IOException;
 public class AuthenticationController {
 @Autowired
   private AuthenticationService authenticationService;
-  @Autowired
-  private PasswordEncoder passwordEncoder ;
-  @Autowired
-  private UserRepository userRepository ;
 
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(

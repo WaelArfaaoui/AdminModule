@@ -222,7 +222,6 @@ List<String> updatedRequestsData =new ArrayList<>();
             columns.deleteCharAt(columns.length() - 1);
             values.deleteCharAt(values.length() - 1);
         }
-        StringBuilder sqlQuery = new StringBuilder();
         String sql = String.format("INSERT INTO %s (%s) VALUES (%s)", tableName, columns, values);
         jdbcTemplate.update(sql, params.toArray());
 

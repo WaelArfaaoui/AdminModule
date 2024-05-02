@@ -1,5 +1,6 @@
 package com.talan.adminmodule.service;
 
+import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -18,7 +19,6 @@ import com.talan.adminmodule.entity.User;
 import com.talan.adminmodule.repository.UserRepository;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -90,7 +90,7 @@ class AuthenticationServiceTest {
         // Assert
         verify(jwtService).generateRefreshToken(Mockito.<UserDetails>any());
         verify(jwtService).generateToken(Mockito.<User>any());
-        verify(userRepository).findByEmail(eq("jane.doe@example.org"));
+        verify(userRepository).findByEmail("jane.doe@example.org");
         verify(authenticationManager).authenticate(Mockito.<Authentication>any());
         assertEquals("ABC123", actualAuthenticateResult.getAccessToken());
         assertEquals("ABC123", actualAuthenticateResult.getRefreshToken());
@@ -148,7 +148,7 @@ class AuthenticationServiceTest {
         authenticationService.refreshToken(request, response);
 
         // Assert that nothing has changed
-        verify(request).getHeader(eq("Authorization"));
+        verify(request).getHeader("Authorization");
         HttpServletResponse response2 = response.getResponse();
         assertTrue(response2 instanceof ResponseFacade);
         ServletOutputStream expectedOutputStream = response.getOutputStream();
@@ -173,18 +173,18 @@ class AuthenticationServiceTest {
         Optional<User> ofResult = Optional.of(user);
         when(userRepository.findByEmail(Mockito.<String>any())).thenReturn(ofResult);
         when(jwtService.generateToken(Mockito.<User>any())).thenReturn("ABC123");
-        when(jwtService.isTokenValid(Mockito.<String>any(), Mockito.<UserDetails>any())).thenReturn(true);
+        when(jwtService.isTokenValid(Mockito.<String>any())).thenReturn(true);
         when(jwtService.extractUsername(Mockito.<String>any())).thenReturn("janedoe");
         HttpServletRequestWrapper request = mock(HttpServletRequestWrapper.class);
         when(request.getHeader(Mockito.<String>any())).thenReturn("Bearer ");
 
         authenticationService.refreshToken(request, new MockHttpServletResponse());
 
-        verify(jwtService).extractUsername(eq(""));
+        verify(jwtService).extractUsername("");
         verify(jwtService).generateToken(Mockito.<User>any());
-        verify(jwtService).isTokenValid(eq(""), Mockito.<UserDetails>any());
-        verify(userRepository).findByEmail(eq("janedoe"));
-        verify(request).getHeader(eq("Authorization"));
+     verify(jwtService).isTokenValid("");
+        verify(userRepository).findByEmail("janedoe");
+        verify(request).getHeader("Authorization");
     }
 
     @Test
@@ -202,7 +202,7 @@ class AuthenticationServiceTest {
         user.setRole(Role.BUSINESSEXPERT);
         Optional<User> ofResult = Optional.of(user);
         when(userRepository.findByEmail(Mockito.<String>any())).thenReturn(ofResult);
-        when(jwtService.isTokenValid(Mockito.<String>any(), Mockito.<UserDetails>any())).thenReturn(false);
+        when(jwtService.isTokenValid(Mockito.<String>any())).thenReturn(false);
         when(jwtService.extractUsername(Mockito.<String>any())).thenReturn("janedoe");
         HttpServletRequestWrapper request = mock(HttpServletRequestWrapper.class);
         when(request.getHeader(Mockito.<String>any())).thenReturn("Bearer ");
@@ -211,10 +211,10 @@ class AuthenticationServiceTest {
         authenticationService.refreshToken(request, mock(HttpServletResponse.class));
 
         // Assert that nothing has changed
-        verify(jwtService).extractUsername(eq(""));
-        verify(jwtService).isTokenValid(eq(""), Mockito.<UserDetails>any());
-        verify(userRepository).findByEmail(eq("janedoe"));
-        verify(request).getHeader(eq("Authorization"));
+        verify(jwtService).extractUsername("");
+        verify(jwtService).isTokenValid("");
+        verify(userRepository).findByEmail("janedoe");
+        verify(request).getHeader("Authorization");
     }
 
 }

@@ -63,9 +63,8 @@ public class UserService {
                 .message("Password Changed").build();
     }
     public String storeProfileImage(MultipartFile profileImage) throws IOException {
-        String imagePath = "";
         String path ="";
-        if (profileImage != null && !profileImage.isEmpty()) {
+        if (profileImage != null && !profileImage.isEmpty()&& profileImage.getOriginalFilename()!=null) {
             String fileName = StringUtils.cleanPath(profileImage.getOriginalFilename());
             String currentDir = System.getProperty("user.dir");
             Path uploadDir = Paths.get(currentDir,"..","Front", "src","assets","demo","images", "user-profiles");
@@ -76,7 +75,6 @@ public class UserService {
             try (InputStream inputStream = profileImage.getInputStream()) {
                 Path filePath = uploadDir.resolve(fileName);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                imagePath = filePath.toAbsolutePath().toString();
                 path= storeDir.toString();
             } catch (IOException ex) {
                 throw new IOException("Could not store file " + fileName + ". Please try again!", ex);

@@ -1,9 +1,5 @@
 package com.talan.adminmodule.service;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -48,7 +44,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = {AuthenticationService.class, AuthenticationManager.class})
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
-class AuthenticationServiceDiffblueTest {
+class AuthenticationServiceTest {
     @MockBean
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -114,10 +110,10 @@ class AuthenticationServiceDiffblueTest {
         authenticationService.refreshToken(request, response);
         // Assert that nothing has changed
         HttpServletResponse response2 = response.getResponse();
-        assertTrue(response2 instanceof ResponseFacade);
-        assertTrue(request.getInputStream() instanceof DelegatingServletInputStream);
-        assertTrue(request.getHttpServletMapping() instanceof MockHttpServletMapping);
-        assertTrue(request.getSession() instanceof MockHttpSession);
+        assertInstanceOf(ResponseFacade.class, response2);
+        assertInstanceOf(DelegatingServletInputStream.class, request.getInputStream());
+        assertInstanceOf(MockHttpServletMapping.class, request.getHttpServletMapping());
+        assertInstanceOf(MockHttpSession.class, request.getSession());
         assertEquals("", request.getContextPath());
         assertEquals("", request.getMethod());
         assertEquals("", request.getRequestURI());
@@ -146,7 +142,6 @@ class AuthenticationServiceDiffblueTest {
      */
     @Test
     void testRefreshToken2() throws IOException {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
         // Arrange
         ArrayList<AuthenticationProvider> providers = new ArrayList<>();
         providers.add(new RunAsImplAuthenticationProvider());

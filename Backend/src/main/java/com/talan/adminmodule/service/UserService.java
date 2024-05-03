@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -64,8 +65,8 @@ public class UserService {
     }
     public String storeProfileImage(MultipartFile profileImage) throws IOException {
         String path ="";
-        if (profileImage != null && !profileImage.isEmpty()&& profileImage.getOriginalFilename()!=null) {
-            String fileName = StringUtils.cleanPath(profileImage.getOriginalFilename());
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(profileImage.getOriginalFilename()));
             String currentDir = System.getProperty("user.dir");
             Path uploadDir = Paths.get(currentDir,"..","Front", "src","assets","demo","images", "user-profiles");
             Path storeDir = Paths.get("assets","demo","images","user-profiles",fileName);

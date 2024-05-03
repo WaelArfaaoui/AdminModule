@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.sql.DataSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-@TestPropertySource(locations = "classpath:application.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 
 @SpringBootTest
 class AdminModuleApplicationTests {

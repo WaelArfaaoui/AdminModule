@@ -24,7 +24,7 @@
 			<id>test</id>
 			<properties>
 				<spring.profiles.active>test</spring.profiles.active>
-				<resources>src/test/resources/</resources>
+				<resources>src/test/resources/application-test.properties</resources>
 			</properties>
 		</profile>
 		<profile>
@@ -118,6 +118,9 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+<!--
+			<scope>test</scope>
+-->
 		</dependency>
 	</dependencies>
 	<build>
@@ -161,11 +164,14 @@
 			</plugin>
 		</plugins>
 
-			<testResources>
-				<testResource>
+			<resources>
+				<resource>
+					<directory>src/main/resources</directory>
+				</resource>
+				<resource>
 					<directory>src/test/resources</directory>
-				</testResource>
-			</testResources>
+				</resource>
+			</resources>
 
 	</build>
 </project>

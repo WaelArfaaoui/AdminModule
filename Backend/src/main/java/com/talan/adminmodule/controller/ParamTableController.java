@@ -37,7 +37,7 @@ public class ParamTableController {
     @PatchMapping("/cancelupdate/{tableName}/{primaryKeyValue}")
     public ResponseDto cancelupdaterequest(@PathVariable String primaryKeyValue,
                                            @PathVariable String tableName){
-        return tableService.cancelupdaterequest(primaryKeyValue,tableName);
+        return tableService.cancelUpdateRequest(primaryKeyValue,tableName);
     }
 
 

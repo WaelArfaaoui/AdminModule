@@ -106,12 +106,12 @@ List<String> updatedRequestsData =new ArrayList<>();
 
         for (Map<String, Object> row : dataFromTable.getData()) {
             String primaryKeyValue = row.get(primaryKeyDetails(tableName).getName()).toString();
-            for (DeleteRequest deleteRequest : getdeleterequestByTable(tableName)) {
+            for (DeleteRequest deleteRequest : getDeleteRequestByTable(tableName)) {
                 if (primaryKeyValue.equals(deleteRequest.getPrimaryKeyValue())) {
                     deletedRequestsData.add(deleteRequest.getPrimaryKeyValue());
                 }
             }
-            for (UpdateRequest updateRequest : getupdaterequestByTable(tableName)) {
+            for (UpdateRequest updateRequest : getUpdateRequestByTable(tableName)) {
                 if (primaryKeyValue.equals(updateRequest.getInstanceData().get(primaryKeyDetails(tableName).getName()))) {
                     updatedRequestsData.add(updateRequest.getInstanceData().get(primaryKeyDetails(tableName).getName()));
                 }
@@ -263,7 +263,7 @@ public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
 
     return responseDto;
 }
-    public ResponseDto cancelupdaterequest(String primaryKeyValue ,String tableName) {
+    public ResponseDto cancelUpdateRequest(String primaryKeyValue , String tableName) {
         ResponseDto responseDto = new ResponseDto();
          String primaryKey= primaryKeyDetails(tableName).getName();
         boolean requestFound = false;
@@ -289,11 +289,11 @@ public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
 
         return responseDto;
     }
-  public  List<UpdateRequest> getupdaterequestByTable(String tableName){
+  public  List<UpdateRequest> getUpdateRequestByTable(String tableName){
         return updateRequests.stream()
                 .filter(updateRequest -> updateRequest.getTableName().equals(tableName)).toList();
     }
-   public List<DeleteRequest> getdeleterequestByTable(String tableName){
+   public List<DeleteRequest> getDeleteRequestByTable(String tableName){
         return deleteRequests.stream()
                 .filter(deleteRequest -> deleteRequest.getTableName().equals(tableName)).toList();
     }
@@ -427,8 +427,7 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
     }
     @Transactional
     @Scheduled(cron = "0 56 21 * * *")
-    public  ResponseDto executeupdate() {
-        ResponseDto responseDto = new ResponseDto();
+    public void executeUpdate() {
         List<String> uniqueTableNames = new ArrayList<>();
         for (UpdateRequest updateRequest : updateRequests) {
             if (!uniqueTableNames.contains(updateRequest.getTableName())) {
@@ -437,24 +436,21 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
         }
 
         for (String uniqueTableName : uniqueTableNames) {
-            List<UpdateRequest> tableUpdateRequests = getupdaterequestByTable(uniqueTableName);
+            List<UpdateRequest> tableUpdateRequests = getUpdateRequestByTable(uniqueTableName);
             Integer version = findMaxVersionByTableName(uniqueTableName) + 1;
-            for (UpdateRequest tableupdateRequest:tableUpdateRequests){
+            for (UpdateRequest tableupdateRequest : tableUpdateRequests) {
 
-               responseDto= updateInstance(tableupdateRequest,version);
-               if (responseDto.getSuccess()!=null){
-                   updateRequests.remove(tableupdateRequest);
-               }
-               else break;
+              ResponseDto  responseDto = updateInstance(tableupdateRequest, version);
+                if (responseDto.getSuccess() != null) {
+                    updateRequests.remove(tableupdateRequest);
+                } else break;
             }
 
         }
-        return responseDto;
     }
     @Transactional
    @Scheduled(cron = "0 56 21 * * *")
-    public ResponseDto executeDeletion () {
-            ResponseDto responseDto = new ResponseDto();
+    public void executeDeletion () {
 
                 List<String> uniqueTableNames = new ArrayList<>();
                 for (DeleteRequest deleteRequest : deleteRequests) {
@@ -463,15 +459,18 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
                     }
                 }
                for (String uniqueTableName : uniqueTableNames){
-                List <DeleteRequest>tableDeletedRequests =getdeleterequestByTable(uniqueTableName);
+                List <DeleteRequest>tableDeletedRequests = getDeleteRequestByTable(uniqueTableName);
                 Integer version=findMaxVersionByTableName(uniqueTableName)+1;
 
                  for (DeleteRequest tableDeletedRequest:tableDeletedRequests){
-                     responseDto = deleteInstance(tableDeletedRequest,version);
+                   ResponseDto responseDto = deleteInstance(tableDeletedRequest,version);
+                   if (responseDto.getSuccess()!=null){
+                       deleteRequests.remove(tableDeletedRequest);
+                   }else break;
 
                 }}
 
-            return responseDto;
+
         }
    public ResponseDto deleteInstance(DeleteRequest deleteRequest,Integer version){
        ResponseDto responseDto = new ResponseDto();
@@ -480,8 +479,15 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
        String primaryKeyColumn = primaryKeyDetails(deleteRequest.getTableName()).getName();
        String primaryKeyColumnType = primaryKeyDetails(deleteRequest.getTableName()).getType();
        Object primaryKeyValue = convertToDataType(inputValue, primaryKeyColumnType);
-       String sqlQuery = "UPDATE " + deleteRequest.getTableName() + " SET active = false WHERE " + primaryKeyColumn + " = ?";
-       rowsUpdated =jdbcTemplate.update(sqlQuery, primaryKeyValue);
+       StringBuilder sqlQuery;
+       sqlQuery = new StringBuilder();
+       sqlQuery.append("UPDATE ")
+               .append(deleteRequest.getTableName())
+               .append(" SET active = false WHERE ")
+               .append(primaryKeyColumn)
+               .append(" = ?");
+
+       rowsUpdated =jdbcTemplate.update(sqlQuery.toString(), primaryKeyValue);
 
        if (rowsUpdated > 0) {
            responseDto.setSuccess("Record updated successfully ");

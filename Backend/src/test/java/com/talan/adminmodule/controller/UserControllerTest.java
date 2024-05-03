@@ -25,7 +25,6 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
-import java.security.Principal;
 import java.util.ArrayList;
 
 import com.talan.adminmodule.service.UserService;
@@ -42,6 +41,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.ResultActions;
@@ -52,6 +52,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 @ContextConfiguration(classes = {UserController.class})
 @ExtendWith(SpringExtension.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@DisabledInAotMode
 class UserControllerTest {
     @MockBean
     private ModelMapper modelMapper;

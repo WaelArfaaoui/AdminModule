@@ -39,9 +39,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = {AuthenticationService.class, AuthenticationManager.class})
+@TestPropertySource(locations = "classpath:application-test.properties")
+
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
 class AuthenticationServiceTest {

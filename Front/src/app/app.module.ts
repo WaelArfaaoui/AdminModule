@@ -33,7 +33,6 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {SliderModule} from "primeng/slider";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {LoginComponent} from './pages/login/login.component';
-import {ParamTableComponent} from './components/param-table/param-table.component';
 import {DashbordComponent} from './components/dashbord/dashbord.component';
 import {ChartModule} from "primeng/chart";
 import {AddUserComponent} from './components/add-user/add-user.component';
@@ -55,7 +54,7 @@ import { StackedColumnsComponent } from './components/stacked-columns/stacked-co
 
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

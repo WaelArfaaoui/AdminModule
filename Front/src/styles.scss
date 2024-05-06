@@ -55,3 +55,28 @@ h1 {
 p-dialog-header {
   background: white !important;
 }
+
+.p-dropdown {
+  width: 10rem !important;
+  height: 3rem !important;
+}
+
+.p-dropdown-label {
+  padding: 0.5rem !important;
+}
+
+.p-paginator {
+  align-items: center !important;
+  border-radius :0 !important ;
+  background: var(--color-info-light)  !important;
+}
+
+.apexcharts-datalabels {
+  display: none !important;
+}
+
+
+app-stacked-columns .apexcharts-legend-series {
+  display: none !important;
+}
+

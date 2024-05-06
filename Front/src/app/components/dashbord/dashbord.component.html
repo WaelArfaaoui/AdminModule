@@ -1,31 +1,55 @@
-<div class="grid p-fluid">
-  <div class="col-6 mx-n4">
+<div class="rules">
+  <div class="total-rules">
+    <div class="icon-bef-title">
+      <div >
+      <span class="material-symbols-outlined">
+                        Assignment
+                        </span>
+      </div>
+      <div class="icon-title">
+        <h3>Total rules</h3>
+        <h1 class="assign-count">630</h1>
+      </div>
+    </div>
+    <div class="middle">
+      <app-donut></app-donut>
+    </div>
+    <small class="text-muted"></small>
 
-    <div class="card">
-      <h5>Les tables les plus modifiés</h5>
-      <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
-    </div>
-    <div class="card">
-      <h5>Linear Chart</h5>
-      <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
-    </div>
-
-    <div class="card">
-      <h5>Polar Area Chart</h5>
-      <p-chart type="polarArea" [data]="polarData" [options]="polarOptions"></p-chart>
-    </div>
   </div>
-  <div class="col-6">
-    <div class="card">
-      <h5>Bar Chart</h5>
-      <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+  <div class="expenses">
+    <div class="icon-bef-title">
+      <span class="material-symbols-outlined">
+                        table
+                        </span>
+      <div class="icon-title">
+        <h3>Total tables</h3>
+        <h1 class="assign-count">400</h1>
+      </div>
+    </div>
+    <div class="middle">
+      <app-stacked-columns></app-stacked-columns>
+    </div>
+    <small class="text-muted"> </small>
+
+  </div>
+  <div class="income">
+    <div class="icon-bef-title">
+       <span class="material-symbols-outlined">
+                        update
+                        </span>
+      <div class="icon-title">
+
+        <h3>Total updates</h3>
+        <h1 class="assign-count">262</h1>
+      </div>
     </div>
 
-    <div class="card">
-      <h5>Pie Chart</h5>
-      <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+    <div class="middle">
+      <app-heatmap></app-heatmap>
     </div>
+    <small class="text-muted"></small>
 
-
+  </div>
 
 </div>

@@ -1,0 +1,254 @@
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MessageService } from 'primeng/api';
+import {
+  AttributeDataDto,
+  AttributeDto, AttributeService,
+  CategoryDto,
+  CategoryService,
+  RuleDto,
+  RuleService
+} from "../../../open-api";
+import { Router } from "@angular/router";
+import { DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
+
+@Component({
+  selector: 'app-update-rule',
+  templateUrl: './update-rule.component.html',
+  styleUrls: ['./update-rule.component.scss']
+})
+export class UpdateRuleComponent implements OnInit {
+
+  ruleForm!: FormGroup;
+  attributes!: AttributeDto[];
+  categories!: CategoryDto[];
+  selectedCategory!: CategoryDto;
+  selectedAttributes: AttributeDto[] = [];
+  categoryVisible: boolean = false;
+  attributeVisible: boolean = false;
+  newCategoryName: string = '';
+  newAttributeName: string = '';
+  existingAttributes!: AttributeDataDto[];
+  rule!: RuleDto;
+
+  constructor(
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private attributeService: AttributeService,
+    private ruleService: RuleService,
+    private categoryService: CategoryService,
+    private router: Router,
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig,
+  ) {}
+
+  ngOnInit(): void {
+    this.rule = this.config.data;
+    this.initializeForm();
+    this.loadCategories();
+    this.loadAttributes();
+  }
+
+  initializeForm() {
+    if (this.rule.category!=null)this.selectedCategory = this.rule.category ;
+    this.ruleForm = this.fb.group({
+      name: [this.rule.name, Validators.required],
+      description: [this.rule.description, Validators.required],
+      category: [this.rule.category, Validators.required],
+      attributeDtos: this.fb.array([]) ,
+      updateDescription:['']
+    });
+    this.addExistingAttributes();
+  }
+
+  addExistingAttributes() {
+    if (this.rule.attributeDtos != null) {
+      const attributeArray = this.ruleForm.get('attributeDtos') as FormArray;
+      this.existingAttributes = this.rule.attributeDtos;
+      this.existingAttributes.forEach(attr => {
+        if (attr.name!=null)this.selectedAttributes.push(attr.name) ;
+        attributeArray.push(this.createAttributeGroup(attr));
+      });
+    }
+  }
+
+  createAttributeGroup(attr: AttributeDataDto) {
+    return this.fb.group({
+      name: [attr.name, Validators.required],
+      percentage: [attr.percentage, Validators.required],
+      value: [attr.value, Validators.required]
+    });
+  }
+
+  loadCategories() {
+    this.categoryService.getAllCategories().subscribe({
+      next: data => {
+        this.categories = data;
+      },
+      error: error => {
+        console.error('Error loading categories:', error);
+      }
+    });
+  }
+
+  loadAttributes() {
+    this.attributeService.getAllAttributes().subscribe({
+      next: data => {
+        this.attributes = data;
+      },
+      error: error => {
+        console.error('Error loading attributes:', error);
+      }
+    });
+  }
+  createEmptyAttributeGroup() {
+    return this.fb.group({
+      name: ['', Validators.required],
+      percentage: ['', Validators.required],
+      value: ['', Validators.required]
+    });
+  }
+  addAttribute() {
+    const attributeArray = this.ruleForm.get('attributeDtos') as FormArray;
+    attributeArray.push(this.createEmptyAttributeGroup());
+  }
+
+
+  removeAttribute(index: number) {
+    const attributeArray = this.ruleForm.get('attributeDtos') as FormArray;
+    attributeArray.removeAt(index);
+  }
+
+  getAttributeControls() {
+    return (this.ruleForm.get('attributeDtos') as FormArray).controls;
+  }
+
+  private validateAttributeNames(): boolean {
+    const attributeNames = new Set<string>();
+    const attributeControls = this.getAttributeControls();
+    for (const control of attributeControls) {
+      const name = control.value.name;
+      if (attributeNames.has(name)) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Attribute names must be unique'
+        });
+        return false;
+      }
+      attributeNames.add(name);
+    }
+    return true;
+  }
+
+  private validateAttributeValues(): boolean {
+    const attributeControls = this.getAttributeControls();
+    for (const control of attributeControls) {
+      const value = parseInt(control.value.value);
+      if (isNaN(value) || value < 1 || value > 10) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Attribute value must be between 1 and 10'
+        });
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private validateAttributePercentages(): boolean {
+    let sum = 0;
+    for (const control of this.getAttributeControls()) {
+      const percentage = parseInt(control.value.percentage);
+      if (!isNaN(percentage)) {
+        sum += percentage;
+      }
+    }
+
+    if (sum !== 100) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Sum of attribute percentages must be equal to 100'
+      });
+      return false;
+    }
+    return true;
+  }
+
+  showDialog(type: string) {
+    if (type == 'category') {
+      this.categoryVisible = true;
+    } else {
+      this.attributeVisible = true;
+    }
+  }
+
+  addNewAttribute() {
+    if (this.newAttributeName.trim() !== '') {
+      const attributeExists = this.attributes.some(attr => attr.name === this.newAttributeName);
+      if (!attributeExists) {
+        const newAttribute: AttributeDto = { name: this.newAttributeName };
+        this.attributes.push(newAttribute);
+        this.attributeVisible = false;
+        this.messageService.add({ severity: 'success', summary: 'success', detail: 'Attribute added' });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'error', detail: 'Attribute exists ' });
+      }
+    }
+  }
+
+  addNewCategory() {
+    if (this.newCategoryName.trim() !== '') {
+      const categoryExists = this.categories.some(cat => cat.name === this.newCategoryName);
+      if (!categoryExists) {
+        const newCategory: CategoryDto = { name: this.newCategoryName };
+        this.categories.push(newCategory);
+        this.categoryVisible = false;
+        this.messageService.add({ severity: 'success', summary: 'success', detail: 'Category added' });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'error', detail: 'Category exists ' });
+      }
+    }
+  }
+
+  onSubmit() {
+    const formData = this.ruleForm.value;
+    console.log(formData) ;
+    if (this.ruleForm.valid) {
+      if (!this.validateAttributeNames() || !this.validateAttributeValues() || !this.validateAttributePercentages()) {
+        return;
+      }
+      this.saveRule(formData);
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill all required fields correctly.' });
+    }
+  }
+
+  saveRule(formData: any) {
+    let ruleId = this.rule.id ;
+    if (ruleId != null) {
+      this.ruleService.updateRule(2, ruleId, formData.updateDescription, formData).subscribe({
+        next: response => {
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Rule updated successfully'});
+          this.ref.close();
+        },
+        error: error => {
+          console.error('Error saving rule:', error);
+          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to update rule. Please try again.'});
+        }
+      });
+    }
+  }
+
+  deleteAttribute(id?: number) {
+    if (id !== undefined) {
+      const index = this.existingAttributes.findIndex(attr => attr.id === id);
+      if (index !== -1) {
+        this.existingAttributes.splice(index, 1);
+        this.selectedAttributes.splice(index, 1);
+      }
+    }
+  }
+}

@@ -1,86 +1,103 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Table} from "primeng/table";
+import {Component, OnInit} from '@angular/core';
+import {PageRuleDto, RuleDto, RuleService} from "../../../open-api";
+import {DialogService} from "primeng/dynamicdialog";
+import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
+import {UpdateRuleComponent} from "../update-rule/update-rule.component";
+import {RuleHistoryComponent} from "../rule-history/rule-history.component";
 
-@Component({
-  selector: 'app-all-rules',
-  templateUrl: './all-rules.component.html',
-  styleUrls: ['./all-rules.component.scss']
-})
-export class AllRulesComponent implements OnInit {
-
-
-  data:any   = [
-    {
-      name: 'Rule 1',
-      description: 'Description of Rule 1',
-      createdDate: new Date('2023-01-15'),
-      enabled: true
-    },
-    {
-      name: 'Rule 2',
-      description: 'Description of Rule 2',
-      createdDate: new Date('2023-03-22'),
-      enabled: false
-    },
-    {
-      name: 'Rule 3',
-      description: 'Description of Rule 3',
-      createdDate: new Date('2023-07-08'),
-      enabled: true
-    },
-    {
-      name: 'Rule 4',
-      description: 'Description of Rule 4',
-      createdDate: new Date('2023-09-01'),
-      enabled: false
-    },
-    {
-      name: 'Rule 5',
-      description: 'Description of Rule 5',
-      createdDate: new Date('2023-12-10'),
-      enabled: true
-    },
-    {
-      name: 'Rule 6',
-      description: 'Description of Rule 6',
-      createdDate: new Date('2024-02-28'),
-      enabled: false
-    },
-    {
-      name: 'Rule 7',
-      description: 'Description of Rule 7',
-      createdDate: new Date('2024-05-17'),
-      enabled: true
-    },
-    {
-      name: 'Rule 8',
-      description: 'Description of Rule 8',
-      createdDate: new Date('2024-08-04'),
-      enabled: false
-    },
-    {
-      name: 'Rule 9',
-      description: 'Description of Rule 9',
-      createdDate: new Date('2024-10-29'),
-      enabled: true
-    },
-    {
-      name: 'Rule 10',
-      description: 'Description of Rule 10',
-      createdDate: new Date('2024-12-05'),
-      enabled: false
-    },
-    {
-      name: 'Rule 11',
-      description: 'Description of Rule 11',
-      createdDate: new Date('2024-12-05'),
-      enabled: false
-    }
-  ];
-
-  constructor() {
-  }
-  ngOnInit(): void {
-  }
+interface PageEvent {
+    first: number;
+    rows: number;
+    page: number;
+    pageCount: number;
 }
 
+@Component({
+    selector: 'app-all-rules',
+    templateUrl: './all-rules.component.html',
+    styleUrls: ['./all-rules.component.scss']
+})
+export class AllRulesComponent implements OnInit {
+    first: number = 0;
+    rows: number = 10;
+    searchQuery: string = '';
+    rules: Array<RuleDto> | undefined = [];
+    totalRecords: number | undefined = 0;
+    private selectedRule!: RuleDto;
+
+    constructor(private ruleService: RuleService  , private dialogService: DialogService) {}
+
+    onPageChange(event: PageEvent) {
+        this.first = event.first;
+        this.rows = event.rows;
+        this.loadRules();
+    }
+    ngOnInit(): void {
+        this.loadRules();
+    }
+    search() {
+      this.first = 0;
+      this.searchRules();
+    }
+    loadRules() {
+        this.ruleService.findAllRules(this.first, this.rows).subscribe({
+            next: (response: PageRuleDto) => {
+                this.rules = response.content;
+                this.totalRecords = response.totalElements;
+            },
+            error: error => {
+                console.error('Error fetching rules:', error);
+            }
+        });
+    }
+    searchRules() {
+      this.ruleService.searchRules(this.first, this.rows, this.searchQuery).subscribe({
+        next: (response: PageRuleDto) => {
+          this.rules = response.content;
+          this.totalRecords = response.totalElements;
+        },
+        error: error => {
+          console.error('Error fetching rules:', error);
+        }
+      });
+    }
+    disableRule(rule: RuleDto) {
+        this.selectedRule = rule;
+        const ref = this.dialogService.open(DisableRuleComponent, {
+            header: 'Disable rule',
+            width: '500px',
+            contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+            data: this.selectedRule
+        });
+        ref.onClose.subscribe((result: any) => {
+            if (result==true) {
+                this.loadRules();
+            }
+        });
+    }
+
+    updateRule(rule: RuleDto) {
+        this.selectedRule = rule;
+        const ref = this.dialogService.open(UpdateRuleComponent, {
+            header: 'Update Rule',
+            width: '900px',
+            height: '600px',
+            contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+            data: this.selectedRule
+        });
+
+    }
+
+    openRuleHistory(rule:RuleDto) {
+        this.selectedRule = rule;
+        const ref = this.dialogService.open(RuleHistoryComponent, {
+            header: 'Rule history',
+            width: '900px',
+            height: '600px',
+            contentStyle: {"background-color": "var(--color-white)","color": "var(--color-dark)"},
+            data: this.selectedRule
+        });
+
+    }
+
+}

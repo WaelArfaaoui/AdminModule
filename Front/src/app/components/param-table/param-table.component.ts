@@ -1,93 +1,251 @@
-import { Component, OnInit } from '@angular/core';
 
-import {MessageService} from "primeng/api";
+import {Component, Input, OnInit} from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { HttpClient } from '@angular/common/http';
+import {DeleteParamComponent} from "../delete-param/delete-param.component";
+import {DialogService} from "primeng/dynamicdialog";
+import {TableInfo} from "../../model/table-info";
 import {TableService} from "../../services/table/table.service";
-import {HttpClient} from "@angular/common/http";
-interface expandedRows {
-  [key: string]: boolean;
-}
+import {ParamHistoryComponent} from "../param-history/param-history.component";
+
+
+
+
 @Component({
   selector: 'app-param-table',
   templateUrl: './param-table.component.html',
   styleUrls: ['./param-table.component.scss']
 })
-
 export class ParamTableComponent implements OnInit {
 
+  @Input() table: TableInfo=new TableInfo();
 
-  expandedRows: expandedRows = {};
-  isExpanded: boolean = false;
+  constructor(private messageService: MessageService, private tableService: TableService, private http: HttpClient,private dialogService:DialogService) {}
 
-  productDialog: boolean = false;
+  gettable(table: TableInfo) {
+    table.data=[];
+    table.totalPageCount = Math.ceil(table.totalRows / table.limit);
+    table.offset = (table.currentPage - 1) * table.limit;
+    if (table.selectedColumns === []) {
+      table.selectedColumns = table.columns.map(column => column.name);
+    }
 
-  deleteProductDialog: boolean = false;
-
-  deleteProductsDialog: boolean = false;
-  showNewRow: boolean = false;
-
-  tables: any[] = [];
-
-  product: any = {};
-
-  selectedProducts: any[] = [];
-
-  submitted: boolean = false;
-columns: string[] = ['id', 'customer', 'date', 'Limitesdetransaction', 'status'];
-  orders: any[] = [];
-  cols: any[] = [];
-  totalRecords: number = 100; // Total number of records
-
-  statuses: any[] = [];
-  tablesArray: { name: string, columns: string[] }[] = [];
-  selectedColumns: any[]=[];
-    products:any[]=[];
-  rowsPerPageOptions = [5, 10, 20];
-
-  constructor(private messageService: MessageService, private tableService: TableService,private http:HttpClient) {
+    this.tableService.getDataFromTable(table).subscribe({
+      next:(DataFromTable)=>{table.data = DataFromTable.data;
+        table.deleteRequests = DataFromTable.deleteRequests;
+        table.updateRequests = DataFromTable.updateRequests;
+        console.log(table.updateRequests)
+       },
+      error:()=>{this.messageService.add({ severity: 'error', summary: 'error data', detail: `Data loaded for ${table.name}` });},
+    })
 
   }
-
-  ngOnInit() {
-    this.retrieveData();
-    this.getProductsWithOrdersSmall().then(data => this.products = data);
-
-  }
-  // Rest of your component code
-
-  retrieveData(): void {
-    this.tableService.retrieveAllTablesAndColumns().subscribe(
-      data => {
-        console.log('Received data:', data);
-        this.tablesArray = data.map((table: { name: any; columns: any[]; }) => ({
-          name: table.name,
-          columns: table.columns.map(column => ({ name: column }))
-        }));
-        console.log(this.tablesArray); // Check the content in the console
+  cancelUpdateInstance(table:TableInfo,primaryKeyValue :string){
+    this.tableService.cancelUpdateInstance(table.name,primaryKeyValue).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messageService.add({ severity: 'success', summary: 'Deletion Cancelled',detail: response.success });
+          this.gettable(table)
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Deletion not Cancelled',detail: response.error });
+        }
       },
-      error => {
-        console.error('Error:', error);
-        // Handle error
+      error: (error) => {
+        console.error(error);
+        this.messageService.add({ severity: 'error', summary: 'Deletion not Cancelled', detail: error});
+
+      }
+    });
+  }
+
+  canceldeletion(table:TableInfo, primaryKeyValue: string) {
+    this.tableService.cancelDeletion(table.name, primaryKeyValue).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messageService.add({ severity: 'success', summary: 'Deletion Cancelled',detail: response.success });
+           this.gettable(table)
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Deletion not Cancelled',detail: response.error });
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this.messageService.add({ severity: 'error', summary: 'Deletion not Cancelled', detail: error});
+
+      }
+    });
+  }
+
+  updateEditedValue(table: TableInfo, row: any, column: string, newValue: any) {
+    const rowId = row[table.pk.name];
+    if (!table.editedValue) {
+      table.editedValue = {};
+    }
+    if (!table.editedValue[rowId]) {
+      table.editedValue[rowId] = {};
+    }
+    table.editedValue[rowId][column] = newValue;
+  }
+  isRowMarkedForUpdate(table: TableInfo, row: any): boolean {
+    const rowId = row[table.pk.name];
+    let rowMarkedForUpdate = false;
+    for (const request of table.updateRequests) {
+
+      if (request=== rowId) {
+        rowMarkedForUpdate = true;
+        break;
+      }
+    }
+    return rowMarkedForUpdate;
+  }
+  isRowMarkedForDeletion(table: TableInfo, row: any): boolean {
+    const rowId = row[table.pk.name];
+    let rowMarkedForDeletion = false;
+    for (const request of table.deleteRequests) {
+
+      if (request=== rowId) {
+        rowMarkedForDeletion = true;
+        break;
+      }
+    }
+    return rowMarkedForDeletion;
+  }
+
+
+  createInstanceDataUpdate(row: any, table: TableInfo) {
+    const instanceData: { [column: string]: any } = {};
+    const rowId = row[table.pk.name];
+    instanceData[table.pk.name] = rowId;
+    for (const column of table.selectedColumns) {
+      if (column === table.pk.name) {
+        continue;
+      }
+        if (table.editedValue && table.editedValue[rowId] && table.editedValue[rowId][column] !== undefined) {
+          instanceData[column] = table.editedValue[rowId][column];
+        }
+      }
+
+    return instanceData;
+  }
+
+editValue (table: TableInfo, row: any) {
+  const instanceData = this.createInstanceDataUpdate(row, table);
+  this.tableService.updateInstance(instanceData, table.name).subscribe(
+    (response: any) => {
+      this.gettable(table);
+      this.messageService.add({ severity: 'success', summary: 'Parameter EDITED', detail: `Parameter EDITED to ${table.name}` });
+      const index = table.newRows.indexOf(row);
+    },
+    (error: any) => {
+      console.error('Error adding instance:', error);
+    }
+  );
+}
+
+  toggleEditMode(row: any) {
+    row.editMode = !row.editMode;
+  }
+  dblclickeditmode(row: any) {
+    if (!row.editMode) {
+      row.editMode = true;
+    }
+  }
+  getColumnType(column: string): string  {
+    for (let col of this.table.columns) {
+      if (col.name === column) {
+        return col.type;
+      }
+    }
+    return "string";
+  }
+
+  addNewRow(table: TableInfo) {
+    const newRow: { [anycolumn: string]: any } = {};
+    for (let column of table.selectedColumns) {
+      newRow[column] = '';
+    }
+    table.newRows.push(newRow);
+    table.showNewRow = true;
+  }
+  changeLimit(newLimit: number) {
+    this.table.limit = newLimit;
+    this.gettable(this.table);
+  }
+
+
+
+  toggleplusMode(table: TableInfo, newRow: any) {
+    const index = table.newRows.indexOf(newRow);
+    if (index !== -1) {
+      table.newRows.splice(index, 1);
+    }
+
+  }
+
+
+
+
+
+
+  ngOnInit(): void {
+  }
+  deleteinstance(table:TableInfo, primaryKeyValue: string) {
+    this.dialogService.open(DeleteParamComponent, {
+      header: 'Delete Parameter',
+      width: '500px',
+      contentStyle: {"background-color": "var(--color-white)", "color": "var(--color-dark)"}
+    });
+    this.tableService.dataDeleteInstance = {
+      table: table,
+      primaryKeyValue: primaryKeyValue
+    };
+
+  }
+
+  createInstanceData(newRow: { [column: string]: string }, table: TableInfo) {
+    const instanceData: { [column: string]: string } = {};
+    for (let column of table.selectedColumns) {
+      instanceData[column] = newRow[column];
+    }
+    return instanceData;
+  }
+
+  addNewInstance(table: TableInfo, newRow: any) {
+    const instanceData = this.createInstanceData(newRow, table);
+    this.tableService.addInstance(instanceData, table.name).subscribe(
+      (response: any) => {
+        this.gettable(table);
+        this.messageService.add({ severity: 'success', summary: 'Parameter Added', detail: `Parameter added to ${table.name}` });
+        // Remove the added row from the list of new rows
+        const index = table.newRows.indexOf(newRow);
+        if (index !== -1) {
+          table.newRows.splice(index, 1);
+        }
+      },
+      (error: any) => {
+        console.error('Error adding instance:', error);
       }
     );
   }
-  toggleEditMode(order: any) {
-    order.editMode = !order.editMode; // Toggle the edit mode flag
-  }
 
-  newRow: any = {};
-  addNewRow(product: any) {
-    // Initialize new row object
-    this.newRow = {};
-    // Set showNewRow flag to true to display the new row
-    this.showNewRow = true;
-  }
-  getProductsWithOrdersSmall() {
-    return this.http.get<any>('assets/demo/data/products-orders-small.json')
-      .toPromise()
-      .then(res => res.data as any[])
-      .then(data => data);
-  }
+  changePage(table: TableInfo, pageNumber: number) {
+    if (pageNumber >= 1 && pageNumber <= table.totalPageCount) {
+      table.currentPage = pageNumber;
 
+      table.offset = (table.currentPage - 1) * table.limit;
 
+      this.gettable(table);
+    }
+  }
+  openparamhistory(tableName: string) {
+    this.dialogService.open(ParamHistoryComponent, {
+      header: `History ${tableName} `,
+      width: '90%',
+      contentStyle: {"background-color": "var(--color-white)", "color": "var(--color-dark)"},
+      data: {
+        tableName: tableName
+      }
+    });
+  }
 
 }

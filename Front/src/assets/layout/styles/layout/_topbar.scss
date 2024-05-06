@@ -41,12 +41,8 @@
   }
 
   .user-avatar img {
-    width: 42px; /* Adjust size as needed */
-    height: 42px; /* Adjust size as needed */
-    border-radius: 50%;
-    margin-right: 5px;
-    shape:"circle";
-    margin-left:30px
+    max-width: 100%; /* Ensure image does not exceed container width */
+    height: auto; /* Maintain aspect ratio */
   }
 
   .user-details {

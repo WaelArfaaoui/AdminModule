@@ -35,7 +35,6 @@ import {SliderModule} from "primeng/slider";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import { LoginComponent } from './pages/login/login.component';
 import { ParamTableComponent } from './components/param-table/param-table.component';
-import { DashbordComponent } from './components/dashbord/dashbord.component';
 import {ChartModule} from "primeng/chart";
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
@@ -46,12 +45,12 @@ import {AvatarModule} from "primeng/avatar";
 import { DeleteParamComponent } from './components/delete-param/delete-param.component';
 import { ListParamTablesComponent } from './components/list-param-tables/list-param-tables.component';
 import {InterceptorService} from "./services/interceptor/interceptor.service";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {DialogService} from "primeng/dynamicdialog";
 import { ParamHistoryComponent } from './components/param-history/param-history.component';
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, DashbordComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DeleteParamComponent, ListParamTablesComponent, ParamHistoryComponent],
+  declarations: [AppComponent, AllUsersComponent , AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, DeleteParamComponent, ListParamTablesComponent, ParamHistoryComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -85,10 +84,12 @@ import { ParamHistoryComponent } from './components/param-history/param-history.
         ChartModule,
         ToastModule,
         DialogModule,
-        AvatarModule
+        AvatarModule,
+      MatDialogModule,
+      HttpClientModule
 
     ],
-  providers: [MessageService , DialogService,ParamTableComponent,{
+  providers: [MessageService , DialogService,ParamTableComponent,HttpClient,{
     provide: HTTP_INTERCEPTORS,
     useClass: InterceptorService,
     multi: true,

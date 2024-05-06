@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.aot.DisabledInAotMode;
@@ -26,8 +27,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ContextConfiguration(classes = {AuthenticationController.class})
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
-
+@ActiveProfiles("test")
 @DisabledInAotMode
 class AuthenticationControllerTest {
     @Autowired

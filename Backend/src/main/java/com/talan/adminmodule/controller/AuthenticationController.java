@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/auth")
+@CrossOrigin("*")
+
 public class AuthenticationController {
 @Autowired
   private AuthenticationService authenticationService;
@@ -30,9 +31,9 @@ public class AuthenticationController {
           @RequestBody AuthenticationRequest request
   ) {
 
-    try {
+//    try {
       return ResponseEntity.ok(authenticationService.authenticate(request));
-    } catch (BadCredentialsException e) {
+    /*} catch (BadCredentialsException e) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
               .body(AuthenticationResponse.builder()
                       .error("Credentials provided are incorrect. Please check your credentials and try again.")
@@ -42,7 +43,7 @@ public class AuthenticationController {
               .body(AuthenticationResponse.builder()
                       .error("An error occurred during authentication. Please try again later.")
                       .build());
-    }
+    }*/
   }
 
   @PostMapping("/refresh-token")

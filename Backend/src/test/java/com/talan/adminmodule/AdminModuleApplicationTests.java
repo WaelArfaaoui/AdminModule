@@ -4,30 +4,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.sql.DataSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @TestPropertySource(locations = "classpath:application-test.properties")
-
+@ActiveProfiles("test")
 @SpringBootTest
+@EnableScheduling
 class AdminModuleApplicationTests {
 	@Autowired
-	private ApplicationContext context;
-	@Bean
-	public DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.H2)
-				.build();
-	}
-
-	@Test
+	private  ApplicationContext context;
+    @Test
 	void contextLoads() {
 		assertThat(context).isNotNull();
 	}
-
 }

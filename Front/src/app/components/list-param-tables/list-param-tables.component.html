@@ -3,9 +3,6 @@
   <div>
     <h1 class="pt-3" style=" font-size: 20px !important;margin-top:20px">
       Tables Per Page <p-dropdown [options]="[5, 10, 20]" [(ngModel)]="limit" (ngModelChange)="retrieveData()" [style]="{'width': '100px'}"></p-dropdown></h1>
-
-
-
   </div>
   <div class="row">
     <div class="col-12">
@@ -44,8 +41,8 @@
             </td>
             <td style="white-space: nowrap; width: 220px;">
               <div>
-                <p-dropdown [options]="[''].concat(table.selectedColumns)" [(ngModel)]="table.sortByColumn" [style]="{'width': '150px','margin-right':'10px'}" ></p-dropdown>
-                <p-dropdown [disabled]="table.sortByColumn == ''" [options]="['asc', 'desc']" [(ngModel)]="table.sortOrder" [style]="{'width': '100px'}"></p-dropdown>
+                <p-dropdown [options]="[''].concat(table.selectedColumns)" [(ngModel)]="table.sortByColumn" (onChange)="onModelChange(table)" [style]="{'width': '150px','margin-right':'10px'}" ></p-dropdown>
+                <p-dropdown [disabled]="table.sortByColumn == ''" [options]="['asc', 'desc']" [(ngModel)]="table.sortOrder" (onChange)="onModelChange(table)" [style]="{'width': '100px'}"></p-dropdown>
               </div>
             </td>
             <td style="white-space: nowrap; width: 200px;">

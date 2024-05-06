@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin("*")
 @RequestMapping("/api/tables")
 @RestController
+@CrossOrigin("*")
+
 public class ParamTableController {
     @Autowired
     private ParamTableService tableService;
@@ -48,7 +49,7 @@ public class ParamTableController {
        String username = requestWrapper.getRemoteUser();
        UpdateRequest updateRequest = new UpdateRequest(instanceData,tableName,username);
 
-       return tableService.addupdaterequest(updateRequest);
+       return tableService.addUpdateRequest(updateRequest);
 
    }
     @PostMapping("/{tableName}")
@@ -64,12 +65,12 @@ public ResponseDto deleteRecord(@PathVariable String tableName, @PathVariable St
     String username = requestWrapper.getRemoteUser();
     DeleteRequest deleteRequest = new DeleteRequest(tableName, primaryKeyValue,username);
 
-    return tableService.addeleterequest(deleteRequest);
+    return tableService.addDeleteRequest(deleteRequest);
 
 }
     @PatchMapping("/{tableName}/canceldeletion/{primaryKeyValue}")
 public ResponseDto canceldeleterequest(@PathVariable String tableName, @PathVariable String primaryKeyValue){
-        return tableService.canceldeleterequest(tableName,primaryKeyValue);
+        return tableService.cancelDeleteRequest(tableName,primaryKeyValue);
     }
     @GetMapping("/{tableName}/history")
        public List<ParamAudit> paramHistory(@PathVariable String tableName){

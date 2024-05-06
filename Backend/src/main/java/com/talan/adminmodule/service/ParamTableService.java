@@ -31,7 +31,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
-
 public class ParamTableService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -51,7 +50,7 @@ public class ParamTableService {
 
     public static final String ACTIVE ="active";
     List<UpdateRequest>updateRequests = new ArrayList<>();
-    private final List<DeleteRequest> deleteRequests =new ArrayList<>();
+     List<DeleteRequest> deleteRequests =new ArrayList<>();
     @PostConstruct
     public void initialize() {
         allTablesWithColumns = databaseInitializer.getAllTablesWithColumns();
@@ -242,7 +241,7 @@ ResponseDto responseDto = new ResponseDto();
 
 
 //LIST SCHEDULED FOR UPDATE WITH SIMULATION TOC CHECK REQUEST VALIDITY
-public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
+public ResponseDto addUpdateRequest(UpdateRequest updateRequest) {
     ResponseDto responseDto = new ResponseDto();
 
     boolean exists = updateRequests.stream()
@@ -255,7 +254,7 @@ public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
 
             responseDto.setSuccess("Update request validated and added successfully.");
         } else {
-            responseDto.setError("Validation failed; update request not added.");
+            responseDto.setError("Validation failed, update request not added.");
         }
     } else {
         responseDto.setError("Update request already exists.");
@@ -275,16 +274,16 @@ public ResponseDto addupdaterequest(UpdateRequest updateRequest) {
                 int newsize = updateRequests.size();
 
                 if (size != newsize) {
-                    responseDto.setSuccess("Update of " + primaryKey + " cancelled successfully");
+                    responseDto.setSuccess("Update of " + primaryKeyValue + " cancelled successfully");
                 } else {
-                    responseDto.setError("Update of " + primaryKey + " not cancelled");
+                    responseDto.setError("Update of " + primaryKeyValue + " not cancelled");
                 }
                 requestFound = true;
                 break;
             }
         }
         if (!requestFound) {
-            responseDto.setError("Request not found: " + primaryKey);
+            responseDto.setError("Request not found: " + primaryKeyValue);
         }
 
         return responseDto;
@@ -385,21 +384,20 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
         }
     }
 
-    public ResponseDto addeleterequest(DeleteRequest deleteRequest) {
+    public ResponseDto addDeleteRequest(DeleteRequest deleteRequest) {
         ResponseDto responseDto = new ResponseDto();
-        if (deleteRequests.stream() .noneMatch(req ->
+        if (deleteRequests.stream().noneMatch(req ->
                 req.getTableName().equals(deleteRequest.getTableName()) &&
                         req.getPrimaryKeyValue().equals(deleteRequest.getPrimaryKeyValue()))&&simulateDelete(deleteRequest)){
             deleteRequests.add(deleteRequest);
             responseDto.setSuccess("INSTANCE ADDED TO DELETE 8 AM");
-
         }
         else {
             responseDto.setError("INSTANCE ALREADY EXISTS");
         }
         return responseDto ;
     }
-    public ResponseDto canceldeleterequest(String tableName,String primaryKeyValue) {
+    public ResponseDto cancelDeleteRequest(String tableName, String primaryKeyValue) {
         ResponseDto responseDto = new ResponseDto();
         boolean requestFound = false;
 
@@ -451,9 +449,8 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
     @Transactional
    @Scheduled(cron = "0 56 21 * * *")
     public void executeDeletion () {
-
                 List<String> uniqueTableNames = new ArrayList<>();
-                for (DeleteRequest deleteRequest : deleteRequests) {
+        for (DeleteRequest deleteRequest : deleteRequests) {
                     if (!uniqueTableNames.contains(deleteRequest.getTableName())) {
                         uniqueTableNames.add(deleteRequest.getTableName());
                     }
@@ -512,7 +509,7 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
                     case "varchar", "text", "bpchar" -> inputValue;
                     case "timestamptz" -> {
                         LocalDateTime dateTime;
-                        if (inputValue.isEmpty()) {
+                        if (inputValue.isEmpty()||inputValue.equals("null") ||inputValue.equals("undefined")) {
                             dateTime = LocalDateTime.now();
                         } else {
                             dateTime = LocalDateTime.parse(inputValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);

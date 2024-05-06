@@ -1,6 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MessageService} from "primeng/api";
-import {HttpClient} from "@angular/common/http";
 import {TableInfo} from "../../model/table-info";
 import {TableService} from "../../services/table/table.service";
 import {ParamTableComponent} from "../param-table/param-table.component";
@@ -17,40 +16,50 @@ export class ListParamTablesComponent implements OnInit {
   tablesInfo: TableInfo[] = [];
 
   currentPage: number = 1;
-  numberTables:number=0
-  limit: number=5;
+  numberTables: number = 0
+  limit: number = 5;
   totalPageCount: number = Math.ceil(this.numberTables / this.limit);
-  offset: number=0;
-  pageNumber: number=1;
-  constructor(private messageService: MessageService, private tableService: TableService, private http: HttpClient,private paramTableComponent:ParamTableComponent) {}
+  offset: number = 0;
+  pageNumber: number = 1;
+  dataLoaded:boolean=false;
 
-  ngOnInit() {
-    this.retrieveData();
+  constructor(private messageService: MessageService, private tableService: TableService, private paramTableComponent: ParamTableComponent) {
+  }
+
+  async ngOnInit() {
+   await this.retrieveData();
+   this.dataLoaded=true
 
   }
 
   retrieveData(): void {
     this.tablesInfo = [];
-    this.tableService.retrieveAllTablesAndColumns(this.limit,this.offset).subscribe(
-
-      (data:TablesWithColumns) => {
-        this.totalPageCount = Math.ceil(data.numberTables/ this.limit);
+    this.tableService.retrieveAllTablesAndColumns(this.limit, this.offset).subscribe({
+      next: (data: TablesWithColumns) => {
+        this.totalPageCount = Math.ceil(data.numberTables / this.limit);
         this.offset = (this.currentPage - 1) * this.limit;
-        this.tablesInfo=data.allTablesWithColumns;
+        this.tablesInfo = data.allTablesWithColumns;
         this.tablesInfo.forEach((table: TableInfo) => {
           table.currentPage = 1;
-          table.offset=0;
-          table.newRow={}
-          table.newRows=[];
+          table.offset = 0;
+          table.limit=5;
+          table.newRow = {};
+          table.newRows = [];
           this.handleColumnInfo(table);
         });
-        this.messageService.add({ severity: 'success', summary: 'Param Tables Loaded', detail: `${this.limit} Tables Loaded` });
       },
-      error => {
+      error: (error) => {
         console.error('Error:', error);
       }
-    );
+    });
+   this.messageService.add({
+      severity: 'success',
+      summary: 'Param Tables Loaded',
+      detail: `${this.limit} Tables Loaded`
+    });
+
   }
+
   handleColumnInfo(table: TableInfo) {
     for (let column of table.columns) {
       switch(column.type) {
@@ -89,9 +98,10 @@ export class ListParamTablesComponent implements OnInit {
     return table.columns.map((column: ColumnInfo) => column.name);
   }
   onModelChange( table: TableInfo) {
-   this.paramTableComponent.gettable(table);
-   this.messageService.add({ severity: 'success', summary: 'Data Loaded', detail: `Data loaded for ${table.name}` });
-
+    if(this.dataLoaded) {
+      this.paramTableComponent.gettable(table);
+      this.messageService.add({severity: 'success', summary: 'Data Loaded', detail: `Data loaded for ${table.name}`});
+    }
   }
 
   toggleRowExpansion(table: TableInfo) {

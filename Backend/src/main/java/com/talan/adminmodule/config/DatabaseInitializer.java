@@ -1,12 +1,21 @@
 package com.talan.adminmodule.config;
 
+import ch.qos.logback.classic.encoder.JsonEncoder;
 import com.talan.adminmodule.dto.ColumnInfo;
+import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.TableInfo;
 import com.talan.adminmodule.dto.TablesWithColumns;
+import com.talan.adminmodule.entity.Role;
+import com.talan.adminmodule.entity.User;
+import com.talan.adminmodule.repository.UserRepository;
+import com.talan.adminmodule.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -18,15 +27,21 @@ import java.util.List;
 public class DatabaseInitializer {
 
 
+    private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
+    private static final Logger log =  LoggerFactory.getLogger(DatabaseInitializer.class);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
-    @Autowired
-    private DataSource dataSource;
-
+    public DatabaseInitializer( DataSource dataSource,JdbcTemplate jdbcTemplate) {
+        this.dataSource = dataSource;
+        this.jdbcTemplate=jdbcTemplate;
+    }
     @Getter
     private TablesWithColumns allTablesWithColumns =new TablesWithColumns();
-
+@Autowired
+UserRepository userService;
     @PostConstruct
     private void initialize() {
          allTablesWithColumns = retrieveAllTablesWithColumns();
@@ -39,6 +54,20 @@ public class DatabaseInitializer {
         }
 
          allTablesWithColumns =retrieveAllTablesWithColumns();
+      /*  User user = User.builder()
+                .firstname("fedi")
+                .lastname("jat")
+                .email("jatlaouimedfedi@gmail.com")
+                .company("")
+                .phone("")
+                .password(passwordEncoder.encode("123"))
+                .role(Role.ADMIN)
+                .profileImagePath("profileImagePath")
+                .active(true)
+                .nonExpired(true)
+                .build();
+        userService.save(user);*/
+
     }
 
     public TablesWithColumns retrieveAllTablesWithColumns() {
@@ -72,7 +101,7 @@ public class DatabaseInitializer {
                     primaryKeyColumn.setType(primaryKeyColumnType);
                 }
 
-                long totalRows = getTotalRowsCount(tableName, connection);
+                long totalRows = getTotalRowsCount(tableName);
 
                 TableInfo tableInfo = new TableInfo();
                 tableInfo.setName(tableName);
@@ -83,7 +112,7 @@ public class DatabaseInitializer {
                 tablesWithColumnsList.add(tableInfo);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("An error occurred: {}", e.getMessage());
         }
 
         tablesWithColumns.setAllTablesWithColumns(tablesWithColumnsList);
@@ -92,13 +121,13 @@ public class DatabaseInitializer {
     }
 
 
-    private int getTotalRowsCount(String tableName, Connection connection) throws SQLException {
+    private int getTotalRowsCount(String tableName)  {
         int totalRows = 0;
-        try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM " + tableName);
-            if (resultSet.next()) {
-                totalRows = resultSet.getInt(1);
-            }
+
+        String sql = String.format("SELECT COUNT(*) FROM %s", tableName);
+        Integer result = jdbcTemplate.queryForObject(sql,Integer.class);
+        if (result!=null){
+            totalRows=result;
         }
         return totalRows;
     }

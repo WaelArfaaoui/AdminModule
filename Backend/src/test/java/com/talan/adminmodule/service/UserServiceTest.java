@@ -41,6 +41,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -48,7 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 @ContextConfiguration(classes = {UserService.class, PasswordEncoder.class})
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-
+@ActiveProfiles("test")
 class UserServiceTest {
     @MockBean
     private ModelMapper modelMapper;

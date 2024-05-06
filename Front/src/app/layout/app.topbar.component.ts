@@ -2,8 +2,8 @@ import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/c
 import {MenuItem, OverlayService} from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import { OverlayPanel } from 'primeng/overlaypanel';
-import {UserControllerService} from "../../app-api";
 import {Router} from "@angular/router";
+import {UserControllerService} from "../../open-api";
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
@@ -19,7 +19,7 @@ export class AppTopBarComponent implements OnInit{
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-  @ViewChild('overlayPanel') overlayPanel: OverlayPanel | undefined;
+    @ViewChild('overlayPanel') overlayPanel: OverlayPanel | undefined;
 
     constructor(public layoutService: LayoutService ,private  router:Router , private userService:UserControllerService) { }
   toggleDropdown(event: Event) {
@@ -56,7 +56,7 @@ export class AppTopBarComponent implements OnInit{
     if (email) {
       this.userService.getUser(email).subscribe(
           (user) => {
-            console.log("User details:", user);
+            localStorage.setItem('connectedUser', JSON.stringify(user));
             this.username = user.firstname;
             this.role = user.role;
             this.profileImagePath=user.profileImagePath;

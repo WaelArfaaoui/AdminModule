@@ -37,6 +37,7 @@
                 </p-avatar>
                 </td>
 
+
                 <td>
                   <span class="text-muted">12/10</span><br>
                   <span class="text-muted">09:23</span>
@@ -47,8 +48,8 @@
                   </p>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle" (click)="lockUser()"><i class="fa fa-key"></i> </button>
-                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2" (click)="deleteUser()"><i class="fa fa-trash"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle" (click)="lockUser(user)"><i class="fa fa-key"></i> </button>
+                  <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2" (click)="deleteUser(user)"><i class="fa fa-trash"></i> </button>
                   <button type="button" class="btn btn-outline-warning btn-circle btn-lg btn-circle ml-2" (click)="updateUser(user)"><i class="fa fa-edit"></i> </button>
                 </td>
               </tr>

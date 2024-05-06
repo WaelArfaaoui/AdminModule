@@ -1,14 +1,11 @@
 
 .recent-rules {
-  min-height: 80vh;
+  min-height: 80vh !important;
   background: white;
   border-radius: var(--card-border-radius);
 
 }
 
-.recent-rules h2 {
-  margin-bottom: 0.8rem;
-}
 
 .assign-count {
   text-align: center;
@@ -17,7 +14,7 @@
 .recent-rules table {
   background: var(--color-white);
   width: 100%;
-  border-radius: var(--card-border-radius);
+  border-radius: var(--card-border-radius) ;
   padding: var(--card-padding);
   text-align: center;
   transition: all 300ms ease;
@@ -28,21 +25,17 @@
 }
 
 th {
-  padding: 2rem 0 1rem 0;
+  padding: 1.3rem 0 1rem 0;
 }
 
 
-table tbody td {
+ tbody td {
   height: 2.8rem;
   border-bottom: 1px solid var(--color-light);
   color: var(--color-dark-variant);
 
 }
 
-table tbody tr:last-child td {
-  border: none;
-  padding: 1rem 0 1.6rem 0 !important;
-}
 
 .recent-rules a {
   text-align: center;
@@ -67,4 +60,27 @@ mat-paginator {
   background-color:var(--color-background) ;
   color: var(--color-dark);
 }
+
+.details {
+  padding: 0.2rem 0;
+}
+
+.hist-btn {
+  padding-left: 45px;
+}
+
+.hist-button {
+  border-radius :10px;
+  padding: 0.35rem;
+  background: rgba(250, 245, 245, 0.89) !important;
+}
+
+.search-btn {
+  width: 3rem;
+  height: 3rem;
+  padding-top: 1rem;
+  margin-left: -3rem;
+
+}
+
 

@@ -68,7 +68,6 @@
           <input *ngSwitchCase="'number'" type="number" [disabled]="column === table.pk.name" [(ngModel)]="newrow[column]" pInputText>
           <input *ngSwitchCase="'date'" type="number"  [(ngModel)]="newrow[column]" pInputText>
           <input *ngSwitchCase="'string'" type="text" [disabled]="column === table.pk.name" [(ngModel)]="newrow[column]" pInputText>
-          <!-- Add additional cases for other column types as needed -->
         </ng-container>
       </td>
     </ng-container>

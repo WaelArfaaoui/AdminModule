@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.adminmodule.dto.AuthenticationRequest;
 import com.talan.adminmodule.dto.AuthenticationResponse;
+import com.talan.adminmodule.service.impl.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;

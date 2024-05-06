@@ -1,11 +1,10 @@
 package com.talan.adminmodule.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talan.adminmodule.dto.ChangePassword;
 import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.UserDto;
 import com.talan.adminmodule.entity.User;
-import com.talan.adminmodule.service.UserService;
+import com.talan.adminmodule.service.impl.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200/**")
 public class UserController {
 
     private final UserService userservice;
@@ -63,20 +61,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
-
-
-    @PatchMapping("/changepassword")
-    public ResponseEntity<ChangePassword> changePassword(
-            @RequestBody ChangePassword request,
-            Principal connectedUser
-    ) {
-        ChangePassword changePassword=   userservice.changePassword(request, connectedUser);
-        return new ResponseEntity<>(changePassword, HttpStatus.OK);
-    }
-
-
 
     @GetMapping("/{email}")
     public ResponseEntity<UserDto> getUser(@PathVariable String email){

@@ -1,11 +1,14 @@
 package com.talan.adminmodule.config;
 import com.talan.adminmodule.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,9 +22,16 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableScheduling
+@RequiredArgsConstructor
 public class ApplicationConfig {
+
+  private UserRepository userRepository;
+
   @Autowired
-private UserRepository userRepository;
+  public ApplicationConfig(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
   @Bean
   public UserDetailsService userDetailsService() {
     return email -> userRepository.findByEmail(email)
@@ -53,4 +63,8 @@ private UserRepository userRepository;
 
 @Bean
   public DatabaseInitializer databaseInitializer(DataSource dataSource, JdbcTemplate jdbcTemplate){ return new DatabaseInitializer(dataSource, jdbcTemplate);}
+  @Bean
+  public AuditorAware<Integer> auditorAware() {
+    return new ApplicationAuditAware();
+  }
 }

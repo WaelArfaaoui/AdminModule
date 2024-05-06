@@ -1,14 +1,9 @@
 package com.talan.adminmodule.config;
 
-import ch.qos.logback.classic.encoder.JsonEncoder;
 import com.talan.adminmodule.dto.ColumnInfo;
-import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.TableInfo;
 import com.talan.adminmodule.dto.TablesWithColumns;
-import com.talan.adminmodule.entity.Role;
-import com.talan.adminmodule.entity.User;
 import com.talan.adminmodule.repository.UserRepository;
-import com.talan.adminmodule.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -34,14 +29,13 @@ public class DatabaseInitializer {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+
     public DatabaseInitializer( DataSource dataSource,JdbcTemplate jdbcTemplate) {
         this.dataSource = dataSource;
         this.jdbcTemplate=jdbcTemplate;
     }
     @Getter
     private TablesWithColumns allTablesWithColumns =new TablesWithColumns();
-@Autowired
-UserRepository userService;
     @PostConstruct
     private void initialize() {
          allTablesWithColumns = retrieveAllTablesWithColumns();
@@ -54,19 +48,6 @@ UserRepository userService;
         }
 
          allTablesWithColumns =retrieveAllTablesWithColumns();
-      /*  User user = User.builder()
-                .firstname("fedi")
-                .lastname("jat")
-                .email("jatlaouimedfedi@gmail.com")
-                .company("")
-                .phone("")
-                .password(passwordEncoder.encode("123"))
-                .role(Role.ADMIN)
-                .profileImagePath("profileImagePath")
-                .active(true)
-                .nonExpired(true)
-                .build();
-        userService.save(user);*/
 
     }
 

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from "../../services/user/user.service";
-import { Router } from "@angular/router";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { MessageService } from 'primeng/api';
-import {AddUserRequest, RegisterDto, UserDto} from "../../../app-api";
+import {Component, OnInit} from '@angular/core';
+import {UserService} from "../../services/user/user.service";
+import {Router} from "@angular/router";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {MessageService} from 'primeng/api';
+import {UserDto} from "../../../open-api";
 
 @Component({
   selector: 'app-add-user',

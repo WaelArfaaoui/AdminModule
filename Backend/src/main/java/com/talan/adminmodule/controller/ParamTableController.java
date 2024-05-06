@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RequestMapping("/api/tables")
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200/**")
 
 public class ParamTableController {
     @Autowired

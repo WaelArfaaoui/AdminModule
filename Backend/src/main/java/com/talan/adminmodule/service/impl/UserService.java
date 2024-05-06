@@ -41,29 +41,6 @@ public class UserService {
     public UserDto mapUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
-    public ChangePassword changePassword(ChangePassword request, Principal connectedUser) {
-
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            return ChangePassword.builder()
-                    .message("Wrong password").build();
-        }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            return ChangePassword.builder()
-                    .message("Passwords are not the same").build();
-        }
-
-        // update the password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        // save the new password
-        userRepository.save(user);
-        return ChangePassword.builder()
-                .message("Password Changed").build();
-    }
     public String storeProfileImage(@Nullable MultipartFile profileImage) throws IOException {
         String path = "";
         if (profileImage != null && !profileImage.isEmpty()) {

@@ -153,62 +153,6 @@ class UserServiceDiffblueTest {
         verify(modelMapper).map(isA(Object.class), isA(Class.class));
     }
 
-    /**
-     * Method under test: {@link UserService#mapUserToDto(User)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testMapUserToDto3() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@25c28eae testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass673, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        // Arrange
-        User user = new User();
-        user.setActive(true);
-        user.setCompany("Company");
-        user.setEmail("jane.doe@example.org");
-        user.setFirstname("Jane");
-        user.setId(1);
-        user.setLastname("Doe");
-        user.setNonExpired(true);
-        user.setPassword("iloveyou");
-        user.setPhone("6625550144");
-        user.setProfileImagePath("Profile Image Path");
-        user.setRole(Role.BUSINESSEXPERT);
-
-        // Act
-        userService.mapUserToDto(user);
-    }
-
-    /**
-     * Method under test:
-     * {@link UserService#changePassword(ChangePassword, Principal)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testChangePassword() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@5e1f01cf testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass244, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        // Arrange and Act
-        userService.changePassword(null, new UserPrincipal("connectedUser"));
-    }
-
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
     @Test
     void testStoreProfileImage() throws IOException {
         //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
@@ -461,26 +405,6 @@ class UserServiceDiffblueTest {
      * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
      */
     @Test
-    @Disabled("TODO: Complete this test")
-    void testStoreProfileImage10() throws IOException {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@42a81f92 testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass973, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        // Arrange and Act
-        userService
-                .storeProfileImage(new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-    }
-
-    /**
-     * Method under test: {@link UserService#addUser(RegisterDto, MultipartFile)}
-     */
-    @Test
     void testAddUser() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
             // Arrange
@@ -691,26 +615,7 @@ class UserServiceDiffblueTest {
     /**
      * Method under test: {@link UserService#getAll()}
      */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testGetAll5() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@43b3f91e testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass671, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
 
-        // Arrange and Act
-        userService.getAll();
-    }
-
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
     @Test
     void testUpdate() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
@@ -927,285 +832,6 @@ class UserServiceDiffblueTest {
             verify(userRepository).save(isA(User.class));
         }
     }
-
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
-    @Test
-    void testUpdate4() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
-
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenThrow(new IOException("foo"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenThrow(new IOException("foo"));
-
-            User user = new User();
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            Optional<User> ofResult = Optional.of(user);
-            UserRepository userRepository = mock(UserRepository.class);
-            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-            ModelMapper modelMapper = new ModelMapper();
-            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-            RegisterDto dto = RegisterDto.builder()
-                    .company("Company")
-                    .email("jane.doe@example.org")
-                    .firstname("Jane")
-                    .lastname("Doe")
-                    .password("iloveyou")
-                    .phone("6625550144")
-                    .role(Role.BUSINESSEXPERT)
-                    .build();
-
-            // Act and Assert
-            assertThrows(IOException.class, () -> userService.update(1, dto,
-                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))));
-            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(1);
-        }
-    }
-
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
-    @Test
-    void testUpdate5() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
-
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(false);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenThrow(new IOException("foo"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenThrow(new IOException("foo"));
-
-            User user = new User();
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            Optional<User> ofResult = Optional.of(user);
-            UserRepository userRepository = mock(UserRepository.class);
-            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-            ModelMapper modelMapper = new ModelMapper();
-            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-            RegisterDto dto = RegisterDto.builder()
-                    .company("Company")
-                    .email("jane.doe@example.org")
-                    .firstname("Jane")
-                    .lastname("Doe")
-                    .password("iloveyou")
-                    .phone("6625550144")
-                    .role(Role.BUSINESSEXPERT)
-                    .build();
-
-            // Act and Assert
-            assertThrows(IOException.class, () -> userService.update(1, dto,
-                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))));
-            mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(1);
-        }
-    }
-
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
-    @Test
-    void testUpdate6() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
-
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenThrow(new IOException("foo"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenThrow(new IOException("foo"));
-            User user = mock(User.class);
-            doNothing().when(user).setActive(anyBoolean());
-            doNothing().when(user).setCompany(Mockito.<String>any());
-            doNothing().when(user).setEmail(Mockito.<String>any());
-            doNothing().when(user).setFirstname(Mockito.<String>any());
-            doNothing().when(user).setId(Mockito.<Integer>any());
-            doNothing().when(user).setLastname(Mockito.<String>any());
-            doNothing().when(user).setNonExpired(anyBoolean());
-            doNothing().when(user).setPassword(Mockito.<String>any());
-            doNothing().when(user).setPhone(Mockito.<String>any());
-            doNothing().when(user).setProfileImagePath(Mockito.<String>any());
-            doNothing().when(user).setRole(Mockito.<Role>any());
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            Optional<User> ofResult = Optional.of(user);
-            UserRepository userRepository = mock(UserRepository.class);
-            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-            ModelMapper modelMapper = new ModelMapper();
-            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-            RegisterDto dto = RegisterDto.builder()
-                    .company("Company")
-                    .email("jane.doe@example.org")
-                    .firstname("Jane")
-                    .lastname("Doe")
-                    .password("iloveyou")
-                    .phone("6625550144")
-                    .role(Role.BUSINESSEXPERT)
-                    .build();
-
-            // Act and Assert
-            assertThrows(IOException.class, () -> userService.update(1, dto,
-                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))));
-            verify(user).setActive(true);
-            verify(user).setCompany("Company");
-            verify(user, atLeast(1)).setEmail("jane.doe@example.org");
-            verify(user, atLeast(1)).setFirstname("Jane");
-            verify(user).setId(1);
-            verify(user, atLeast(1)).setLastname("Doe");
-            verify(user).setNonExpired(true);
-            verify(user, atLeast(1)).setPassword(Mockito.<String>any());
-            verify(user, atLeast(1)).setPhone("6625550144");
-            verify(user).setProfileImagePath("Profile Image Path");
-            verify(user, atLeast(1)).setRole(Role.BUSINESSEXPERT);
-            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(1);
-        }
-    }
-
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
-    @Test
-    void testUpdate7() throws IOException {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
-
-        // Arrange
-        User user = new User();
-        user.setActive(true);
-        user.setCompany("Company");
-        user.setEmail("jane.doe@example.org");
-        user.setFirstname("Jane");
-        user.setId(1);
-        user.setLastname("Doe");
-        user.setNonExpired(true);
-        user.setPassword("iloveyou");
-        user.setPhone("6625550144");
-        user.setProfileImagePath("Profile Image Path");
-        user.setRole(Role.BUSINESSEXPERT);
-        Optional<User> ofResult = Optional.of(user);
-
-        User user2 = new User();
-        user2.setActive(true);
-        user2.setCompany("Company");
-        user2.setEmail("jane.doe@example.org");
-        user2.setFirstname("Jane");
-        user2.setId(1);
-        user2.setLastname("Doe");
-        user2.setNonExpired(true);
-        user2.setPassword("iloveyou");
-        user2.setPhone("6625550144");
-        user2.setProfileImagePath("Profile Image Path");
-        user2.setRole(Role.BUSINESSEXPERT);
-        UserRepository userRepository = mock(UserRepository.class);
-        when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
-        when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-        ModelMapper modelMapper = new ModelMapper();
-        UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-        RegisterDto dto = RegisterDto.builder()
-                .company("Company")
-                .email("jane.doe@example.org")
-                .firstname("Jane")
-                .lastname("Doe")
-                .password("iloveyou")
-                .phone("6625550144")
-                .role(Role.BUSINESSEXPERT)
-                .build();
-        dto.setFirstname(null);
-        dto.setPassword(null);
-        dto.setRole(null);
-        dto.setPhone(null);
-        dto.setEmail(null);
-        dto.setLastname(null);
-
-        // Act
-        UserDto actualUpdateResult = userService.update(1, dto, null);
-
-        // Assert
-        verify(userRepository).findById(1);
-        verify(userRepository).save(isA(User.class));
-        assertEquals("6625550144", actualUpdateResult.getPhone());
-        assertEquals("Company", actualUpdateResult.getCompany());
-        assertEquals("Doe", actualUpdateResult.getLastname());
-        assertEquals("Jane", actualUpdateResult.getFirstname());
-        assertEquals("Profile Image Path", actualUpdateResult.getProfileImagePath());
-        assertEquals("jane.doe@example.org", actualUpdateResult.getEmail());
-        assertEquals(1L, actualUpdateResult.getId().longValue());
-        assertEquals(Role.BUSINESSEXPERT, actualUpdateResult.getRole());
-        assertTrue(actualUpdateResult.isActive());
-        assertTrue(actualUpdateResult.isNonExpired());
-    }
-
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testUpdate8() throws IOException {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@4017b90f testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass1070, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        // Arrange
-        RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
-                Role.BUSINESSEXPERT);
-
-        // Act
-        userService.update(1, dto, new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-    }
-
-    /**
-     * Method under test: {@link UserService#findbyemail(String)}
-     */
     @Test
     void testFindbyemail() {
         //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
@@ -1239,25 +865,6 @@ class UserServiceDiffblueTest {
 
     /**
      * Method under test: {@link UserService#findbyemail(String)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testFindbyemail2() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@9449d5f testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass514, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        // Arrange and Act
-        userService.findbyemail("jane.doe@example.org");
-    }
-
-    /**
-     * Method under test: {@link UserService#delete(Integer)}
      */
     @Test
     void testDelete() {
@@ -1392,28 +999,6 @@ class UserServiceDiffblueTest {
         verify(userRepository).findById(1);
     }
 
-    /**
-     * Method under test: {@link UserService#delete(Integer)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testDelete4() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@72671f98 testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass484, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        // Arrange and Act
-        userService.delete(1);
-    }
-
-    /**
-     * Method under test: {@link UserService#expireUser(Integer)}
-     */
     @Test
     void testExpireUser() {
         //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
@@ -1550,25 +1135,7 @@ class UserServiceDiffblueTest {
     /**
      * Method under test: {@link UserService#expireUser(Integer)}
      */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testExpireUser4() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@6052be2b testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass499, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
 
-        // Arrange and Act
-        userService.expireUser(1);
-    }
-
-    /**
-     * Method under test: {@link UserService#unexpireUser(Integer)}
-     */
     @Test
     void testUnexpireUser() {
         //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
@@ -1705,19 +1272,5 @@ class UserServiceDiffblueTest {
     /**
      * Method under test: {@link UserService#unexpireUser(Integer)}
      */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testUnexpireUser4() {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded: skipping repeated attempt to load context for [MergedContextConfiguration@1173cd76 testClass = com.talan.adminmodule.service.impl.DiffblueFakeClass1054, locations = [], classes = [com.talan.adminmodule.service.impl.UserService, org.springframework.security.crypto.password.PasswordEncoder], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = [], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3c57f52d, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@61abe1f3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@471b66fe, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@25b52b55], contextLoader = org.springframework.test.context.support.DelegatingSmartContextLoader, parent = null]
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:145)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
-        //       at java.base/java.util.Optional.map(Optional.java:260)
-        //   See https://diff.blue/R026 to resolve this issue.
 
-        // Arrange and Act
-        userService.unexpireUser(1);
-    }
 }

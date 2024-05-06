@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200/**")
 public class UserController {
 
     private final UserService userservice;
@@ -63,21 +63,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
-
-
-    @PatchMapping("/changepassword")
-    public ResponseEntity<ChangePassword> changePassword(
-            @RequestBody ChangePassword request,
-            Principal connectedUser
-    ) {
-        ChangePassword changePassword=   userservice.changePassword(request, connectedUser);
-        return new ResponseEntity<>(changePassword, HttpStatus.OK);
-    }
-
-
-
     @GetMapping("/{email}")
     public ResponseEntity<UserDto> getUser(@PathVariable String email){
         User user = this.userservice.findbyemail(email);

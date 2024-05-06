@@ -1,9 +1,9 @@
-
-
 .rules {
   display: grid;
   grid-template-columns: repeat(2,1fr);
   gap: 1.6rem;
+  margin-top: -1rem !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif    !important ;
 }
 
 /*direct children div of rules */

@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
-import { ChartComponent } from "ng-apexcharts";
+import {Component, ViewChild} from '@angular/core';
+import {ChartComponent} from "ng-apexcharts";
+import {CategoryDto, CategoryService} from "../../../open-api";
 
 export type ChartOptions = {
   series: any;
@@ -17,8 +18,10 @@ export type ChartOptions = {
 export class DonutComponent {
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  categories!: CategoryDto[];
 
-  constructor() {
+
+    constructor( private categoryService: CategoryService) {
     this.chartOptions = {
       series: [30, 30, 12, 15, 13],
       chart: {
@@ -47,4 +50,17 @@ export class DonutComponent {
       ]
     };
   }
+    ngOnInit(): void {
+        this.loadCategories();
+    }
+    loadCategories() {
+        this.categoryService.getAllCategories().subscribe({
+            next: data => {
+                this.categories = data;
+            },
+            error: error => {
+                console.error('Error loading categories:', error);
+            }
+        });
+    }
 }

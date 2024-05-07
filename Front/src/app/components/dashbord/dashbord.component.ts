@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {LayoutService} from "../../layout/service/app.layout.service";
 import {Subscription} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
+import {MessageService} from "primeng/api";
 @Component({
   selector: 'app-dashbord',
   templateUrl: './dashbord.component.html',
@@ -18,13 +20,15 @@ export class DashbordComponent implements OnInit {
   radarData:any;
   radarOptions:any;
   subscription: Subscription;
-  constructor(public layoutService: LayoutService) {
+  constructor(public layoutService: LayoutService,    private route: ActivatedRoute,public messageService : MessageService) {
     this.subscription = this.layoutService.configUpdate$.subscribe(config => {
       this.initCharts();
     });
   }
   ngOnInit(): void {
     this.initCharts();
+    console.log("this.route.snapshot.data['state']"+ this.route.snapshot.data[0])
+
   }
   initCharts() {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -241,4 +245,5 @@ export class DashbordComponent implements OnInit {
       this.subscription.unsubscribe();
     }
   }
+
 }

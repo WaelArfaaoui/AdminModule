@@ -56,10 +56,11 @@ import { StackedColumnsComponent } from './components/stacked-columns/stacked-co
 import {ParamHistoryComponent} from "./components/param-history/param-history.component";
 import {ListParamTablesComponent} from "./components/list-param-tables/list-param-tables.component";
 import { DashbordComponent } from './components/dashbord/dashbord.component';
+import { NotfoundComponent } from './components/notfound/notfound.component';
 
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent,ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent,ListParamTablesComponent, ParamHistoryComponent,DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, DashbordComponent],
+  declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent,ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent,ListParamTablesComponent, ParamHistoryComponent,DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, DashbordComponent, NotfoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

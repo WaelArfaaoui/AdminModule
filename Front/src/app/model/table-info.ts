@@ -13,8 +13,8 @@ export class TableInfo {
   data: any[]=[];
   showNewRow: boolean=false;
   editedValue: { [rowId: string]: { [column: string]: any } }={};
-  isExpanded: boolean=false; // Property for expansion state
-  currentPage: number=1; // Property for current page
+  isExpanded: boolean=false;
+  currentPage: number=1;
   newRow={}
   newRows: any[]=[];
   totalPageCount=0;

@@ -1,3 +1,5 @@
+import {HttpClient} from "@angular/common/http";
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DonutComponent } from './donut.component';
@@ -8,7 +10,8 @@ describe('DonutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DonutComponent ]
+      declarations: [ DonutComponent ],
+      imports : [HttpClient]
     })
     .compileComponents();
 

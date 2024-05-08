@@ -43,27 +43,28 @@ paramAuditHistory:ParamAudit[]=[];
   closeDialog() {
     this.ref.close()
   }
-paramHistory(){
+
+
+  paramHistory() {
     this.tableService.paramHistory(this.tableName).subscribe({
       next: (data: ParamAudit[]) => {
         this.paramAuditHistory = data;
-        console.log(this.paramAuditHistory)
-      },
-      complete: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'history',
           detail: `History loaded for ${this.tableName}`
         });
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading history:', error);
         this.messageService.add({
           severity: 'error',
-          summary: 'error histpry',
-          detail: `History loaded for ${this.tableName}`
+          summary: 'Error loading history',
+          detail: `Failed to load history for ${this.tableName}`
         });
-      },
-    })
-}
+      }
+    });
+  }
+
 
 }

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UpdateRuleComponent } from './update-rule.component';
+import {FormBuilder} from "@angular/forms";
 
 describe('UpdateRuleComponent', () => {
   let component: UpdateRuleComponent;
@@ -8,7 +9,7 @@ describe('UpdateRuleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpdateRuleComponent ]
+      declarations: [ UpdateRuleComponent ],
     })
     .compileComponents();
 

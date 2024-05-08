@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LockUserComponent } from './lock-user.component';
+import {DynamicDialogRef} from "primeng/dynamicdialog";
+import {HttpClient} from "@angular/common/http";
 
 describe('LockUserComponent', () => {
   let component: LockUserComponent;
@@ -8,7 +10,9 @@ describe('LockUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LockUserComponent ]
+      declarations: [ LockUserComponent ],
+      imports : [DynamicDialogRef],
+      providers: [DynamicDialogRef, HttpClient]
     })
     .compileComponents();
 

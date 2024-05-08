@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DynamicDialogRef} from "primeng/dynamicdialog";
 import {TableService} from "../../services/table/table.service";
 import {MessageService} from "primeng/api";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {ParamTableComponent} from "../param-table/param-table.component";
 import {TableInfo} from "../../model/table-info";
 
@@ -35,7 +35,7 @@ this.ref.close()
             summary: 'Data DELETED',
             detail: `${response.success}`
           });
-          this.paramTableComponent.gettable(this.table);
+          this.paramTableComponent.getDataTable(this.table);
 
           this.ref.close()
 
@@ -43,13 +43,6 @@ this.ref.close()
       },
       error => {
         console.log(error)
-
         });
-
-
-       /* console.error('Error deleting record:', error);
-        this.messageService.add({ severity: 'error', summary: 'NOT DELETED', detail: `Error deleting record from ${this.tableName}` });*/
-
-
   }
 }

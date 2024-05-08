@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeleteUserComponent } from './delete-user.component';
+import {DynamicDialogRef} from "primeng/dynamicdialog";
 
 describe('DeleteUserComponent', () => {
   let component: DeleteUserComponent;
@@ -8,7 +9,8 @@ describe('DeleteUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteUserComponent ]
+      declarations: [ DeleteUserComponent ],
+      imports:[DynamicDialogRef]
     })
     .compileComponents();
 

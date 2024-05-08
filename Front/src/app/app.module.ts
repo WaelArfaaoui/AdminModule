@@ -57,10 +57,11 @@ import {ParamHistoryComponent} from "./components/param-history/param-history.co
 import {ListParamTablesComponent} from "./components/list-param-tables/list-param-tables.component";
 import { DashbordComponent } from './components/dashbord/dashbord.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import {DeleteParamComponent} from "./components/delete-param/delete-param.component";
 
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent,ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent,ListParamTablesComponent, ParamHistoryComponent,DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, DashbordComponent, NotfoundComponent],
+  declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent,ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent,ListParamTablesComponent, ParamHistoryComponent,DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, DashbordComponent, NotfoundComponent,DeleteParamComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -7,12 +7,12 @@
   </div>
   <!-- Centered Button Container -->
   <div class="button-container" style="flex: 1; display: flex; justify-content: center;">
-    <button pButton type="button" (click)="gettable(table)" class="p-button p-button-info btn-config" style="margin-right: 10px;">Refresh</button>
+    <button pButton type="button" (click)="getDataTable(table)" class="p-button p-button-info btn-config" style="margin-right: 10px;">Refresh</button>
     <button pButton type="button" (click)="addNewRow(table)" class="btn btn-success btn-config"><i class="pi pi-fw pi-plus" style="margin-right: 5px;"></i>New Parameter</button>
   </div>
 </div>
 <div class="search-bar-container" style="display: flex; justify-content: center; margin-bottom: 10px;margin-top:10px;">
-  <input type="text" [(ngModel)]="table.search" (ngModelChange)="gettable(table)" placeholder="Search..." pInputText  [style]="{'width': '400px'}">
+  <input type="text" [(ngModel)]="table.search" (ngModelChange)="getDataTable(table)" placeholder="Search..." pInputText  [style]="{'width': '400px'}">
 </div>
 <table class="table">
   <thead>
@@ -49,7 +49,6 @@
     <td [ngClass]="{ 'marked-for-deletion': isRowMarkedForDeletion(table,row),'marked-for-update': isRowMarkedForUpdate(table,row)  }" >
       <button  *ngIf="isRowMarkedForDeletion(table,row)" pButton type="button" label="Cancel Deletion" class="p-button-secondary p-button-cancel" (click)="canceldeletion(table, row[table.pk.name])"></button>
       <button  *ngIf="isRowMarkedForUpdate(table,row)" pButton type="button" label="Cancel Update" class="p-button-secondary p-button-cancel" (click)="cancelUpdateInstance(table, row[table.pk.name])"></button>
-
       <ng-container  *ngIf="!row.editMode &&!isRowMarkedForDeletion(table,row)&&!isRowMarkedForUpdate(table,row)">
         <button pButton type="button" icon="pi pi-pencil" style="margin-right:15px" class="p-button-warning" (click)="toggleEditMode(row)"></button>
         <button pButton type="button" icon="pi pi-trash" (click)="deleteinstance(table,row[table.pk.name])" class="p-button-danger"></button>

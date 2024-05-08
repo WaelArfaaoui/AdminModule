@@ -19,10 +19,12 @@ import {ParamHistoryComponent} from "../param-history/param-history.component";
 export class ParamTableComponent implements OnInit {
 
   @Input() table: TableInfo=new TableInfo();
+  ngOnInit(): void {
+  }
 
   constructor(private messageService: MessageService, private tableService: TableService, private http: HttpClient,private dialogService:DialogService) {}
 
-  gettable(table: TableInfo) {
+  getDataTable(table: TableInfo) {
     table.data=[];
     table.totalPageCount = Math.ceil(table.totalRows / table.limit);
     table.offset = (table.currentPage - 1) * table.limit;
@@ -45,7 +47,7 @@ export class ParamTableComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.messageService.add({ severity: 'success', summary: 'Deletion Cancelled',detail: response.success });
-          this.gettable(table)
+          this.getDataTable(table)
         } else {
           this.messageService.add({ severity: 'error', summary: 'Deletion not Cancelled',detail: response.error });
         }
@@ -63,7 +65,7 @@ export class ParamTableComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.messageService.add({ severity: 'success', summary: 'Deletion Cancelled',detail: response.success });
-           this.gettable(table)
+           this.getDataTable(table)
         } else {
           this.messageService.add({ severity: 'error', summary: 'Deletion not Cancelled',detail: response.error });
         }
@@ -132,7 +134,7 @@ editValue (table: TableInfo, row: any) {
   const instanceData = this.createInstanceDataUpdate(row, table);
   this.tableService.updateInstance(instanceData, table.name).subscribe(
     (response: any) => {
-      this.gettable(table);
+      this.getDataTable(table);
       this.messageService.add({ severity: 'success', summary: 'Parameter EDITED', detail: `Parameter EDITED to ${table.name}` });
       const index = table.newRows.indexOf(row);
     },
@@ -169,7 +171,7 @@ editValue (table: TableInfo, row: any) {
   }
   changeLimit(newLimit: number) {
     this.table.limit = newLimit;
-    this.gettable(this.table);
+    this.getDataTable(this.table);
   }
 
 
@@ -182,13 +184,6 @@ editValue (table: TableInfo, row: any) {
 
   }
 
-
-
-
-
-
-  ngOnInit(): void {
-  }
   deleteinstance(table:TableInfo, primaryKeyValue: string) {
     this.dialogService.open(DeleteParamComponent, {
       header: 'Delete Parameter',
@@ -214,9 +209,8 @@ editValue (table: TableInfo, row: any) {
     const instanceData = this.createInstanceData(newRow, table);
     this.tableService.addInstance(instanceData, table.name).subscribe(
       (response: any) => {
-        this.gettable(table);
+        this.getDataTable(table);
         this.messageService.add({ severity: 'success', summary: 'Parameter Added', detail: `Parameter added to ${table.name}` });
-        // Remove the added row from the list of new rows
         const index = table.newRows.indexOf(newRow);
         if (index !== -1) {
           table.newRows.splice(index, 1);
@@ -234,7 +228,7 @@ editValue (table: TableInfo, row: any) {
 
       table.offset = (table.currentPage - 1) * table.limit;
 
-      this.gettable(table);
+      this.getDataTable(table);
     }
   }
   openparamhistory(tableName: string) {

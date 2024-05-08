@@ -16,19 +16,18 @@ export class ListParamTablesComponent implements OnInit {
   tablesInfo: TableInfo[] = [];
 
   currentPage: number = 1;
-  numberTables: number = 0
+  numberTables: number = 20;
   limit: number = 5;
   totalPageCount: number = Math.ceil(this.numberTables / this.limit);
   offset: number = 0;
-  pageNumber: number = 1;
   dataLoaded:boolean=false;
 
-  constructor(private messageService: MessageService, private tableService: TableService, private paramTableComponent: ParamTableComponent) {
+  constructor(private messageService: MessageService, private tableService: TableService, public paramTableComponent: ParamTableComponent) {
   }
 
-  async ngOnInit() {
-   await this.retrieveData();
-   this.dataLoaded=true
+   ngOnInit() {
+    this.retrieveData();
+    this.dataLoaded=true
 
   }
 
@@ -42,23 +41,23 @@ export class ListParamTablesComponent implements OnInit {
         this.tablesInfo.forEach((table: TableInfo) => {
           table.currentPage = 1;
           table.offset = 0;
-          table.limit=5;
+          table.limit = 5;
           table.newRow = {};
           table.newRows = [];
           this.handleColumnInfo(table);
+        });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Param Tables Loaded',
+          detail: `${this.limit} Tables Loaded`
         });
       },
       error: (error) => {
         console.error('Error:', error);
       }
     });
-   this.messageService.add({
-      severity: 'success',
-      summary: 'Param Tables Loaded',
-      detail: `${this.limit} Tables Loaded`
-    });
-
   }
+
 
   handleColumnInfo(table: TableInfo) {
     for (let column of table.columns) {
@@ -91,22 +90,21 @@ export class ListParamTablesComponent implements OnInit {
   }
   changeLimit(newLimit: number) {
     this.limit = newLimit;
-    console.log(this.limit)
     this.retrieveData();
   }
   getColumnNames(table: TableInfo): string[] {
     return table.columns.map((column: ColumnInfo) => column.name);
   }
-  onModelChange( table: TableInfo) {
+  onModelChange(table: TableInfo) {
     if(this.dataLoaded) {
-      this.paramTableComponent.gettable(table);
+      this.paramTableComponent.getDataTable(table);
       this.messageService.add({severity: 'success', summary: 'Data Loaded', detail: `Data loaded for ${table.name}`});
     }
   }
 
   toggleRowExpansion(table: TableInfo) {
     if (!table.selectedColumns || table.selectedColumns.length === 0) {
-      table.selectedColumns = table.columns.map(column => column.name);
+      table.selectedColumns = this.getColumnNames(table);
     }
     if (!table.isExpanded) {
       this.onModelChange(table);
@@ -123,7 +121,6 @@ export class ListParamTablesComponent implements OnInit {
     if (pageNumber >= 1 && pageNumber <= this.totalPageCount) {
       this.currentPage = pageNumber;
       this.offset = (this.currentPage - 1) * this.limit;
-
       this.retrieveData();
     }
   }

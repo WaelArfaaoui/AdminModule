@@ -35,15 +35,12 @@ export class UserService {
   getUserDetails() {
     this.token = localStorage.getItem('accessToken')
     let decodedJwt: any = jwtDecode(this.token);
-    console.log(decodedJwt) ;
     this.email = decodedJwt.sub;
     return {
       'email': this.email,
     }
   }
-  setConnectedUser(user: any): void {
-    localStorage.setItem('connectedUser', JSON.stringify(user));
-  }
+
   isUserLoggedAndAccessTokenValid(): boolean {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
@@ -68,7 +65,6 @@ export class UserService {
   }
 
   setToken(data: any) {
-    console.log("access token set")
     localStorage.setItem('accessToken', data['access_token']);
   }
   getAllUsers() {
@@ -84,8 +80,8 @@ export class UserService {
     return this.http.put<UserDto>(`http://localhost:8090/api/users/${id}`, formData, { headers: headers })
       .pipe(
         catchError((error: any) => {
-          console.error('An error occurred:', error); // Handle errors here
-          throw error; // Rethrow the error to be caught by the caller
+          console.error('An error occurred:', error);
+          throw error;
         })
       );
   }

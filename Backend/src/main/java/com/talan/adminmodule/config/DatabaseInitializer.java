@@ -26,9 +26,6 @@ public class DatabaseInitializer {
     private final DataSource dataSource;
     private static final Logger log =  LoggerFactory.getLogger(DatabaseInitializer.class);
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
 
     public DatabaseInitializer( DataSource dataSource,JdbcTemplate jdbcTemplate) {
         this.dataSource = dataSource;
@@ -46,19 +43,24 @@ public class DatabaseInitializer {
                 jdbcTemplate.execute("ALTER TABLE " + tableInfo.getName() + " ADD COLUMN "+ active +" BOOLEAN DEFAULT TRUE");
             }
         }
-
          allTablesWithColumns =retrieveAllTablesWithColumns();
-
     }
 
     public TablesWithColumns retrieveAllTablesWithColumns() {
         List<TableInfo> tablesWithColumnsList = new ArrayList<>();
         TablesWithColumns tablesWithColumns = new TablesWithColumns();
+        List<String> tablesData = new ArrayList<>();
+        tablesData.add("_user");
+        tablesData.add("attribute");
+        tablesData.add("param_audit");
+        tablesData.add("rule");
+        tablesData.add("rule_attribute");
+        tablesData.add("rule_modification");
         try (Connection connection = dataSource.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
-
             ResultSet tables = metaData.getTables(null, "public", null, new String[]{"TABLE"});
             while (tables.next()) {
+                if (!tablesData.contains(tables.getString("TABLE_NAME"))){
                 String tableName = tables.getString("TABLE_NAME");
                 List<ColumnInfo> columns = new ArrayList<>();
                 ResultSet tableColumns = metaData.getColumns(null, "public", tableName, null);
@@ -91,7 +93,7 @@ public class DatabaseInitializer {
                 tableInfo.setTotalRows(totalRows);
 
                 tablesWithColumnsList.add(tableInfo);
-            }
+            }}
         } catch (SQLException e) {
             log.error("An error occurred: {}", e.getMessage());
         }

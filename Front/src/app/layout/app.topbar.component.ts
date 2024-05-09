@@ -4,6 +4,7 @@ import { LayoutService } from "./service/app.layout.service";
 import { OverlayPanel } from 'primeng/overlaypanel';
 import {Router} from "@angular/router";
 import {UserControllerService} from "../../open-api";
+import {UserService} from "../services/user/user.service";
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
@@ -21,7 +22,7 @@ export class AppTopBarComponent implements OnInit{
 
     @ViewChild('overlayPanel') overlayPanel: OverlayPanel | undefined;
 
-    constructor(public layoutService: LayoutService ,private  router:Router , private userService:UserControllerService) { }
+    constructor(public layoutService: LayoutService ,private  router:Router , private userService:UserControllerService,private userservice :UserService) { }
   toggleDropdown(event: Event) {
     this.dropdownVisible = !this.dropdownVisible;
     event.stopPropagation(); // Prevent event from bubbling up to document click listener
@@ -52,11 +53,13 @@ export class AppTopBarComponent implements OnInit{
     }
 
   getUserByEmail() {
-    const email = JSON.parse(localStorage.getItem('connectedUser') || '{}').email;
+   // const email = JSON.parse(localStorage.getItem('connectedUser') || '{}').email;
+    const email = this.userservice.getUserDetails()
     if (email) {
-      this.userService.getUser(email).subscribe(
+      this.userService.getUser(email.email).subscribe(
           (user) => {
-            localStorage.setItem('connectedUser', JSON.stringify(user));
+           // localStorage.setItem('connectedUser', JSON.stringify(user));
+
             this.username = user.firstname;
             this.role = user.role;
             this.profileImagePath=user.profileImagePath;

@@ -11,7 +11,6 @@ describe('DonutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ DonutComponent ],
-      imports : [HttpClient]
     })
     .compileComponents();
 

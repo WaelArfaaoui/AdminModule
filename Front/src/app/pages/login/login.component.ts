@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
   }
 
   connectUser(data: any) {
-    this.userService.setConnectedUser(this.userService.getUserDetails());
+    // this.userService.setConnectedUser(this.userService.getUserDetails());
     let email = this.userService.getUserDetails().email ;
     this.router.navigate(['/']);
   }

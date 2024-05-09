@@ -94,13 +94,14 @@ public class ParamTableService {
 
     //BUILD l query w baaed executi w l map eli bech return KOL ROW converted to string aala le types par exemple table (NO TOSTRING)
     // iteration aal list updateRequest w DelteRequest ken fama idrequete== rowid (scheduled for deletion/edition)
-    public DataFromTable getDataFromTable(String tableName, TableDataRequest request) {
+    public DataFromTable getDataFromTable(String tableName,TableDataRequest request) {
         StringBuilder sqlQuery = buildSqlQuery(tableName, request);
         LOGGER.debug("Executing SQL: {}", sqlQuery);
         DataFromTable dataFromTable =new DataFromTable();
-List<String> deletedRequestsData =new ArrayList<>();
-List<String> updatedRequestsData =new ArrayList<>();
-        dataFromTable.setData (jdbcTemplate.queryForList(sqlQuery.toString()));
+     List<String> deletedRequestsData =new ArrayList<>();
+     List<String> updatedRequestsData =new ArrayList<>();
+     dataFromTable.setData (jdbcTemplate.queryForList(sqlQuery.toString()));
+        System.out.println("QUERY "+sqlQuery);
 
 
         for (Map<String, Object> row : dataFromTable.getData()) {
@@ -130,7 +131,7 @@ List<String> updatedRequestsData =new ArrayList<>();
         if (request.getSearch() != null && !request.getSearch().isEmpty() && !request.getSearch().equals("undefined") && !request.getColumns().isEmpty()) {
             sqlQuery.append(" AND (")
                      .append(request.getColumns().stream()
-                    .map(column -> "LOWER ( CAST ("+column+" AS TEXT ) )" + " LIKE '%"+request.getSearch()+"%'")
+                    .map(column -> "LOWER ( CAST ("+column+" AS TEXT ) )" + " LIKE  '%"+request.getSearch().toLowerCase()+"%'")
                     .collect(Collectors.joining(" OR ")));
             sqlQuery.append(")");
         }
@@ -147,11 +148,11 @@ List<String> updatedRequestsData =new ArrayList<>();
                 .map(ColumnInfo::getName)
                 .filter(column -> !column.contains(ACTIVE))
                 .toList();
-
+        String pk = primaryKeyDetails(tableName).getName();
         if (request.getColumns().isEmpty()) {
-            appendAllColumns(selectClause, columns);
+            appendAllColumns(selectClause, columns,pk);
         } else {
-            appendSpecifiedColumns(selectClause, columns, request);
+            appendSpecifiedColumns(selectClause, columns,pk, request);
         }
         if (selectClause.charAt(selectClause.length() - 1) == ' ') {
             selectClause.delete(selectClause.length() - 2, selectClause.length());
@@ -160,16 +161,23 @@ List<String> updatedRequestsData =new ArrayList<>();
 
     }
 
-    public void appendAllColumns(StringBuilder selectClause, List<String> columns) {
+    public void appendAllColumns(StringBuilder selectClause, List<String> columns, String pk) {
         for (String column : columns) {
-            selectClause.append("CAST (").append(column).append(" AS TEXT )").append(", ");
+            if (column.equals(pk)){
+                selectClause.append(pk).append(", ");
+            }else {
+            selectClause.append("CAST (").append(column).append(" AS TEXT )").append(", ");}
         }
     }
 
-    public void appendSpecifiedColumns(StringBuilder selectClause, List<String> columns, TableDataRequest request) {
+    public void appendSpecifiedColumns(StringBuilder selectClause, List<String> columns,String pk, TableDataRequest request) {
         for (String column : request.getColumns()) {
             if (columns.contains(column)) {
-                selectClause.append("CAST (").append(column).append(" AS TEXT )").append(", ");
+                if (column.equals(pk)){
+                    selectClause.append(pk).append(", ");
+
+                }else  {
+                selectClause.append("CAST (").append(column).append(" AS TEXT )").append(", ");}
             }
         }
     }
@@ -226,8 +234,9 @@ List<String> updatedRequestsData =new ArrayList<>();
 
         String username = getUsernameFromSecurityContext();
         Integer version = findMaxVersionByTableName(tableName) + 1;
-
-        ParamAudit audit = ParamAudit.constructForInsertion(tableName, "ADDED", version, instanceData.toString(), username);
+        Map<String, String> cleanmap = instanceData.entrySet().stream().filter(value -> !(value.getValue().isEmpty())&&!(value.getValue().equals("undefined"))) .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        String auditRow = cleanmap.toString().substring(1, cleanmap.toString().length()-1);
+        ParamAudit audit = ParamAudit.constructForInsertion(tableName, "ADDED", version,auditRow, username);
         paramAuditRepository.save(audit);
 ResponseDto responseDto = new ResponseDto();
         responseDto.setSuccess("Record added successfully");
@@ -240,7 +249,6 @@ ResponseDto responseDto = new ResponseDto();
     }
 
 
-//LIST SCHEDULED FOR UPDATE WITH SIMULATION TOC CHECK REQUEST VALIDITY
 public ResponseDto addUpdateRequest(UpdateRequest updateRequest) {
     ResponseDto responseDto = new ResponseDto();
 
@@ -340,7 +348,9 @@ public ResponseDto addUpdateRequest(UpdateRequest updateRequest) {
                 int rowsUpdated = jdbcTemplate.update(sqlQuery.toString(), params.toArray());
                 if (rowsUpdated > 0 && primaryKeyValue!=null) {
                     responseDto.setSuccess("Instance updated successfully");
-                ParamAudit paramAudit = ParamAudit.constructForUpdate(updateRequest.getTableName(), primaryKeyValue.toString(), updateRequest.getInstanceData().toString(), "EDITED", version, updateRequest.getUsername());
+                    Map<String, String> cleanmap = updateRequest.getInstanceData().entrySet().stream().filter(value -> !(value.getValue().isEmpty())&&!(value.getValue().equals("undefined"))) .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    String auditRow = cleanmap.toString().substring(1, cleanmap.toString().length()-1);
+                ParamAudit paramAudit = ParamAudit.constructForUpdate(updateRequest.getTableName(), primaryKeyValue.toString(), auditRow, "EDITED", version, updateRequest.getUsername());
 
                 paramAuditRepository.save(paramAudit);
 

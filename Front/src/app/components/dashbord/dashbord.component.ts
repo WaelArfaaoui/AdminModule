@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {LayoutService} from "../../layout/service/app.layout.service";
 import {Subscription} from "rxjs";
-import {MessageService} from "primeng/api";
 @Component({
   selector: 'app-dashbord',
   templateUrl: './dashbord.component.html',
@@ -19,7 +18,7 @@ export class DashbordComponent implements OnInit {
   radarData:any;
   radarOptions:any;
   subscription: Subscription;
-  constructor(public layoutService: LayoutService,public messageService : MessageService) {
+  constructor(public layoutService: LayoutService) {
     this.subscription = this.layoutService.configUpdate$.subscribe(config => {
       this.initCharts();
     });

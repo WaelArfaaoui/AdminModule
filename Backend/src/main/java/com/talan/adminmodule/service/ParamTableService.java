@@ -163,21 +163,16 @@ public class ParamTableService {
 
     public void appendAllColumns(StringBuilder selectClause, List<String> columns, String pk) {
         for (String column : columns) {
-            if (column.equals(pk)){
-                selectClause.append(pk).append(", ");
-            }else {
-            selectClause.append("CAST (").append(column).append(" AS TEXT )").append(", ");}
+            selectClause.append(column).append(", ");
+
         }
+
     }
 
     public void appendSpecifiedColumns(StringBuilder selectClause, List<String> columns,String pk, TableDataRequest request) {
         for (String column : request.getColumns()) {
             if (columns.contains(column)) {
-                if (column.equals(pk)){
-                    selectClause.append(pk).append(", ");
-
-                }else  {
-                selectClause.append("CAST (").append(column).append(" AS TEXT )").append(", ");}
+                selectClause.append(column).append(", ");
             }
         }
     }

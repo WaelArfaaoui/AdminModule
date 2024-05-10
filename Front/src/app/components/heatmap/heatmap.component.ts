@@ -1,6 +1,6 @@
 import {Component, ViewChild} from "@angular/core";
 
-import {ChartComponent,ApexChart} from "ng-apexcharts";
+import {ChartComponent} from "ng-apexcharts";
 
 export type ChartOptions = {
   series: any;
@@ -76,11 +76,11 @@ export class HeatmapComponent {
   }
 
   public generateData(count:any, yrange:any) {
-    var i = 0;
-    var series = [];
+    let i = 0;
+    let series = [];
     while (i < count) {
-      var x = "jan " + (i + 1).toString();
-      var y =
+      let x = "jan " + (i + 1).toString();
+      let y =
         Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
 
       series.push({

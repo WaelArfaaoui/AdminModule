@@ -20,56 +20,58 @@ export class AddUserComponent implements OnInit {
                 private router: Router,
                 private fb: FormBuilder,
                 private messageService: MessageService) { }
-    ngOnInit(): void {
-        this.formSave = this.fb.group(
-            {
-                firstname : this.fb.control("") ,
-                lastname : this.fb.control("") ,
-                email : this.fb.control("") ,
-                phone : this.fb.control("") ,
-                company : this.fb.control("") ,
-                role : UserDto.RoleEnum.Admin ,
-                password : this.fb.control("") ,
+  ngOnInit(): void {
+    this.formSave = this.fb.group({
+      firstname: this.fb.control(''),
+      lastname: this.fb.control(''),
+      email: this.fb.control(''),
+      phone: this.fb.control(''),
+      company: this.fb.control(''),
+      role: [UserDto.RoleEnum.Admin],
+      password: this.fb.control(''),
+    });
 
-            }
-        ) ;
-    this.formSave.get('role')!.valueChanges.subscribe((role: UserDto.RoleEnum) => {
-      switch (role) {
-        case UserDto.RoleEnum.Admin:
-          this.formSave.get('role')!.setValue(UserDto.RoleEnum.Admin);
-          break;
-        case UserDto.RoleEnum.Businessexpert:
-          this.formSave.get('role')!.setValue(UserDto.RoleEnum.Businessexpert);
-          break;
-        case UserDto.RoleEnum.Consultant:
-          this.formSave.get('role')!.setValue(UserDto.RoleEnum.Consultant);
-          break;
-        default:
-          this.formSave.get('role')!.setValue(UserDto.RoleEnum.Admin);
+    // Remove the value change subscription
+    // this.formSave.get('role')!.valueChanges.subscribe((role: UserDto.RoleEnum) => {
+    //   switch (role) {
+    //     case UserDto.RoleEnum.Admin:
+    //       this.formSave.get('role')!.setValue(UserDto.RoleEnum.Admin);
+    //       break;
+    //     case UserDto.RoleEnum.Businessexpert:
+    //       this.formSave.get('role')!.setValue(UserDto.RoleEnum.Businessexpert);
+    //       break;
+    //     case UserDto.RoleEnum.Consultant:
+    //       this.formSave.get('role')!.setValue(UserDto.RoleEnum.Consultant);
+    //       break;
+    //     default:
+    //       this.formSave.get('role')!.setValue(UserDto.RoleEnum.Admin);
+    //   }
+    // });
+  }
+
+// Update the addUser method to set the role directly
+  addUser() {
+    if (this.formSave.invalid) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill in all required fields' });
+      return;
+    }
+
+    // Assign the selected role directly to the form control
+    const selectedRole = this.formSave.get('role')!.value;
+    this.userService.addUser({ ...this.formSave.value, role: selectedRole }, this.file).subscribe({
+      next: data => {
+        this.router.navigate(['users']);
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully added' });
+      },
+      error: error => {
+        this.errorFound = true;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add user' });
       }
     });
   }
 
-    addUser() {
-        if (this.formSave.invalid) {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill in all required fields' });
-            return;
-        }
 
-        this.userService.addUser(this.formSave.value, this.file).subscribe({
-            next: data => {
-                this.router.navigate(['users']);
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully added' });
-            },
-            error: error => {
-                this.errorFound = true;
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add user' });
-            }
-        });
-    }
-
-
-    onFileChange(event: any) {
+  onFileChange(event: any) {
         this.file = event.target.files[0];
     }
 }

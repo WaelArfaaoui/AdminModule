@@ -1,6 +1,6 @@
 
 import { NgModule } from '@angular/core';
-import {ExtraOptions, RouterModule, Routes} from '@angular/router';
+import { RouterModule, Routes} from '@angular/router';
 import { AppLayoutComponent } from './layout/app.layout.component';
 import {AllUsersComponent} from "./components/all-users/all-users.component";
 import {NewRuleComponent} from "./components/new-rule/new-rule.component";
@@ -10,7 +10,6 @@ import {AddUserComponent} from "./components/add-user/add-user.component";
 import {GuardService} from "./services/gurad/guard.service";
 import {DashbordComponent} from "./components/dashbord/dashbord.component";
 import {ListParamTablesComponent} from "./components/list-param-tables/list-param-tables.component";
-import {MessageService} from "primeng/api";
 import {NotfoundComponent} from "./components/notfound/notfound.component";
 
 const routes: Routes = [

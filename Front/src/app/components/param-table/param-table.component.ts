@@ -1,5 +1,5 @@
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { HttpClient } from '@angular/common/http';
 import {DeleteParamComponent} from "../delete-param/delete-param.component";
@@ -7,23 +7,15 @@ import {DialogService} from "primeng/dynamicdialog";
 import {TableInfo} from "../../model/table-info";
 import {TableService} from "../../services/table/table.service";
 import {ParamHistoryComponent} from "../param-history/param-history.component";
-
-
-
-
 @Component({
   selector: 'app-param-table',
   templateUrl: './param-table.component.html',
   styleUrls: ['./param-table.component.scss']
 })
-export class ParamTableComponent implements OnInit {
+export class ParamTableComponent {
 
   @Input() table: TableInfo=new TableInfo();
-  ngOnInit(): void {
-  }
-
   constructor(private messageService: MessageService, private tableService: TableService, private http: HttpClient,private dialogService:DialogService) {}
-
   getDataTable(table: TableInfo) {
     table.data=[];
     table.totalPageCount = Math.ceil(table.totalRows / table.limit);
@@ -132,16 +124,22 @@ export class ParamTableComponent implements OnInit {
 
 editValue (table: TableInfo, row: any) {
   const instanceData = this.createInstanceDataUpdate(row, table);
-  this.tableService.updateInstance(instanceData, table.name).subscribe(
-    (response: any) => {
-      this.getDataTable(table);
-      this.messageService.add({ severity: 'success', summary: 'Parameter EDITED', detail: `Parameter EDITED to ${table.name}` });
-      const index = table.newRows.indexOf(row);
-    },
-    (error: any) => {
-      console.error('Error adding instance:', error);
-    }
-  );
+  this.tableService.updateInstance(instanceData, table.name).subscribe({
+  next: (response : any) =>
+  {
+    this.getDataTable(table);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Parameter EDITED',
+      detail: `Parameter EDITED to ${table.name}`
+    });
+  },
+    error :
+
+  (error: any) => {
+    console.error('Error adding instance:', error);
+  }
+});
 }
 
   toggleEditMode(row: any) {
@@ -207,19 +205,24 @@ editValue (table: TableInfo, row: any) {
 
   addNewInstance(table: TableInfo, newRow: any) {
     const instanceData = this.createInstanceData(newRow, table);
-    this.tableService.addInstance(instanceData, table.name).subscribe(
-      (response: any) => {
-        this.getDataTable(table);
-        this.messageService.add({ severity: 'success', summary: 'Parameter Added', detail: `Parameter added to ${table.name}` });
-        const index = table.newRows.indexOf(newRow);
-        if (index !== -1) {
-          table.newRows.splice(index, 1);
-        }
-      },
-      (error: any) => {
-        console.error('Error adding instance:', error);
-      }
-    );
+    this.tableService.addInstance(instanceData, table.name).subscribe({
+      next: (response: any) => {
+          this.getDataTable(table);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Parameter Added',
+            detail: `Parameter added to ${table.name}`
+          });
+          const index = table.newRows.indexOf(newRow);
+          if (index !== -1) {
+            table.newRows.splice(index, 1);
+          }
+        },
+    error: (error :any) =>
+    {
+      console.error('Error adding instance:', error);
+    }
+  });
   }
 
   changePage(table: TableInfo, pageNumber: number) {

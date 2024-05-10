@@ -11,31 +11,25 @@ describe('ParamHistoryComponent', () => {
   let fixture: ComponentFixture<ParamHistoryComponent>;
   let tableServiceSpy: jasmine.SpyObj<TableService>;
   let messageServiceSpy: jasmine.SpyObj<MessageService>;
+  let ref: jasmine.SpyObj<DynamicDialogRef>;
 
   beforeEach(async () => {
     tableServiceSpy = jasmine.createSpyObj('TableService', ['paramHistory']);
     messageServiceSpy = jasmine.createSpyObj('MessageService', ['add']);
-
+    ref = jasmine.createSpyObj('DynamicDialogRef', ['close']);
     await TestBed.configureTestingModule({
       declarations: [ParamHistoryComponent],
       providers: [
-        { provide: DynamicDialogRef, useValue: {} },
+        { provide: DynamicDialogRef, useValue: ref},
         { provide: DynamicDialogConfig, useValue: { data: { tableName: 'TestTable' } } },
         { provide: TableService, useValue: tableServiceSpy },
-        { provide: MessageService, useValue: messageServiceSpy }
+        { provide: MessageService, useValue: messageServiceSpy },
+        { provide: DynamicDialogRef, useValue: ref }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ParamHistoryComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should load param history on init', async () => {
     const testData: ParamAudit[] = [
       {
         id: 1,
@@ -80,10 +74,18 @@ describe('ParamHistoryComponent', () => {
       summary: 'history',
       detail: 'History loaded for TestTable'
     }));
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should load param history on init', async () => {
+
   });
 
   it('should close the dialog', () => {
-    spyOn(component.ref, 'close');
     component.closeDialog();
     expect(component.ref.close).toHaveBeenCalled();
   });

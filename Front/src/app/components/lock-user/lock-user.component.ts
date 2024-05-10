@@ -10,7 +10,7 @@ import {UserControllerService} from "../../../open-api";
 })
 export class LockUserComponent implements OnInit {
 
-  private user: any;
+  user: any;
 
   constructor(public ref: DynamicDialogRef ,public config: DynamicDialogConfig, public messageService:MessageService  , private userService:UserControllerService) { }
 

@@ -120,7 +120,6 @@ component.table.totalPageCount=20
 
     component.canceldeletion(component.table, "3");
     await fixture.whenStable();
-
     expect(tableService.cancelDeletion).toHaveBeenCalled();
   });
 

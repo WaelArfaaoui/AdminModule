@@ -4,25 +4,19 @@ import {Observable} from "rxjs";
 import {TablesWithColumns} from "../../model/tables-with-columns";
 import {TableInfo} from "../../model/table-info";
 import {ParamAudit} from "../../model/param-audit";
-import {ParamHistoryComponent} from "../../components/param-history/param-history.component";
-
 @Injectable({
   providedIn: 'root'
 })
 export class TableService {
-  private baseUrl = 'http://localhost:8090/api/tables';
-
-
+  baseUrl = 'http://localhost:8090/api/tables';
   constructor(private http : HttpClient) {
-
-
   }
 dataDeleteInstance:any;
   deleteRecord(tableName: string, primaryKeyValue: string): Observable<any> {
-    return this.http.patch<string>(`${this.baseUrl}/${tableName}/delete/${primaryKeyValue}`, {},);
+    return this.http.post<string>(`${this.baseUrl}/${tableName}/delete/${primaryKeyValue}`, {},);
   }
   cancelDeletion(tableName: string, primaryKeyValue: string): Observable<any> {
-    return this.http.patch<string>(`${this.baseUrl}/${tableName}/canceldeletion/${primaryKeyValue}`, {},);
+    return this.http.post<string>(`${this.baseUrl}/${tableName}/canceldeletion/${primaryKeyValue}`, {},);
   }
   retrieveAllTablesAndColumns(limit:number,offset:number): Observable<TablesWithColumns> {
     const url = `${this.baseUrl}/${limit}/${offset}`; // Replace with your actual API endpoint
@@ -48,7 +42,7 @@ dataDeleteInstance:any;
   }
   cancelUpdateInstance(tableName:string,primaryKeyValue :string):Observable<any> {
     const url = `${this.baseUrl}/cancelupdate/${tableName}/${primaryKeyValue}`;
-    return this.http.patch<string>(url, {},);
+    return this.http.post<string>(url, {},);
   }
 
   paramHistory(tableName:string):Observable<ParamAudit[]> {

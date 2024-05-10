@@ -70,7 +70,7 @@ export class AllRulesComponent implements OnInit {
             data: this.selectedRule
         });
         ref.onClose.subscribe((result: any) => {
-            if (result==true) {
+            if (result===true) {
                 this.loadRules();
             }
         });

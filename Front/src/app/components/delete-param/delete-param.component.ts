@@ -25,9 +25,8 @@ primaryKeyValue: string="";
 this.ref.close()
   }
   deleteRecord(): void {
-    this.tableService.deleteRecord(this.table.name, this.primaryKeyValue).subscribe(
-      response => {
-
+    this.tableService.deleteRecord(this.table.name, this.primaryKeyValue).subscribe({
+      next: (response: any) => {
         if (response.success) {
           console.log(response);
           this.messageService.add({
@@ -36,13 +35,14 @@ this.ref.close()
             detail: `${response.success}`
           });
           this.paramTableComponent.getDataTable(this.table);
-
-          this.ref.close()
-
+          this.ref.close();
         }
       },
-      error => {
-        console.log(error)
-        });
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
   }
+
+
 }

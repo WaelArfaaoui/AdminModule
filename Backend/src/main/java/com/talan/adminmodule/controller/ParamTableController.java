@@ -35,7 +35,7 @@ public class ParamTableController {
                 request
         );
     }
-    @PatchMapping("/cancelupdate/{tableName}/{primaryKeyValue}")
+    @PostMapping("/cancelupdate/{tableName}/{primaryKeyValue}")
     public ResponseDto cancelupdaterequest(@PathVariable String primaryKeyValue,
                                            @PathVariable String tableName){
         return tableService.cancelUpdateRequest(primaryKeyValue,tableName);
@@ -59,7 +59,7 @@ public class ParamTableController {
         return tableService.addInstance(instanceData, tableName);
 
     }
-@PatchMapping("/{tableName}/delete/{primaryKeyValue}")
+@PostMapping("/{tableName}/delete/{primaryKeyValue}")
 public ResponseDto deleteRecord(@PathVariable String tableName, @PathVariable String primaryKeyValue) {
     SecurityContextHolderAwareRequestWrapper requestWrapper = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
     String username = requestWrapper.getRemoteUser();
@@ -68,7 +68,7 @@ public ResponseDto deleteRecord(@PathVariable String tableName, @PathVariable St
     return tableService.addDeleteRequest(deleteRequest);
 
 }
-    @PatchMapping("/{tableName}/canceldeletion/{primaryKeyValue}")
+    @PostMapping("/{tableName}/canceldeletion/{primaryKeyValue}")
 public ResponseDto canceldeleterequest(@PathVariable String tableName, @PathVariable String primaryKeyValue){
         return tableService.cancelDeleteRequest(tableName,primaryKeyValue);
     }

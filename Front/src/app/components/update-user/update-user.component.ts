@@ -1,10 +1,9 @@
 
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {UserService} from "../../services/user/user.service";
 import {UserDto} from "../../../open-api";
-import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
 @Component({
   selector: 'app-update-user',
@@ -46,15 +45,15 @@ export class UpdateUserComponent implements OnInit {
       };
       const file = this.file;
       this.userService.updateUser(userId, registerDto, this.file)
-        .subscribe(updatedUser => {
+        .subscribe({ next :(updatedUser:UserDto) => {
           this.messageService.add({severity:'success', summary:'Success', detail:'User updated successfully'});
           this.ref.close();
-        }, error => {
+        }, error:(err : any) => {
           this.messageService.add({severity:'error', summary:'Error', detail:'Error updating user'});
-          console.error('Error updating user:', error);
-        });
-    } else {
+          console.error('Error updating user:', err);
+        }});
     }
+
   }
   onFileChange(event: any): void {
     this.file = event.target.files[0];

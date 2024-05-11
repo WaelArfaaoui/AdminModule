@@ -1,6 +1,7 @@
 package com.talan.adminmodule.config;
 
 import com.talan.adminmodule.dto.ColumnInfo;
+import com.talan.adminmodule.dto.ForeignKey;
 import com.talan.adminmodule.dto.TableInfo;
 import com.talan.adminmodule.dto.TablesWithColumns;
 import com.talan.adminmodule.repository.UserRepository;
@@ -67,12 +68,14 @@ public class DatabaseInitializer {
                 while (tableColumns.next()) {
                     String columnName = tableColumns.getString("COLUMN_NAME");
                     String columnType = tableColumns.getString("TYPE_NAME");
-                    columns.add(new ColumnInfo(columnName, columnType));
+                    String isNullable = tableColumns.getString("IS_NULLABLE");
+
+                    columns.add(new ColumnInfo(columnName, columnType,isNullable));
                 }
 
 
                 ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
-                ColumnInfo primaryKeyColumn = new ColumnInfo();
+                   ColumnInfo primaryKeyColumn = new ColumnInfo();
                 if (primaryKeys.next()) {
                     String primaryKeyColumnName = primaryKeys.getString("COLUMN_NAME");
                     String primaryKeyColumnType = columns.stream()
@@ -83,15 +86,24 @@ public class DatabaseInitializer {
                     primaryKeyColumn.setName(primaryKeyColumnName);
                     primaryKeyColumn.setType(primaryKeyColumnType);
                 }
+                    List<ForeignKey> foreignKeyList = new ArrayList<>();
+                ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
+                        while(foreignKeys.next()){
+                            String referencedTable = foreignKeys.getString("PKTABLE_NAME");
+                            String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
+                            String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");
+                            ForeignKey foreignKey = new ForeignKey(fkColumnName,referencedTable,pkColumnName);
+                            foreignKeyList.add(foreignKey);
+                        }
 
-                long totalRows = getTotalRowsCount(tableName);
+                        long totalRows = getTotalRowsCount(tableName);
 
                 TableInfo tableInfo = new TableInfo();
                 tableInfo.setName(tableName);
                 tableInfo.setColumns(columns);
                 tableInfo.setPk(primaryKeyColumn);
                 tableInfo.setTotalRows(totalRows);
-
+                tableInfo.setForeignKeys(foreignKeyList);
                 tablesWithColumnsList.add(tableInfo);
             }}
         } catch (SQLException e) {

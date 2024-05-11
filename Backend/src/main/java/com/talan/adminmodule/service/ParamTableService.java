@@ -68,12 +68,11 @@ public class ParamTableService {
 
 
         for (int i = offset; i < endIndex; i++) {
-            TableInfo originalTable = allTablesWithColumns.getAllTablesWithColumns().get(i);
-            List<ColumnInfo> columns = originalTable.getColumns();
+            TableInfo paramTable = allTablesWithColumns.getAllTablesWithColumns().get(i);
+            List<ColumnInfo> columns = paramTable.getColumns();
             List<ColumnInfo> filteredColumns =  columns.stream().filter(column->!column.getName().equals(ACTIVE)).toList();
-
-            TableInfo filteredTable = new TableInfo(originalTable.getName(),originalTable.getType(),originalTable.getPk(), originalTable.getTotalRows(), filteredColumns);
-            paginatedTables.add(filteredTable);
+            paramTable.setColumns(filteredColumns);
+            paginatedTables.add(paramTable);
         }
         tablesWithColumns.setAllTablesWithColumns(paginatedTables);
         tablesWithColumns.setNumberTables(allTablesWithColumns.getNumberTables());

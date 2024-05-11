@@ -11,7 +11,7 @@ public class ColumnInfo {
     @NonNull
     private String name;
     private String type;
-
+    private String isNullable;
 
 
 }

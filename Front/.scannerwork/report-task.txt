@@ -2,5 +2,5 @@ projectKey=test-app
 serverUrl=http://localhost:9000
 serverVersion=9.9.5.90363
 dashboardUrl=http://localhost:9000/dashboard?id=test-app
-ceTaskId=AY93nnyc6wci2UP1lAOU
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AY93nnyc6wci2UP1lAOU
+ceTaskId=AY97XuLK6wci2UP1lAOZ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AY97XuLK6wci2UP1lAOZ

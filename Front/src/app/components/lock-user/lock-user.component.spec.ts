@@ -79,18 +79,12 @@ describe('LockUserComponent', () => {
     expect(component.ref.close).toHaveBeenCalled();
   });
 
-  xit('should lock user', async () => {
-    const userServiceSpy = spyOn(component.userService, 'lockUser').and.returnValue(observableOf({}));
-    const refSpy = spyOn(component.ref, 'close');
-    const messageServiceSpy = spyOn(component.messageService, 'add');
+  xit('should lock user successfully', () => {
+    const userId = 1; // Example user ID
+    component.user = { id: userId }; // Assuming user object is provided to the component
 
-    component.user = { id: 'id' };
-
-    component.lockUser();
-
-    expect(userServiceSpy).toHaveBeenCalled();
-    expect(refSpy).toHaveBeenCalled();
-    expect(messageServiceSpy).toHaveBeenCalled();
+    expect(userService._delete).toHaveBeenCalled(userId);
+    expect(messageService.add).toHaveBeenCalledWith({ severity: 'success', summary: 'User locked !', detail: 'User locked successfully' });
   });
 
 });

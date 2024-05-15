@@ -11,7 +11,7 @@ export class RuleHistoryComponent implements OnInit {
 
   ruleModifications!:RuleModificationDto[] ;
   private rule!: RuleDto;
-  private ruleId!: number;
+  ruleId!: number;
   constructor(public config: DynamicDialogConfig ,private ruleService:RuleService) { }
 
   ngOnInit(): void {
@@ -21,7 +21,7 @@ export class RuleHistoryComponent implements OnInit {
   }
 
 
-  private loadHistory(ruleId: number) {
+  loadHistory(ruleId: number) {
     this.ruleService.getModificationsByRuleId(ruleId).subscribe(data => {
       this.ruleModifications = data ;
     }, error => {

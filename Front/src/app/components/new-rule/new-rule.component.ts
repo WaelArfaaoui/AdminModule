@@ -23,11 +23,11 @@ export class NewRuleComponent implements OnInit {
 
   constructor(
       private fb: FormBuilder,
-      private messageService: MessageService,
+      public messageService: MessageService,
       private attributeService: AttributeService,
-      private ruleService: RuleService,
+      public ruleService: RuleService,
       private categoryService: CategoryService,
-      private router: Router
+      public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +92,7 @@ export class NewRuleComponent implements OnInit {
     return (this.ruleForm.get('attributeDtos') as FormArray).controls;
   }
 
-  private validateAttributeNames(): boolean {
+  validateAttributeNames(): boolean {
     const attributeNames = new Set<string>();
     const attributeControls = this.getAttributeControls();
     for (const control of attributeControls) {
@@ -110,7 +110,7 @@ export class NewRuleComponent implements OnInit {
     return true;
   }
 
-  private validateAttributeValues(): boolean {
+  validateAttributeValues(): boolean {
     const attributeControls = this.getAttributeControls();
     for (const control of attributeControls) {
       const value = parseInt(control.value.value);
@@ -126,7 +126,7 @@ export class NewRuleComponent implements OnInit {
     return true;
   }
 
-  private validateAttributePercentages(): boolean {
+  validateAttributePercentages(): boolean {
     let sum = 0;
     for (const control of this.getAttributeControls()) {
       const percentage = parseInt(control.value.percentage);

@@ -241,14 +241,4 @@ export class UpdateRuleComponent implements OnInit {
       });
     }
   }
-
-  deleteAttribute(id?: number) {
-    if (id !== undefined) {
-      const index = this.existingAttributes.findIndex(attr => attr.id === id);
-      if (index !== -1) {
-        this.existingAttributes.splice(index, 1);
-        this.selectedAttributes.splice(index, 1);
-      }
-    }
-  }
 }

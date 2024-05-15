@@ -23,3 +23,6 @@ describe('RuleHistoryComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+

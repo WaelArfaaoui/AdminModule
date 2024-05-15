@@ -67,7 +67,9 @@ describe('ListParamTablesComponent', () => {
         offset: 0,
         search: "",
         deleteRequests: [],
-        updateRequests: []
+        updateRequests: [],
+        foreignKeys:[],
+        foreignKeyoptions:[]
       }]
     }));
 

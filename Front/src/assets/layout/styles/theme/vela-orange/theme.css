@@ -2257,15 +2257,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-button.p-button-danger, .p-buttonset.p-button-danger > .p-button, .p-splitbutton.p-button-danger > .p-button {
-<<<<<<< HEAD
-  color: white;
-  background: #d9534f;
-  border: 1px solid #d9534f;
-=======
+
   color: #ffffff;
   background: #D32F2F;
   border: 1px solid #D32F2F;
->>>>>>> paramtable
 }
 .p-button.p-button-danger:enabled:hover, .p-buttonset.p-button-danger > .p-button:enabled:hover, .p-splitbutton.p-button-danger > .p-button:enabled:hover {
   background: #c02929;
@@ -6094,6 +6089,11 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-badge.p-badge-info {
   background-color: rgba(3, 47, 68, 0.83);
   color: #f6f1f1;
+}
+.p-badge.p-badge-fk {
+  background: #ECCFFF;
+  color: #482d5b;
+
 }
 .p-badge.p-badge-warning {
   background: #FEEDAF;

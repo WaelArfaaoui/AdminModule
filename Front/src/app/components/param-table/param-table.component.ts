@@ -7,10 +7,11 @@ import {DialogService} from "primeng/dynamicdialog";
 import {TableInfo} from "../../model/table-info";
 import {TableService} from "../../services/table/table.service";
 import {ParamHistoryComponent} from "../param-history/param-history.component";
+
 @Component({
   selector: 'app-param-table',
   templateUrl: './param-table.component.html',
-  styleUrls: ['./param-table.component.scss']
+  styleUrls: ['./param-table.component.scss'],
 })
 export class ParamTableComponent {
 
@@ -27,8 +28,8 @@ export class ParamTableComponent {
     this.tableService.getDataFromTable(table).subscribe({
       next:(DataFromTable)=>{table.data = DataFromTable.data;
         table.deleteRequests = DataFromTable.deleteRequests;
+        console.log(table.deleteRequests)
         table.updateRequests = DataFromTable.updateRequests;
-        console.log(table.updateRequests)
        },
       error:()=>{this.messageService.add({ severity: 'error', summary: 'error data', detail: `Data loaded for ${table.name}` });},
     })
@@ -52,6 +53,9 @@ export class ParamTableComponent {
     });
   }
 
+
+
+
   canceldeletion(table:TableInfo, primaryKeyValue: string) {
     this.tableService.cancelDeletion(table.name, primaryKeyValue).subscribe({
       next: (response) => {
@@ -69,6 +73,17 @@ export class ParamTableComponent {
       }
     });
   }
+  checkForeignKey(column:string,table:TableInfo):boolean {
+    let isFk : boolean = false
+
+    for (let fk of table.foreignKeys){
+      if (fk ===column){
+        isFk=true
+        break;
+      }
+    }
+    return isFk
+  }
 
   updateEditedValue(table: TableInfo, row: any, column: string, newValue: any) {
     const rowId = row[table.pk.name];
@@ -85,7 +100,7 @@ export class ParamTableComponent {
     let rowMarkedForUpdate = false;
     for (const request of table.updateRequests) {
 
-      if (request=== rowId) {
+      if (request=== rowId.toString()) {
         rowMarkedForUpdate = true;
         break;
       }
@@ -93,11 +108,14 @@ export class ParamTableComponent {
     return rowMarkedForUpdate;
   }
   isRowMarkedForDeletion(table: TableInfo, row: any): boolean {
+
+
     const rowId = row[table.pk.name];
     let rowMarkedForDeletion = false;
-    for (const request of table.deleteRequests) {
 
-      if (request=== rowId) {
+    for (const request of table.deleteRequests) {
+      if (request === rowId.toString()) {
+
         rowMarkedForDeletion = true;
         break;
       }
@@ -179,9 +197,7 @@ editValue (table: TableInfo, row: any) {
     if (index !== -1) {
       table.newRows.splice(index, 1);
     }
-
   }
-
   deleteinstance(table:TableInfo, primaryKeyValue: string) {
     this.dialogService.open(DeleteParamComponent, {
       header: 'Delete Parameter',
@@ -192,7 +208,6 @@ editValue (table: TableInfo, row: any) {
       table: table,
       primaryKeyValue: primaryKeyValue
     };
-
   }
 
   createInstanceData(newRow: { [column: string]: string }, table: TableInfo) {
@@ -236,7 +251,7 @@ editValue (table: TableInfo, row: any) {
   }
   openparamhistory(tableName: string) {
     this.dialogService.open(ParamHistoryComponent, {
-      header: `History ${tableName} `,
+      header: `History ${tableName}`,
       width: '90%',
       contentStyle: {"background-color": "var(--color-white)", "color": "var(--color-dark)"},
       data: {

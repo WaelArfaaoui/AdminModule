@@ -17,7 +17,9 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class DatabaseInitializer {
@@ -49,6 +51,8 @@ public class DatabaseInitializer {
 
     public TablesWithColumns retrieveAllTablesWithColumns() {
         List<TableInfo> tablesWithColumnsList = new ArrayList<>();
+        List<ForeignKey> foreignKeyList = new ArrayList<>();
+
         TablesWithColumns tablesWithColumns = new TablesWithColumns();
         List<String> tablesData = new ArrayList<>();
         tablesData.add("_user");
@@ -61,9 +65,12 @@ public class DatabaseInitializer {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet tables = metaData.getTables(null, "public", null, new String[]{"TABLE"});
             while (tables.next()) {
+                TableInfo tableInfo = new TableInfo();
+
                 if (!tablesData.contains(tables.getString("TABLE_NAME"))){
                 String tableName = tables.getString("TABLE_NAME");
-                List<ColumnInfo> columns = new ArrayList<>();
+
+                    List<ColumnInfo> columns = new ArrayList<>();
                 ResultSet tableColumns = metaData.getColumns(null, "public", tableName, null);
                 while (tableColumns.next()) {
                     String columnName = tableColumns.getString("COLUMN_NAME");
@@ -86,24 +93,28 @@ public class DatabaseInitializer {
                     primaryKeyColumn.setName(primaryKeyColumnName);
                     primaryKeyColumn.setType(primaryKeyColumnType);
                 }
-                    List<ForeignKey> foreignKeyList = new ArrayList<>();
-                ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
-                        while(foreignKeys.next()){
-                            String referencedTable = foreignKeys.getString("PKTABLE_NAME");
-                            String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
-                            String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");
-                            ForeignKey foreignKey = new ForeignKey(fkColumnName,referencedTable,pkColumnName);
-                            foreignKeyList.add(foreignKey);
-                        }
 
                         long totalRows = getTotalRowsCount(tableName);
+                    ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
+                    List<String> fks = new ArrayList<>();
+                    while(foreignKeys.next()){
+                        String fkTableName = foreignKeys.getString("FKTABLE_NAME");
+                        String referencedTable = foreignKeys.getString("PKTABLE_NAME");
+                        String referencedColumn = foreignKeys.getString("PKCOLUMN_NAME");
+                        String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");
+                        ForeignKey foreignKey = new ForeignKey(fkTableName,fkColumnName,referencedTable,referencedColumn);
 
-                TableInfo tableInfo = new TableInfo();
+                        if (tableName.equals(fkTableName)) {
+                            fks.add(fkColumnName);
+                        }
+                        foreignKeyList.add(foreignKey);
+
+                    }
+                tableInfo.setForeignKeys(fks);
                 tableInfo.setName(tableName);
                 tableInfo.setColumns(columns);
                 tableInfo.setPk(primaryKeyColumn);
                 tableInfo.setTotalRows(totalRows);
-                tableInfo.setForeignKeys(foreignKeyList);
                 tablesWithColumnsList.add(tableInfo);
             }}
         } catch (SQLException e) {
@@ -112,6 +123,7 @@ public class DatabaseInitializer {
 
         tablesWithColumns.setAllTablesWithColumns(tablesWithColumnsList);
         tablesWithColumns.setNumberTables((long)tablesWithColumnsList.size());
+        tablesWithColumns.setAllforeignKeys(foreignKeyList);
         return tablesWithColumns;
     }
 

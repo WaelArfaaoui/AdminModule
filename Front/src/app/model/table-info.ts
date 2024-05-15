@@ -1,4 +1,5 @@
 import {ColumnInfo} from "./column-info";
+import {ForeignKey} from "./foreign-key";
 
 export class TableInfo {
   name: string="";
@@ -22,6 +23,8 @@ export class TableInfo {
   search:string="";
   deleteRequests: any[]=[];
   updateRequests: any[]=[];
+  foreignKeys: String[]=[];
+  foreignKeyoptions: { column: string, options: string[] }[] = []
   constructor() {
     this.selectedColumns = [];
 

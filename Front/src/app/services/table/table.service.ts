@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {TablesWithColumns} from "../../model/tables-with-columns";
 import {TableInfo} from "../../model/table-info";
 import {ParamAudit} from "../../model/param-audit";
+import {ForeignKey} from "../../model/foreign-key";
 @Injectable({
   providedIn: 'root'
 })
@@ -13,13 +14,13 @@ export class TableService {
   }
 dataDeleteInstance:any;
   deleteRecord(tableName: string, primaryKeyValue: string): Observable<any> {
-    return this.http.post<string>(`${this.baseUrl}/${tableName}/delete/${primaryKeyValue}`, {},);
+    return this.http.get<string>(`${this.baseUrl}/${tableName}/delete/${primaryKeyValue}`, {},);
   }
   cancelDeletion(tableName: string, primaryKeyValue: string): Observable<any> {
     return this.http.post<string>(`${this.baseUrl}/${tableName}/canceldeletion/${primaryKeyValue}`, {},);
   }
   retrieveAllTablesAndColumns(limit:number,offset:number): Observable<TablesWithColumns> {
-    const url = `${this.baseUrl}/${limit}/${offset}`; // Replace with your actual API endpoint
+    const url = `${this.baseUrl}/${limit}/${offset}`;
     return this.http.get<TablesWithColumns>(url);
 
   }
@@ -40,7 +41,11 @@ dataDeleteInstance:any;
     const url = `${this.baseUrl}/update/${tableName}`;
     return this.http.put(url, instanceData, { responseType: 'text' });
   }
-  cancelUpdateInstance(tableName:string,primaryKeyValue :string):Observable<any> {
+  fkoptions(column :string,foreignKeys: ForeignKey[]): Observable<string[]> {
+    const url = `${this.baseUrl}/fkoptions/${column}`;
+    return this.http.post<string[]>(url, foreignKeys);
+  }
+cancelUpdateInstance(tableName:string,primaryKeyValue :string):Observable<any> {
     const url = `${this.baseUrl}/cancelupdate/${tableName}/${primaryKeyValue}`;
     return this.http.post<string>(url, {},);
   }

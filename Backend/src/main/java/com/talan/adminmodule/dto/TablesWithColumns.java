@@ -12,4 +12,5 @@ import java.util.List;
 public class TablesWithColumns {
     private Long numberTables;
     private List<TableInfo> allTablesWithColumns;
+    private List<ForeignKey> allforeignKeys;
 }

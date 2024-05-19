@@ -178,6 +178,13 @@ input {
 .flex-disp {
   display: flex !important;
   gap: 0.4rem;
+  align-items: center;
+}
+
+.sec-flex-disp {
+  display: flex !important;
+  gap: 1.45rem;
+  align-items: center;
 }
 
 .cat-flex {
@@ -189,4 +196,8 @@ input {
   display: flex !important;
   justify-content: center;
 
+}
+
+.del-ex{
+  margin-top: 1.9rem !important;
 }

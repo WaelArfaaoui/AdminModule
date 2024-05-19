@@ -13,7 +13,7 @@ import { CategoryDto } from './categoryDto';
 import { AttributeDataDto } from './attributeDataDto';
 
 
-export interface RuleDto { 
+export interface RuleUpdateDto { 
     id?: number;
     name?: string;
     description?: string;
@@ -24,5 +24,6 @@ export interface RuleDto {
     createdBy?: number;
     lastModifiedBy?: number;
     attributeDtos?: Array<AttributeDataDto>;
+    imageUrl?: string;
 }
 

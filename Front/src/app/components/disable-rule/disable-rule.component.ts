@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {MessageService} from "primeng/api";
-import {RuleDto, RuleService} from "../../../open-api";
+import {RuleDto, RuleService, UserControllerService} from "../../../open-api";
+import {UserService} from "../../services/user/user.service";
 
 @Component({
   selector: 'app-disable-rule',
@@ -10,10 +11,15 @@ import {RuleDto, RuleService} from "../../../open-api";
 })
 export class DisableRuleComponent implements OnInit {
   private rule!: RuleDto;
+  private username: any;
+  private imageUrl: any;
 
-  constructor(public ref: DynamicDialogRef , public config: DynamicDialogConfig , private ruleService:RuleService , public messageService:MessageService) { }
+  constructor(public ref: DynamicDialogRef , public config: DynamicDialogConfig ,
+              private ruleService:RuleService , public messageService:MessageService ,
+              private userService:UserService , private userControllerService:UserControllerService) { }
 
   ngOnInit(): void {
+    this.retrieveUserFromLocalStorage() ;
     this.rule = this.config.data;
   }
 
@@ -23,18 +29,27 @@ export class DisableRuleComponent implements OnInit {
 
   disable() {
     if (this.rule.id != null) {
-      this.ruleService.updateStatus(this.rule.id, false)
-          .subscribe(
-              (response) => {
-                this.messageService.add({severity:'success', summary:'Disabled', detail:'Rule disabled successfully'});
-                this.ref.close(true);
-                console.log("Rule Disabled !")
-              },
-              (error) => {
-                console.log("Error occured !")
-              }
-          );
+      this.ruleService.deleteRule(this.rule.id , {modifiedBy: this.username,imageUrl: this.imageUrl})
+        .subscribe(
+          (response) => {
+            this.messageService.add({severity:'success', summary:'Scheduled delete', detail:'Rule deletion scheduled'});
+            this.ref.close(true);
+          },
+          (error) => {
+            console.log("Error occured !")
+          }
+        );
     }
   }
 
+  retrieveUserFromLocalStorage() {
+    const userDetailsJSON = localStorage.getItem('userDetails');
+    if (userDetailsJSON) {
+      const userDetails = JSON.parse(userDetailsJSON);
+      this.username = userDetails.username;
+      this.imageUrl = userDetails.profileImagePath;
+    } else {
+      console.error("User details not found in local storage.");
+    }
+  }
 }

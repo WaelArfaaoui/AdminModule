@@ -103,33 +103,15 @@
         }
       }
     },
-    "/api/rules/{modDescription}/{id}/{modifiedBy}": {
+    "/api/tables/update/{tableName}": {
       "put": {
         "tags": [
-          "Rule"
+          "param-table-controller"
         ],
-        "operationId": "updateRule",
+        "operationId": "updateInstance",
         "parameters": [
           {
-            "name": "modifiedBy",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "modDescription",
+            "name": "tableName",
             "in": "path",
             "required": true,
             "schema": {
@@ -141,7 +123,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RuleDto"
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
               }
             }
           },
@@ -153,46 +138,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/RuleDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/rules/{id}/status": {
-      "put": {
-        "tags": [
-          "Rule"
-        ],
-        "operationId": "updateStatus",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "enabled",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/RuleDto"
+                  "$ref": "#/components/schemas/ResponseDto"
                 }
               }
             }
@@ -255,6 +201,199 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{tableName}": {
+      "get": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "getDataFromTable",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TableDataRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataFromTable"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "addInstance",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{tableName}/delete/{primaryKeyValue}": {
+      "post": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "deleteRecord",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "primaryKeyValue",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{tableName}/canceldeletion/{primaryKeyValue}": {
+      "post": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "canceldeleterequest",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "primaryKeyValue",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/cancelupdate/{tableName}/{primaryKeyValue}": {
+      "post": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "cancelupdaterequest",
+        "parameters": [
+          {
+            "name": "primaryKeyValue",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDto"
                 }
               }
             }
@@ -332,38 +471,44 @@
         }
       }
     },
-    "/api/categories": {
-      "get": {
-        "tags": [
-          "Category"
-        ],
-        "operationId": "getAllCategories",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CategoryDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/rules/{modDescription}/{id}/{modifiedBy}": {
       "post": {
         "tags": [
-          "Category"
+          "Rule"
         ],
-        "operationId": "createCategory",
+        "operationId": "updateRule",
+        "parameters": [
+          {
+            "name": "modifiedBy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "modDescription",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CategoryDto"
+                "$ref": "#/components/schemas/RuleUpdateDto"
               }
             }
           },
@@ -371,14 +516,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryDto"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -419,57 +557,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthenticationResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/attributes": {
-      "get": {
-        "tags": [
-          "Attribute"
-        ],
-        "operationId": "getAllAttributes",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttributeDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Attribute"
-        ],
-        "operationId": "createAttribute",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AttributeDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttributeDto"
                 }
               }
             }
@@ -539,36 +626,6 @@
         }
       }
     },
-    "/api/users/changepassword": {
-      "patch": {
-        "tags": [
-          "user-controller"
-        ],
-        "operationId": "changePassword",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePassword"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChangePassword"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/users/{email}": {
       "get": {
         "tags": [
@@ -592,6 +649,79 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{tableName}/history": {
+      "get": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "paramHistory",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ParamAudit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{limit}/{offset}": {
+      "get": {
+        "tags": [
+          "param-table-controller"
+        ],
+        "operationId": "retrieveAllTablesAndColumns",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TablesWithColumns"
                 }
               }
             }
@@ -645,6 +775,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteRuleRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -669,6 +809,29 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RuleModificationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rules/updates": {
+      "get": {
+        "tags": [
+          "Rule"
+        ],
+        "operationId": "getAllUpdates",
         "responses": {
           "200": {
             "description": "OK",
@@ -736,6 +899,29 @@
         }
       }
     },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "getAllCategories",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/categories/{id}": {
       "get": {
         "tags": [
@@ -765,53 +951,47 @@
             }
           }
         }
-      },
-      "delete": {
-        "tags": [
-          "Category"
-        ],
-        "operationId": "deleteCategory",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
       }
     },
-    "/api/categories/exists/{name}": {
+    "/api/categories/top-used": {
       "get": {
         "tags": [
           "Category"
         ],
-        "operationId": "doesCategoryExistByName",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "operationId": "getTopUsedCategories",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "boolean"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/attributes": {
+      "get": {
+        "tags": [
+          "Attribute"
+        ],
+        "operationId": "getAllAttributes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AttributeDto"
+                  }
                 }
               }
             }
@@ -843,58 +1023,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/AttributeDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Attribute"
-        ],
-        "operationId": "deleteAttribute",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/attributes/exists/{name}": {
-      "get": {
-        "tags": [
-          "Attribute"
-        ],
-        "operationId": "doesAttributeExistByName",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
                 }
               }
             }
@@ -946,6 +1074,48 @@
           },
           "error": {
             "type": "string"
+          }
+        }
+      },
+      "ResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "BUSINESSEXPERT",
+              "ADMIN",
+              "CONSULTANT"
+            ]
           }
         }
       },
@@ -1009,8 +1179,8 @@
           "category": {
             "$ref": "#/components/schemas/CategoryDto"
           },
-          "enabled": {
-            "type": "boolean"
+          "status": {
+            "type": "string"
           },
           "createDate": {
             "type": "string",
@@ -1036,34 +1206,49 @@
           }
         }
       },
-      "RegisterDto": {
+      "RuleUpdateDto": {
         "type": "object",
         "properties": {
-          "firstname": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
             "type": "string"
           },
-          "lastname": {
+          "description": {
             "type": "string"
           },
-          "password": {
+          "category": {
+            "$ref": "#/components/schemas/CategoryDto"
+          },
+          "status": {
             "type": "string"
           },
-          "email": {
-            "type": "string"
-          },
-          "company": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "role": {
+          "createDate": {
             "type": "string",
-            "enum": [
-              "BUSINESSEXPERT",
-              "ADMIN",
-              "CONSULTANT"
-            ]
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastModifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attributeDtos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttributeDataDto"
+            }
+          },
+          "imageUrl": {
+            "type": "string"
           }
         }
       },
@@ -1092,33 +1277,182 @@
           }
         }
       },
-      "ChangePassword": {
+      "TableDataRequest": {
         "type": "object",
         "properties": {
-          "currentPassword": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "search": {
             "type": "string"
           },
-          "newPassword": {
+          "sortByColumn": {
             "type": "string"
           },
-          "confirmationPassword": {
+          "sortOrder": {
             "type": "string"
           },
-          "message": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DataFromTable": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "deleteRequests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updateRequests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ParamAudit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tableName": {
             "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rowId": {
+            "type": "string"
+          },
+          "newRow": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedBy": {
+            "type": "string"
+          },
+          "lastModifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ColumnInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "isNullable": {
+            "type": "string"
+          }
+        }
+      },
+      "ForeignKey": {
+        "type": "object",
+        "properties": {
+          "fkColumnName": {
+            "type": "string"
+          },
+          "referencedTable": {
+            "type": "string"
+          },
+          "referencedColumn": {
+            "type": "string"
+          }
+        }
+      },
+      "TableInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "pk": {
+            "$ref": "#/components/schemas/ColumnInfo"
+          },
+          "totalRows": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColumnInfo"
+            }
+          },
+          "foreignKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ForeignKey"
+            }
+          }
+        }
+      },
+      "TablesWithColumns": {
+        "type": "object",
+        "properties": {
+          "numberTables": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "allTablesWithColumns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TableInfo"
+            }
           }
         }
       },
       "PageRuleDto": {
         "type": "object",
         "properties": {
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
           "totalElements": {
             "type": "integer",
             "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
           },
           "size": {
             "type": "integer",
@@ -1165,18 +1499,18 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "pageSize": {
-            "type": "integer",
-            "format": "int32"
-          },
           "pageNumber": {
             "type": "integer",
             "format": "int32"
           },
-          "unpaged": {
-            "type": "boolean"
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
           },
           "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
             "type": "boolean"
           }
         }
@@ -1210,13 +1544,37 @@
             "format": "date-time"
           },
           "modifiedBy": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string"
           },
           "ruleName": {
             "type": "string"
           },
+          "ruleId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "modificationDescription": {
+            "type": "string"
+          },
+          "modificationType": {
+            "type": "string"
+          },
+          "profileImagePath": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteRuleRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "imageUrl": {
             "type": "string"
           }
         }

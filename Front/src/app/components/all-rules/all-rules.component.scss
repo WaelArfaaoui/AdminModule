@@ -1,7 +1,8 @@
 
 .recent-rules {
   min-height: 80vh !important;
-  background: white;
+  background: var(--color-white) !important;
+  color: var(--color-dark) !important;
   border-radius: var(--card-border-radius);
 
 }
@@ -29,7 +30,7 @@ th {
 }
 
 
- tbody td {
+tbody td {
   height: 2.8rem;
   border-bottom: 1px solid var(--color-light);
   color: var(--color-dark-variant);
@@ -84,3 +85,8 @@ mat-paginator {
 }
 
 
+tr {
+  border-radius: 10px !important;
+  background: var(--color-white) !important;
+  color: var(--color-dark) !important;
+}

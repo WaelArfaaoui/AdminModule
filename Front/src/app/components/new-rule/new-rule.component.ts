@@ -22,12 +22,12 @@ export class NewRuleComponent implements OnInit {
   newAttributeName: string = '';
 
   constructor(
-      private fb: FormBuilder,
-      public messageService: MessageService,
-      private attributeService: AttributeService,
-      public ruleService: RuleService,
-      private categoryService: CategoryService,
-      public router: Router
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private attributeService: AttributeService,
+    private ruleService: RuleService,
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +84,7 @@ export class NewRuleComponent implements OnInit {
     return this.fb.group({
       name: ['', Validators.required],
       percentage: ['', Validators.required],
-      value: ['', Validators.required]
+      value: [0]
     });
   }
 
@@ -92,7 +92,7 @@ export class NewRuleComponent implements OnInit {
     return (this.ruleForm.get('attributeDtos') as FormArray).controls;
   }
 
-  validateAttributeNames(): boolean {
+  private validateAttributeNames(): boolean {
     const attributeNames = new Set<string>();
     const attributeControls = this.getAttributeControls();
     for (const control of attributeControls) {
@@ -110,7 +110,7 @@ export class NewRuleComponent implements OnInit {
     return true;
   }
 
-  validateAttributeValues(): boolean {
+  private validateAttributeValues(): boolean {
     const attributeControls = this.getAttributeControls();
     for (const control of attributeControls) {
       const value = parseInt(control.value.value);
@@ -126,7 +126,7 @@ export class NewRuleComponent implements OnInit {
     return true;
   }
 
-  validateAttributePercentages(): boolean {
+  private validateAttributePercentages(): boolean {
     let sum = 0;
     for (const control of this.getAttributeControls()) {
       const percentage = parseInt(control.value.percentage);
@@ -186,7 +186,7 @@ export class NewRuleComponent implements OnInit {
   onSubmit() {
     const formData = this.ruleForm.value;
     if (this.ruleForm.valid) {
-      if (!this.validateAttributeNames() || !this.validateAttributeValues() || !this.validateAttributePercentages()) {
+      if (!this.validateAttributeNames() || !this.validateAttributePercentages()) {
         return;
       }
       const formData = this.ruleForm.value;

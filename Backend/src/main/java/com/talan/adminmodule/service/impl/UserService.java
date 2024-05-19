@@ -1,7 +1,6 @@
 package com.talan.adminmodule.service.impl;
 
 
-import com.talan.adminmodule.dto.ChangePassword;
 import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.UserDto;
 import com.talan.adminmodule.entity.User;
@@ -9,7 +8,6 @@ import com.talan.adminmodule.repository.UserRepository;
 import io.micrometer.common.lang.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 

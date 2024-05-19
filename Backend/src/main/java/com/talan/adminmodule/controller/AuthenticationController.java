@@ -1,10 +1,8 @@
 package com.talan.adminmodule.controller;
 
 
-
 import com.talan.adminmodule.dto.AuthenticationRequest;
 import com.talan.adminmodule.dto.AuthenticationResponse;
-
 import com.talan.adminmodule.service.impl.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +19,7 @@ import java.io.IOException;
 @RestController
 @Tag(name = "Authentication")
 @RequestMapping("/api/auth")
+@CrossOrigin("*")
 public class AuthenticationController {
 
   private final AuthenticationService authenticationService;

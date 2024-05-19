@@ -13,9 +13,12 @@ public class RuleModificationDto {
     private Integer id;
     private RuleDto ruleDto;
     private LocalDateTime modificationDate;
-    private Integer modifiedBy;
+    private String modifiedBy;
     private String ruleName;
+    private Integer ruleId ;
     private String modificationDescription;
+    private String modificationType;
+    private String profileImagePath ;
 
     public static RuleModificationDto fromEntity(RuleModification ruleModification) {
         if (ruleModification == null) {
@@ -27,6 +30,9 @@ public class RuleModificationDto {
                 .modifiedBy(ruleModification.getModifiedBy())
                 .ruleName(ruleModification.getRuleName())
                 .modificationDescription(ruleModification.getModificationDescription())
+                .modificationType(ruleModification.getModificationType())
+                .profileImagePath(ruleModification.getProfileImagePath())
+                .ruleId(ruleModification.getRule().getId())
                 .build();
     }
 }

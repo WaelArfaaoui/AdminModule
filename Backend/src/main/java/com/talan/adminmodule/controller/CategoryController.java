@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/**")
+@CrossOrigin(origins = "*")
 @RequestMapping("api/categories")
 @Tag(name = "Category")
-
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -32,5 +31,11 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> categoryDtoList = categoryService.findAll();
         return ResponseEntity.ok(categoryDtoList);
+    }
+
+    @GetMapping("/top-used")
+    public ResponseEntity<List<CategoryDto>> getTopUsedCategories() {
+        List<CategoryDto> categories = categoryService.getTopUsedCategories();
+        return ResponseEntity.ok(categories);
     }
 }

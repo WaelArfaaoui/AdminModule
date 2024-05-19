@@ -8,6 +8,7 @@ import lombok.Data;
 public class CategoryDto {
     private Integer id;
     private String name;
+    private Integer ruleCount;
 
     public static CategoryDto fromEntity(Category category) {
         if (category == null) {

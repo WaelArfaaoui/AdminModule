@@ -1,16 +1,16 @@
 package com.talan.adminmodule.validator;
 
-import com.talan.adminmodule.dto.RuleDto;
+import com.talan.adminmodule.dto.RuleUpdateDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuleValidator {
-    private RuleValidator(){
+public class RuleUpdateValidator {
+    private RuleUpdateValidator(){
 
     }
-    public static List<String> validate(RuleDto dto) {
+    public static List<String> validate(RuleUpdateDto dto) {
         List<String> errors = new ArrayList<>();
 
         if (dto == null) {

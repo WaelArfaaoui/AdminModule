@@ -4,18 +4,19 @@ import com.talan.adminmodule.dto.ColumnInfo;
 import com.talan.adminmodule.dto.ForeignKey;
 import com.talan.adminmodule.dto.TableInfo;
 import com.talan.adminmodule.dto.TablesWithColumns;
-import com.talan.adminmodule.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

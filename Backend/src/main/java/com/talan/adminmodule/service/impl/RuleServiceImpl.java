@@ -1,21 +1,24 @@
 package com.talan.adminmodule.service.impl;
 
-import com.talan.adminmodule.dto.*;
-import com.talan.adminmodule.entity.*;
 import com.talan.adminmodule.config.exception.EntityNotFoundException;
 import com.talan.adminmodule.config.exception.ErrorCodes;
 import com.talan.adminmodule.config.exception.InvalidEntityException;
+import com.talan.adminmodule.dto.*;
+import com.talan.adminmodule.entity.*;
 import com.talan.adminmodule.repository.*;
 import com.talan.adminmodule.service.RuleService;
+import com.talan.adminmodule.validator.RuleUpdateValidator;
 import com.talan.adminmodule.validator.RuleValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 @Service
 public class RuleServiceImpl implements RuleService {
@@ -25,9 +28,12 @@ public class RuleServiceImpl implements RuleService {
     private final CategoryRepository categoryRepository;
     private final RuleModificationRepository ruleModificationRepository ;
     private final RuleAttributeRepository  ruleAttributeRepository ;
-    private String ruleMessage = "Rule with ID :" ;
-    private String ruleNotFound = "not found" ;
-    
+    private final String ruleMessage = "Rule with ID :" ;
+    private final String ruleNotFound = "not found" ;
+    private final Queue<UpdateRuleRequest> updateQueue = new LinkedList<>();
+
+    private final Queue<DeleteRuleRequest> deleteQueue = new LinkedList<>(); // Queue for disable requests
+
 
     @Autowired
     public RuleServiceImpl(RuleRepository ruleRepository, AttributeRepository attributeRepository, CategoryRepository categoryRepository, RuleModificationRepository ruleModificationRepository, RuleAttributeRepository ruleAttributeRepository) {
@@ -37,6 +43,7 @@ public class RuleServiceImpl implements RuleService {
         this.ruleModificationRepository = ruleModificationRepository;
         this.ruleAttributeRepository = ruleAttributeRepository;
     }
+
 
     @Override
     @Transactional
@@ -57,13 +64,6 @@ public class RuleServiceImpl implements RuleService {
         }
         rule.setCategory(category);
         rule = ruleRepository.save(rule);
-        RuleModification ruleModification = new RuleModification();
-        ruleModification.setRule(rule);
-        ruleModification.setModificationDate(rule.getLastModified());
-        ruleModification.setModifiedBy(rule.getCreatedBy());
-        ruleModification.setRuleName(rule.getName());
-        ruleModification.setModificationDescription("Rule created");
-        this.ruleModificationRepository.save(ruleModification);
         List<RuleAttribute> ruleAttributes = new ArrayList<>();
         for (AttributeDataDto attributeDto : ruleDto.getAttributeDtos()) {
             Attribute attribute = attributeRepository.findByNameIgnoreCase(attributeDto.getName().getName());
@@ -90,28 +90,29 @@ public class RuleServiceImpl implements RuleService {
         return RuleDto.fromEntity(rule);
     }
 
-    @Override
+
     @Transactional
-    public RuleDto updateStatus(Integer id, boolean enabled) {
+    public boolean updateStatus(Integer id, String status , String modifiedBy , String imageUrl) {
         Rule rule = ruleRepository.findById(id).orElse(null);
         if (rule == null) {
             throw new EntityNotFoundException(ruleMessage + id + ruleNotFound, ErrorCodes.RULE_NOT_FOUND);
         }
 
-        rule.setEnabled(enabled);
+        rule.setStatus(status);
+        if (status=="Deleted"){
+            this.saveRuleModification(rule, "Rule deleted" , modifiedBy , "deleted" , imageUrl);
+        }
         rule = ruleRepository.save(rule);
-        return RuleDto.fromEntity(rule);
+        return true;
     }
-
-    @Override
     @Transactional
-    public RuleDto updateRule(Integer id, RuleDto updatedRuleDto, String modDescription, Integer modifiedBy) {
+    public boolean updateRule(Integer id, RuleUpdateDto updatedRuleDto, String modDescription, String modifiedBy, String imageUrl) {
         Rule existingRule = ruleRepository.findById(id).orElse(null);
         if (existingRule == null) {
             throw new EntityNotFoundException(ruleMessage + id + ruleNotFound, ErrorCodes.RULE_NOT_FOUND);
         }
 
-        List<String> errors = RuleValidator.validate(updatedRuleDto);
+        List<String> errors = RuleUpdateValidator.validate(updatedRuleDto);
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("Updated rule is not valid", ErrorCodes.RULE_NOT_VALID, errors);
         }
@@ -137,17 +138,19 @@ public class RuleServiceImpl implements RuleService {
         }
         existingRule.setRuleAttributes(updatedRuleAttributes);
         existingRule = ruleRepository.save(existingRule);
-        this.saveRuleModification(existingRule, modDescription);
-        return RuleDto.fromEntity(existingRule);
+        this.saveRuleModification(existingRule, modDescription , modifiedBy , "updated" , imageUrl);
+        return true;
     }
 
-    public void saveRuleModification(Rule existingRule, String modDescription) {
+    public void saveRuleModification(Rule existingRule, String modDescription , String modifiedBy , String modificationType , String imageUrl) {
         RuleModification ruleModification = new RuleModification();
         ruleModification.setRule(existingRule);
         ruleModification.setModificationDate(existingRule.getLastModified());
-        ruleModification.setModifiedBy(existingRule.getLastModifiedBy());
+        ruleModification.setModifiedBy(modifiedBy);
         ruleModification.setRuleName(existingRule.getName());
         ruleModification.setModificationDescription(modDescription);
+        ruleModification.setModificationType(modificationType);
+        ruleModification.setProfileImagePath(imageUrl);
         this.ruleModificationRepository.save(ruleModification);
     }
 
@@ -177,7 +180,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public Page<RuleDto> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("lastModified").descending());
         return ruleRepository.findAll(pageable).map(RuleDto::fromEntity);
     }
 
@@ -200,5 +203,49 @@ public class RuleServiceImpl implements RuleService {
     public Page<RuleDto> searchRules(int page, int size, String query) {
         Pageable pageable = PageRequest.of(page, size);
         return ruleRepository.search(query, pageable).map(RuleDto::fromEntity);
+    }
+
+    @Override
+    public void queueUpdate(Integer id, RuleUpdateDto updatedRuleDto, String modDescription, String modifiedBy, String imageUrl) {
+        updateQueue.offer(new UpdateRuleRequest(id, updatedRuleDto, modDescription, modifiedBy, imageUrl));
+        this.updateStatus(id,"Scheduled update",modifiedBy,imageUrl) ;
+    }
+    @Override
+    public void queueDelete(Integer id, String modifiedBy, String imageUrl) {
+        this.updateStatus(id,"Scheduled delete" , modifiedBy , imageUrl) ;
+        this.deleteQueue.offer(new DeleteRuleRequest(id,modifiedBy, imageUrl));
+    }
+
+    @Override
+    public List<RuleModificationDto> getAllModifications() {
+        List<RuleModification> modifications = ruleModificationRepository.findAll();
+        List<RuleModificationDto> sortedModifications = modifications.stream()
+                .map(RuleModificationDto::fromEntity)
+                .sorted(Comparator.comparing(RuleModificationDto::getModificationDate).reversed())
+                .toList();
+
+        return sortedModifications;
+    }
+
+    @Scheduled(fixedDelay = 9000)
+    public void processQueuedUpdates() {
+        while (!updateQueue.isEmpty()) {
+            UpdateRuleRequest request = updateQueue.poll();
+            if (request != null) {
+                updateRule(request.getId(), request.getUpdatedRuleDto(), request.getModDescription(), request.getModifiedBy() , request.getImageUrl());
+                this.updateStatus(request.getId() , "Enabled" , request.getModifiedBy() , "") ;
+            }
+        }
+    }
+
+
+    @Scheduled(fixedDelay = 9000)
+    public void processQueuedDeletes() {
+        while (!deleteQueue.isEmpty()) {
+            DeleteRuleRequest request = deleteQueue.poll();
+            if (request != null) {
+                this.updateStatus(request.getId() , "Deleted" , request.getModifiedBy() , request.getImageUrl()) ;
+            }
+        }
     }
 }

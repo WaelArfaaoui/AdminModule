@@ -16,12 +16,17 @@ public class WebConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*/*")
-                        .allowedMethods(HttpMethod.GET.name(),
+                        .allowedOrigins("*")
+                        .allowedMethods(
+                                HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
-                                HttpMethod.DELETE.name())
-                        .allowedHeaders(HttpHeaders.CONTENT_TYPE,
-                                HttpHeaders.AUTHORIZATION);
+                                HttpMethod.PUT.name(),
+                                HttpMethod.DELETE.name()
+                        )
+                        .allowedHeaders(
+                                HttpHeaders.CONTENT_TYPE,
+                                HttpHeaders.AUTHORIZATION
+                        );
             }
         };
     }

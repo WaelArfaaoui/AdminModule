@@ -59,7 +59,18 @@ public class ParamTableController {
         return tableService.addInstance(instanceData, tableName);
 
     }
-@PostMapping("/{tableName}/delete/{primaryKeyValue}")
+    @PostMapping("/fkoptions/{column}")
+    public List<String> fkOptions(@PathVariable String column,@RequestBody List<ForeignKey> fks)
+    {
+        return tableService.foreignKeyoptions(column,fks);
+    }
+    @GetMapping("/{tableName}/references/{primaryKeyValue}")
+    public List<DeleteRequest> checkReferences(@PathVariable String tableName, @PathVariable String primaryKeyValue)
+    {
+        DeleteRequest del = new DeleteRequest(tableName,primaryKeyValue);
+        return tableService.checkReferencedForRecursive(del);
+    }
+@GetMapping("/{tableName}/delete/{primaryKeyValue}")
 public ResponseDto deleteRecord(@PathVariable String tableName, @PathVariable String primaryKeyValue) {
     SecurityContextHolderAwareRequestWrapper requestWrapper = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
     String username = requestWrapper.getRemoteUser();

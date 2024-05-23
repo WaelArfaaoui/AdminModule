@@ -5,6 +5,7 @@ import {TableService} from "../../services/table/table.service";
 import {ParamTableComponent} from "../param-table/param-table.component";
 import {TablesWithColumns} from "../../model/tables-with-columns";
 import {ColumnInfo} from "../../model/column-info";
+import {ForeignKey} from "../../model/foreign-key";
 
 @Component({
   selector: 'app-list-param-tables',
@@ -95,6 +96,7 @@ export class ListParamTablesComponent implements OnInit {
   getColumnNames(table: TableInfo): string[] {
     return table.columns.map((column: ColumnInfo) => column.name);
   }
+
   onModelChange(table: TableInfo) {
     if(this.dataLoaded) {
       this.paramTableComponent.getDataTable(table);
@@ -111,12 +113,19 @@ export class ListParamTablesComponent implements OnInit {
     }
     table.isExpanded = !table.isExpanded;
   }
-
-
-
-
-
-
+/*  fkoptions(column: string, foreignKeys: ForeignKey[]): string[] {
+    console.log("COLUMN "+ column +"FOREIGN KEYS "+foreignKeys)
+    let options: string[] = [];
+    let response = this.tableService.fkoptions(column, foreignKeys).subscribe({
+      next: (data: string[]) => {
+        options = data.map(item => item.toString());
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+    return options;
+  }*/
   changePage(pageNumber: number) {
     if (pageNumber >= 1 && pageNumber <= this.totalPageCount) {
       this.currentPage = pageNumber;

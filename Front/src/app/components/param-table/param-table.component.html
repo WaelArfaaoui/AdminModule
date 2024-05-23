@@ -18,7 +18,7 @@
   <thead>
   <tr>
     <th *ngFor="let column of table.selectedColumns">
-      {{ column }} <span *ngIf="column === table.pk.name" class="p-badge p-badge-info"> PK</span>
+      {{ column }}<span *ngIf="column === table.pk.name" class="p-badge p-badge-info"> PK</span> <span *ngIf="checkForeignKey(column,table)" class="p-badge p-badge-fk">FK</span>
     </th>
     <th class="action-column">Actions</th>
   </tr>
@@ -43,6 +43,7 @@
                pInputText>
         <input  pInputText *ngSwitchCase="'string'" [disabled]="column === table.pk.name" type="text" [ngModel]="row[column]" (ngModelChange)="updateEditedValue(table, row, column, $event)" >
         <p-dropdown [options]="['true','false']" *ngSwitchCase="'boolean'" [disabled]="column === table.pk.name" [ngModel]="row[column]" (ngModelChange)="updateEditedValue(table, row, column, $event)"[style]="{'width': '80px'}"></p-dropdown>
+        <p-dropdown  *ngIf="checkForeignKey(column,table)"  [ngModel]="row[column]" [filter]="true" [style]="{'width': '80px'}"></p-dropdown>
 
       </ng-template>
     </td>

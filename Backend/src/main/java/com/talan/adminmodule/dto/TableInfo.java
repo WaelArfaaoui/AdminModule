@@ -14,6 +14,5 @@ public class TableInfo {
     private ColumnInfo pk;
     private Long totalRows;
     private List<ColumnInfo> columns;
-    private List<ForeignKey> foreignKeys;
-
+    private List<String> foreignKeys;
 }

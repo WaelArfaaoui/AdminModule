@@ -33,6 +33,7 @@
                     <div class="option-item">
                       {{ column }}
                       <span *ngIf="column === table.pk.name" class="p-badge p-badge-info">PK</span>
+                      <span *ngIf="paramTableComponent.checkForeignKey(column,table)" class="p-badge p-badge-fk">FK</span>
                     </div>
                   </ng-template>
                 </p-multiSelect>

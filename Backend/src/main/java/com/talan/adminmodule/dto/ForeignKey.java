@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ForeignKey {
-
+   String fkTableName;
     String fkColumnName;
     String referencedTable;
     String referencedColumn;

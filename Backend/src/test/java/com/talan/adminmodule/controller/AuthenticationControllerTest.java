@@ -1,6 +1,8 @@
 package com.talan.adminmodule.controller;
+
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.adminmodule.dto.AuthenticationRequest;
 import com.talan.adminmodule.dto.AuthenticationResponse;
@@ -15,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,19 +25,18 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 @ContextConfiguration(classes = {AuthenticationController.class})
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles("test")
 @DisabledInAotMode
 class AuthenticationControllerTest {
     @Autowired
     private AuthenticationController authenticationController;
+
     @MockBean
     private AuthenticationService authenticationService;
-    /**
-     * Method under test:
-     * {@link AuthenticationController#authenticate(AuthenticationRequest)}
-     */
+
+
     @Test
     void testAuthenticate() throws Exception {
         // Arrange
@@ -46,6 +46,7 @@ class AuthenticationControllerTest {
                 .refreshToken("ABC123")
                 .build();
         when(authenticationService.authenticate(Mockito.<AuthenticationRequest>any())).thenReturn(buildResult);
+
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setEmail("jane.doe@example.org");
         authenticationRequest.setPassword("iloveyou");
@@ -53,6 +54,7 @@ class AuthenticationControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(authenticationController)
                 .build()
@@ -62,15 +64,14 @@ class AuthenticationControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .string("{\"access_token\":\"ABC123\",\"refresh_token\":\"ABC123\",\"error\":\"An error occurred\"}"));
     }
-    /**
-     * Method under test:
-     * {@link AuthenticationController#authenticate(AuthenticationRequest)}
-     */
+
+
     @Test
     void testAuthenticate2() throws Exception {
         // Arrange
         when(authenticationService.authenticate(Mockito.<AuthenticationRequest>any()))
                 .thenThrow(new BadCredentialsException("Msg"));
+
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setEmail("jane.doe@example.org");
         authenticationRequest.setPassword("iloveyou");
@@ -78,10 +79,12 @@ class AuthenticationControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(authenticationController)
                 .build()
                 .perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
@@ -89,15 +92,14 @@ class AuthenticationControllerTest {
                         .string(
                                 "{\"error\":\"Credentials provided are incorrect. Please check your credentials and try again.\"}"));
     }
-    /**
-     * Method under test:
-     * {@link AuthenticationController#authenticate(AuthenticationRequest)}
-     */
+
+
     @Test
     void testAuthenticate3() throws Exception {
         // Arrange
         when(authenticationService.authenticate(Mockito.<AuthenticationRequest>any()))
                 .thenThrow(new AccountExpiredException("Msg"));
+
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setEmail("jane.doe@example.org");
         authenticationRequest.setPassword("iloveyou");
@@ -105,26 +107,27 @@ class AuthenticationControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(authenticationController)
                 .build()
                 .perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string("{\"error\":\"An error occurred during authentication. Please try again later.\"}"));
     }
-    /**
-     * Method under test:
-     * {@link AuthenticationController#refreshToken(HttpServletRequest, HttpServletResponse)}
-     */
+
+
     @Test
     void testRefreshToken() throws Exception {
         // Arrange
         doNothing().when(authenticationService)
                 .refreshToken(Mockito.<HttpServletRequest>any(), Mockito.<HttpServletResponse>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/auth/refresh-token");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(authenticationController)
                 .build()

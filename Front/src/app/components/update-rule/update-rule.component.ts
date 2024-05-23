@@ -37,12 +37,12 @@ export class UpdateRuleComponent implements OnInit {
   imageUrl: string | undefined;
 
   constructor(
-    private fb: FormBuilder,
-    private messageService: MessageService,
-    private attributeService: AttributeService,
-    private ruleService: RuleService,
-    private categoryService: CategoryService,
-    private router: Router,
+    public fb: FormBuilder,
+    public messageService: MessageService,
+    public attributeService: AttributeService,
+    public ruleService: RuleService,
+    public categoryService: CategoryService,
+    public router: Router,
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     public userService: UserService,
@@ -67,7 +67,7 @@ export class UpdateRuleComponent implements OnInit {
       category: [this.rule.category, Validators.required],
       attributeDtos: this.fb.array([]),
       updateDescription: [''] ,
-      imageUrl: [this.imageUrl]
+      imageUrl: [this.imageUrl || '']
     });
     this.addExistingAttributes();
   }
@@ -136,7 +136,7 @@ export class UpdateRuleComponent implements OnInit {
     return (this.ruleForm.get('attributeDtos') as FormArray).controls;
   }
 
-  private validateAttributeNames(): boolean {
+  public validateAttributeNames(): boolean {
     const attributeNames = new Set<string>();
     const attributeControls = this.getAttributeControls();
     for (const control of attributeControls) {
@@ -154,23 +154,7 @@ export class UpdateRuleComponent implements OnInit {
     return true;
   }
 
-  private validateAttributeValues(): boolean {
-    const attributeControls = this.getAttributeControls();
-    for (const control of attributeControls) {
-      const value = parseInt(control.value.value);
-      if (isNaN(value) || value < 1 || value > 10) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Attribute value must be between 1 and 10'
-        });
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private validateAttributePercentages(): boolean {
+  public validateAttributePercentages(): boolean {
     let sum = 0;
     for (const control of this.getAttributeControls()) {
       const percentage = parseInt(control.value.percentage);

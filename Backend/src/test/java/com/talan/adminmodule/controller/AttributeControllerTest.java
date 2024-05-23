@@ -1,12 +1,7 @@
 package com.talan.adminmodule.controller;
 
-import static org.mockito.Mockito.when;
-
 import com.talan.adminmodule.dto.AttributeDto;
 import com.talan.adminmodule.service.AttributeService;
-
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -20,19 +15,21 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.when;
+
 @ContextConfiguration(classes = {AttributeController.class})
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
-class AttributeControllerDiffblueTest {
+class AttributeControllerTest {
     @Autowired
     private AttributeController attributeController;
 
     @MockBean
     private AttributeService attributeService;
 
-    /**
-     * Method under test: {@link AttributeController#getAllAttributes()}
-     */
+
     @Test
     void testGetAllAttributes() throws Exception {
         // Arrange
@@ -48,9 +45,6 @@ class AttributeControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
-    /**
-     * Method under test: {@link AttributeController#getAttributeById(Integer)}
-     */
     @Test
     void testGetAttributeById() throws Exception {
         // Arrange

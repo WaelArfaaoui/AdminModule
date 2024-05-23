@@ -58,6 +58,9 @@ public class DatabaseInitializer {
         tablesData.add("rule");
         tablesData.add("rule_attribute");
         tablesData.add("rule_modification");
+        tablesData.add("category");
+        tablesData.add("rule_usage");
+        tablesData.add("update");
         try (Connection connection = dataSource.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet tables = metaData.getTables(null, "public", null, new String[]{"TABLE"});

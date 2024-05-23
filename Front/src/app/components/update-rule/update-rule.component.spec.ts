@@ -1,410 +1,414 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule, FormsModule, FormArray } from '@angular/forms';
+import { of, throwError } from 'rxjs';
 import { UpdateRuleComponent } from './update-rule.component';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import {AttributeService, RuleService, CategoryService, AttributeDataDto} from '../../../open-api';
-import { RouterTestingModule } from '@angular/router/testing';
-import {DialogService, DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import { of } from 'rxjs';
-import {HttpClient, HttpHandler} from "@angular/common/http";
+import {
+  AttributeService,
+  RuleService,
+  CategoryService,
+  UserControllerService, RuleDto, AttributeDataDto, CategoryDto, AttributeDto
+} from '../../../open-api';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user/user.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpResponse} from "@angular/common/http";
 
 describe('UpdateRuleComponent', () => {
   let component: UpdateRuleComponent;
   let fixture: ComponentFixture<UpdateRuleComponent>;
-  let formBuilder: FormBuilder;
+  let messageService: jasmine.SpyObj<MessageService>;
+  let attributeService: jasmine.SpyObj<AttributeService>;
+  let ruleService: jasmine.SpyObj<RuleService>;
+  let categoryService: jasmine.SpyObj<CategoryService>;
+  let userService: jasmine.SpyObj<UserService>;
+  let userControllerService: jasmine.SpyObj<UserControllerService>;
+  let router: jasmine.SpyObj<Router>;
+  let config: DynamicDialogConfig;
+  let ref: DynamicDialogRef;
 
   beforeEach(async () => {
+    const messageServiceSpy = jasmine.createSpyObj('MessageService', ['add']);
+    const attributeServiceSpy = jasmine.createSpyObj('AttributeService', ['getAllAttributes']);
+    const ruleServiceSpy = jasmine.createSpyObj('RuleService', ['updateRule']);
+    const categoryServiceSpy = jasmine.createSpyObj('CategoryService', ['getAllCategories']);
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['']);
+    const userControllerServiceSpy = jasmine.createSpyObj('UserControllerService', ['']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
     await TestBed.configureTestingModule({
       declarations: [UpdateRuleComponent],
-      imports: [RouterTestingModule],
+      imports: [ReactiveFormsModule, FormsModule],
       providers: [
-        FormBuilder,
-        MessageService,
-        AttributeService,
-        RuleService,
-        CategoryService,
-        DynamicDialogRef,
-        DynamicDialogConfig,
-        MessageService , DialogService , HttpClient , HttpHandler
-      ]
-    }).compileComponents();
-    formBuilder = TestBed.inject(FormBuilder);
-  });
+        { provide: MessageService, useValue: messageServiceSpy },
+        { provide: AttributeService, useValue: attributeServiceSpy },
+        { provide: RuleService, useValue: ruleServiceSpy },
+        { provide: CategoryService, useValue: categoryServiceSpy },
+        { provide: UserService, useValue: userServiceSpy },
+        { provide: UserControllerService, useValue: userControllerServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: DynamicDialogConfig, useValue: {} },
+        { provide: DynamicDialogRef, useValue: {} }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+        .compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(UpdateRuleComponent);
     component = fixture.componentInstance;
+    messageService = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
+    attributeService = TestBed.inject(AttributeService) as jasmine.SpyObj<AttributeService>;
+    ruleService = TestBed.inject(RuleService) as jasmine.SpyObj<RuleService>;
+    categoryService = TestBed.inject(CategoryService) as jasmine.SpyObj<CategoryService>;
+    userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
+    userControllerService = TestBed.inject(UserControllerService) as jasmine.SpyObj<UserControllerService>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    config = TestBed.inject(DynamicDialogConfig);
+    ref = TestBed.inject(DynamicDialogRef);
+  });
 
-    // Provide test data for DynamicDialogConfig
-    component.config = new DynamicDialogConfig();
-    component.config.data = {
-      rule: {
-        id: 1,
+  describe('ngOnInit', () => {
+    it('should call the necessary methods on initialization', () => {
+      spyOn(component, 'retrieveUserFromLocalStorage');
+      spyOn(component, 'initializeForm');
+      spyOn(component, 'loadCategories');
+      spyOn(component, 'loadAttributes');
+
+      component.ngOnInit();
+
+      expect(component.retrieveUserFromLocalStorage).toHaveBeenCalled();
+      expect(component.initializeForm).toHaveBeenCalled();
+      expect(component.loadCategories).toHaveBeenCalled();
+      expect(component.loadAttributes).toHaveBeenCalled();
+    });
+  });
+
+  describe('initializeForm', () => {
+    it('should initialize the form with given rule data', () => {
+      component.rule = {
         name: 'Test Rule',
         description: 'Test Description',
-        category: { id: 1, name: 'TestCategory' },
-        enabled: true,
-        createDate: '2024-05-14T10:00:00Z',
-        lastModified: '2024-05-14T10:00:00Z',
-        createdBy: 1,
-        lastModifiedBy: 1,
+        category: { name: 'Test Category' },
+        attributeDtos: [{ name: { name: 'Attribute 1' }, percentage: 50, value: 5 }]
+      } as RuleDto;
+
+      component.initializeForm();
+
+      expect(component.ruleForm.value).toEqual({
+        name: 'Test Rule',
+        description: 'Test Description',
+        category: { name: 'Test Category' },
+        attributeDtos: [{
+          name: { name: 'Attribute 1' },
+          percentage: 50,
+          value: 0
+        }],
+        updateDescription: '',
+        imageUrl: ''
+      });
+    });
+  });
+
+  describe('addExistingAttributes', () => {
+    it('should add existing attributes to the form', () => {
+      component.rule = {
         attributeDtos: [
-          {
-            id: 1,
-            name: { id: 1, name: 'Attribute1' },
-            percentage: 50,
-            value: 5
-          },
-          {
-            id: 2,
-            name: { id: 2, name: 'Attribute2' },
-            percentage: 50,
-            value: 5
-          }
+          { name: { name: 'Attribute 1' }, percentage: 50, value: 5 },
+          { name: { name: 'Attribute 2' }, percentage: 50, value: 5 }
         ]
-      }
-    } ;
+      } as RuleDto;
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array([])
+      });
 
+      component.addExistingAttributes();
 
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should initialize form', () => {
-    expect(component.ruleForm).toBeDefined();
-    expect(component.attributes).toBeUndefined(); // Assuming attributes and categories are loaded asynchronously
-    expect(component.categories).toBeUndefined();
-    expect(component.selectedCategory).toBeUndefined();
-    expect(component.selectedAttributes).toEqual([]);
-    expect(component.categoryVisible).toBe(false);
-    expect(component.attributeVisible).toBe(false);
-    expect(component.newCategoryName).toBe('');
-    expect(component.newAttributeName).toBe('');
-    expect(component.existingAttributes).toBeUndefined();
-    expect(component.rule).toBeDefined(); // Adjusted expectation to check if rule is defined
-  });
-
-  it('should load categories', () => {
-    const categoryService = TestBed.inject(CategoryService);
-    const categories = [{ name: 'Category 1' }, { name: 'Category 2' }];
-    spyOn(categoryService, 'getAllCategories').and.returnValue(of(categories as any)); // Casting here
-
-    component.loadCategories();
-
-    expect(component.categories).toEqual(categories);
-  });
-
-  it('should load attributes', () => {
-    const attributeService = TestBed.inject(AttributeService);
-    const attributes = [{ name: 'Attribute 1' }, { name: 'Attribute 2' }];
-    spyOn(attributeService, 'getAllAttributes').and.returnValue(of(attributes as any)); // Casting here
-
-    component.loadAttributes();
-
-    expect(component.attributes).toEqual(attributes);
-  });
-
-  it('should add existing attributes to the form array', () => {
-    // Mocking data
-    const mockAttributeDataDtos: AttributeDataDto[] = [
-      { id: 1, name: { id: 1, name: 'Attribute 1' }, percentage: 0.5, value: 10 },
-      { id: 2, name: { id: 2, name: 'Attribute 2' }, percentage: 0.3, value: 20 },
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array([])
+      const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
+      expect(attributeArray.length).toBe(2);
     });
+  });
 
-    component.rule = { attributeDtos: mockAttributeDataDtos };
+  describe('createAttributeGroup', () => {
+    it('should create a FormGroup for an attribute', () => {
+      const attr = { name: { name: 'Test Attribute' }, percentage: 50, value: 5 } as AttributeDataDto;
+      const group = component.createAttributeGroup(attr);
 
-    component.addExistingAttributes();
+      expect(group.value).toEqual({
+        name: { name: 'Test Attribute' },
+        percentage: 50,
+        value: 0
+      });
+    });
+  });
 
-    // Getting the FormArray
-    const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
-    expect(attributeArray.length).toBe(mockAttributeDataDtos.length);
-    mockAttributeDataDtos.forEach((attrData, index) => {
-      expect(attributeArray.at(index).value).toEqual(component.createAttributeGroup(attrData).value);
-      if (attrData.name && attrData.name.name != null) {
-        expect(component.selectedAttributes).toContain(attrData.name);
-      }
+  describe('createAttributeGroup', () => {
+    it('should create a FormGroup for an attribute', () => {
+      const attr = { name: { name: 'Test Attribute' }, percentage: 50, value: 5 } as AttributeDataDto;
+      const group = component.createAttributeGroup(attr);
+
+      expect(group.value).toEqual({
+        name: { name: 'Test Attribute' },
+        percentage: 50,
+        value: 0
+      });
     });
   });
 
 
-  it('should create an empty attribute form group', () => {
-    // Call the method to be tested
-    const emptyAttributeGroup: FormGroup = component.createEmptyAttributeGroup();
 
-    // Assertions
-    expect(emptyAttributeGroup).not.toBeNull();
-    expect(emptyAttributeGroup).toBeDefined();
-
-    // Check form controls
-    expect(emptyAttributeGroup!.get('name')).toBeDefined();
-    expect(emptyAttributeGroup!.get('percentage')).toBeDefined();
-    expect(emptyAttributeGroup!.get('value')).toBeDefined();
-
-    // Check validators
-    expect(emptyAttributeGroup!.get('name')!.validator).toEqual(Validators.required);
-    expect(emptyAttributeGroup!.get('percentage')!.validator).toEqual(Validators.required);
-    expect(emptyAttributeGroup!.get('value')!.validator).toEqual(Validators.required);
-
-    // Check initial values
-    expect(emptyAttributeGroup!.get('name')!.value).toEqual('');
-    expect(emptyAttributeGroup!.get('percentage')!.value).toEqual('');
-    expect(emptyAttributeGroup!.get('value')!.value).toEqual('');
-  });
-
-  it('should add an attribute to the attributeDtos FormArray', () => {
-    // Set up initial state
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array([])
+  describe('validateAttributeNames', () => {
+    it('should return true if attribute names are unique', () => {
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array([
+          component.fb.group({ name: 'Attribute1', percentage: 50 }),
+          component.fb.group({ name: 'Attribute2', percentage: 50 })
+        ])
+      });
+      const result = component.validateAttributeNames();
+      expect(result).toBe(true);
     });
 
-    // Call the method to be tested
-    component.addAttribute();
-
-    // Get the FormArray
-    const attributeArray: FormArray = component.ruleForm.get('attributeDtos') as FormArray;
-
-    // Assertions
-    expect(attributeArray.length).toBe(1);
-    expect(attributeArray.at(0)).toBeDefined();
-    expect(attributeArray.at(0).value).toEqual({
-      name: '',
-      percentage: '',
-      value: ''
+    it('should return false if attribute names are not unique', () => {
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array([
+          component.fb.group({ name: 'Attribute1', percentage: 50 }),
+          component.fb.group({ name: 'Attribute1', percentage: 50 })
+        ])
+      });
+      const result = component.validateAttributeNames();
+      expect(result).toBe(false);
     });
   });
 
-  it('should remove an attribute from the attributeDtos FormArray', () => {
-    // Set up initial state
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array([
-        formBuilder.group({
-          name: 'Attribute 1',
-          percentage: 0.5,
-          value: 10
-        }),
-        formBuilder.group({
-          name: 'Attribute 2',
-          percentage: 0.3,
-          value: 20
-        }),
-      ])
+
+
+  describe('showDialog', () => {
+    it('should set categoryVisible to true if type is "category"', () => {
+      component.showDialog('category');
+      expect(component.categoryVisible).toBe(true);
     });
 
-    const initialLength = (component.ruleForm.get('attributeDtos') as FormArray).length;
-
-    // Call the method to be tested
-    component.removeAttribute(0);
-
-    // Get the FormArray
-    const attributeArray: FormArray = component.ruleForm.get('attributeDtos') as FormArray;
-
-    // Assertions
-    expect(attributeArray.length).toBe(initialLength - 1);
-    expect(attributeArray.at(0).value).toEqual({
-      name: 'Attribute 2',
-      percentage: 0.3,
-      value: 20
+    it('should set attributeVisible to true if type is "attribute"', () => {
+      component.showDialog('attribute');
+      expect(component.attributeVisible).toBe(true);
     });
   });
-  it('should return true if attribute names are unique', () => {
-    // Set up initial state
-    const attributes = [
-      { name: 'Attribute 1' },
-      { name: 'Attribute 2' },
-      { name: 'Attribute 3' }
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array(attributes.map(attr => formBuilder.group(attr)))
+
+  describe('addNewAttribute', () => {
+    it('should add a new attribute if it does not exist', () => {
+      component.newAttributeName = 'NewAttribute';
+      component.attributes = [{ name: 'ExistingAttribute' }];
+      component.addNewAttribute();
+      expect(component.attributes.some(attr => attr.name === 'NewAttribute')).toBe(true);
     });
 
-    // Call the method to be tested
-    const result = component['validateAttributeNames']();
-
-    // Assertions
-    expect(result).toBeTrue();
+    it('should not add a new attribute if it already exists', () => {
+      component.newAttributeName = 'ExistingAttribute';
+      component.attributes = [{ name: 'ExistingAttribute' }];
+      component.addNewAttribute();
+      expect(component.attributes.length).toBe(1);
+    });
   });
 
-  it('should return false and display error message if attribute names are not unique', () => {
-    // Set up initial state
-    const attributes = [
-      { name: 'Attribute 1' },
-      { name: 'Attribute 1' }, // Duplicate name
-      { name: 'Attribute 3' }
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array(attributes.map(attr => formBuilder.group(attr)))
+  describe('addNewCategory', () => {
+    it('should add a new category if it does not exist', () => {
+      component.newCategoryName = 'NewCategory';
+      component.categories = [{ name: 'ExistingCategory' }];
+      component.addNewCategory();
+      expect(component.categories.some(cat => cat.name === 'NewCategory')).toBe(true);
     });
 
-    // Call the method to be tested
-    const result = component['validateAttributeNames']();
-
-    // Assertions
-    expect(result).toBeFalse();
+    it('should not add a new category if it already exists', () => {
+      component.newCategoryName = 'ExistingCategory';
+      component.categories = [{ name: 'ExistingCategory' }];
+      component.addNewCategory();
+      expect(component.categories.length).toBe(1);
+    });
   });
-  it('should return true if attribute values are between 1 and 10', () => {
-    // Set up initial state
-    const attributes = [
-      { value: '5' },
-      { value: '7' },
-      { value: '10' }
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array(attributes.map(attr => formBuilder.group(attr)))
+  describe('addAttribute', () => {
+    it('should add a new attribute to the form', () => {
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array([])
+      });
+
+      component.addAttribute();
+
+      const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
+      expect(attributeArray.length).toBe(1);
+    });
+  });
+
+  describe('removeAttribute', () => {
+    it('should remove an attribute from the form', () => {
+      const initialAttributes = [
+        component.fb.group({ name: 'Attribute1', percentage: 50 }),
+        component.fb.group({ name: 'Attribute2', percentage: 50 })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(initialAttributes)
+      });
+
+      component.removeAttribute(1); // Removing the attribute at index 1
+
+      const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
+      expect(attributeArray.length).toBe(1);
+      expect(attributeArray.value[0].name).toBe('Attribute1'); // Making sure the correct attribute is removed
+    });
+  });
+
+  describe('getAttributeControls', () => {
+    it('should return the controls of the attribute form array', () => {
+      const initialAttributes = [
+        component.fb.group({ name: 'Attribute1', percentage: 50 }),
+        component.fb.group({ name: 'Attribute2', percentage: 50 })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(initialAttributes)
+      });
+
+      const attributeControls = component.getAttributeControls();
+
+      expect(attributeControls.length).toBe(2);
+      expect(attributeControls[0].value.name).toBe('Attribute1');
+      expect(attributeControls[1].value.name).toBe('Attribute2');
+    });
+  });
+  describe('validateAttributePercentages', () => {
+    it('should return true if the sum of attribute percentages is equal to 100', () => {
+      const attributes = [
+        component.fb.group({ percentage: '50' }),
+        component.fb.group({ percentage: '50' })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(attributes)
+      });
+
+      const result = component.validateAttributePercentages();
+
+      expect(result).toBe(true);
     });
 
-    // Call the method to be tested
-    const result = component['validateAttributeValues']();
+    it('should return false if the sum of attribute percentages is less than 100', () => {
+      const attributes = [
+        component.fb.group({ percentage: '40' }),
+        component.fb.group({ percentage: '40' })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(attributes)
+      });
 
-    // Assertions
-    expect(result).toBeTrue();
-  });
+      const result = component.validateAttributePercentages();
 
-  it('should return false and display error message if attribute values are not between 1 and 10', () => {
-    // Set up initial state
-    const attributes = [
-      { value: '5' },
-      { value: '15' }, // Invalid value
-      { value: '8' }
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array(attributes.map(attr => formBuilder.group(attr)))
+      expect(result).toBe(false);
+      expect(messageService.add).toHaveBeenCalledWith({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Sum of attribute percentages must be equal to 100'
+      });
     });
 
-    // Call the method to be tested
-    const result = component['validateAttributeValues']();
+    it('should return false if the sum of attribute percentages is greater than 100', () => {
+      const attributes = [
+        component.fb.group({ percentage: '50' }),
+        component.fb.group({ percentage: '60' })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(attributes)
+      });
 
-    // Assertions
-    expect(result).toBeFalse();
-  });
+      const result = component.validateAttributePercentages();
 
-  it('should return true if sum of attribute percentages is equal to 100', () => {
-    // Set up initial state
-    const attributes = [
-      { percentage: '50' },
-      { percentage: '30' },
-      { percentage: '20' }
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array(attributes.map(attr => formBuilder.group(attr)))
+      expect(result).toBe(false);
+      expect(messageService.add).toHaveBeenCalledWith({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Sum of attribute percentages must be equal to 100'
+      });
     });
 
-    // Call the method to be tested
-    const result = component['validateAttributePercentages']();
+    it('should handle NaN values and return false', () => {
+      const attributes = [
+        component.fb.group({ percentage: '50' }),
+        component.fb.group({ percentage: 'invalid' })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(attributes)
+      });
 
-    // Assertions
-    expect(result).toBeTrue();
+      const result = component.validateAttributePercentages();
+
+      expect(result).toBe(false);
+      expect(messageService.add).toHaveBeenCalledWith({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Sum of attribute percentages must be equal to 100'
+      });
+    });
   });
 
-  it('should return false and display error message if sum of attribute percentages is not equal to 100', () => {
-    // Set up initial state
-    const attributes = [
-      { percentage: '50' },
-      { percentage: '30' },
-      { percentage: '25' } // Invalid sum
-    ];
-    component.ruleForm = formBuilder.group({
-      attributeDtos: formBuilder.array(attributes.map(attr => formBuilder.group(attr)))
+
+
+  describe('onSubmit', () => {
+    it('should call saveRule if the form is valid and attributes are valid', () => {
+      spyOn(component, 'saveRule');
+      spyOn(component, 'validateAttributeNames').and.returnValue(true);
+      spyOn(component, 'validateAttributePercentages').and.returnValue(true);
+      component.ruleForm = component.fb.group({
+        valid: true
+      });
+      component.onSubmit();
+      expect(component.saveRule).toHaveBeenCalled();
     });
 
-    // Call the method to be tested
-    const result = component['validateAttributePercentages']();
+    it('should not call saveRule if the form is invalid', () => {
+      spyOn(component, 'saveRule');
+      spyOn(component, 'validateAttributeNames').and.returnValue(true);
+      spyOn(component, 'validateAttributePercentages').and.returnValue(true);
+      component.ruleForm = component.fb.group({
+        valid: false
+      });
+      component.onSubmit();
+    });
 
-    // Assertions
-    expect(result).toBeFalse();
+    it('should not call saveRule if the attribute names are not valid', () => {
+      spyOn(component, 'saveRule');
+      spyOn(component, 'validateAttributeNames').and.returnValue(false);
+      spyOn(component, 'validateAttributePercentages').and.returnValue(true);
+      component.ruleForm = component.fb.group({
+        valid: true
+      });
+      component.onSubmit();
+      expect(component.saveRule).not.toHaveBeenCalled();
+    });
+
+    it('should not call saveRule if the attribute percentages are not valid', () => {
+      spyOn(component, 'saveRule');
+      spyOn(component, 'validateAttributeNames').and.returnValue(true);
+      spyOn(component, 'validateAttributePercentages').and.returnValue(false);
+      component.ruleForm = component.fb.group({
+        valid: true
+      });
+      component.onSubmit();
+      expect(component.saveRule).not.toHaveBeenCalled();
+    });
   });
 
-  it('should set categoryVisible to true when type is "category"', () => {
-    // Call the method to be tested
-    component.showDialog('category');
+  describe('retrieveUserFromLocalStorage', () => {
+    it('should retrieve user details from local storage', () => {
+      spyOn(localStorage, 'getItem').and.returnValue('{"username": "testuser", "profileImagePath": "testpath"}');
+      component.retrieveUserFromLocalStorage();
+      expect(component.username).toEqual('testuser');
+      expect(component.imageUrl).toEqual('testpath');
+    });
 
-    // Assertions
-    expect(component.categoryVisible).toBeTrue();
-    expect(component.attributeVisible).toBeFalse(); // Make sure the other property is false
+    it('should log an error if user details are not found in local storage', () => {
+      spyOn(console, 'error');
+      spyOn(localStorage, 'getItem').and.returnValue(null);
+      component.retrieveUserFromLocalStorage();
+      expect(console.error).toHaveBeenCalledWith('User details not found in local storage.');
+    });
   });
-
-  it('should set attributeVisible to true when type is not "category"', () => {
-    // Call the method to be tested
-    component.showDialog('attribute');
-
-    // Assertions
-    expect(component.categoryVisible).toBeFalse(); // Make sure the other property is false
-    expect(component.attributeVisible).toBeTrue();
-  });
-  it('should add a new attribute when it does not already exist', () => {
-    // Set up initial state
-    component.newAttributeName = 'New Attribute';
-    component.attributes = [{ name: 'Existing Attribute' }];
-
-    // Call the method to be tested
-    component.addNewAttribute();
-
-    // Assertions
-    expect(component.attributes.length).toBe(2); // One existing and one newly added
-    expect(component.attributes[1].name).toBe('New Attribute');
-    expect(component.attributeVisible).toBeFalse();
-  });
-
-  it('should not add a new attribute if it already exists', () => {
-    // Set up initial state
-    component.newAttributeName = 'Existing Attribute';
-    component.attributes = [{ name: 'Existing Attribute' }];
-
-    // Call the method to be tested
-    component.addNewAttribute();
-
-    // Assertions
-    expect(component.attributes.length).toBe(1); // The existing attribute remains
-  });
-
-  it('should not add a new attribute if the newAttributeName is empty', () => {
-    // Set up initial state
-    component.newAttributeName = '';
-
-    // Call the method to be tested
-    component.addNewAttribute();
-
-  });
-  it('should add a new category when it does not already exist', () => {
-    // Set up initial state
-    component.newCategoryName = 'New Category';
-    component.categories = [{ name: 'Existing Category' }];
-
-    // Call the method to be tested
-    component.addNewCategory();
-
-    // Assertions
-    expect(component.categories.length).toBe(2); // One existing and one newly added
-    expect(component.categories[1].name).toBe('New Category');
-    expect(component.categoryVisible).toBeFalse();
-  });
-
-  it('should not add a new category if it already exists', () => {
-    // Set up initial state
-    component.newCategoryName = 'Existing Category';
-    component.categories = [{ name: 'Existing Category' }];
-
-    // Call the method to be tested
-    component.addNewCategory();
-
-    // Assertions
-    expect(component.categories.length).toBe(1); // The existing category remains
-  });
-
-  it('should not add a new category if the newCategoryName is empty', () => {
-    // Set up initial state
-    component.newCategoryName = '';
-
-    // Call the method to be tested
-    component.addNewCategory();
-
-  });
-
 
 
 });

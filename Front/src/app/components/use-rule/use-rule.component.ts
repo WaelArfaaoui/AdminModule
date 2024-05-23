@@ -29,10 +29,10 @@ export class UseRuleComponent implements OnInit {
   imageUrl: string | undefined;
 
   constructor(
-    private fb: FormBuilder,
-    private messageService: MessageService,
-    private attributeService: AttributeService,
-    private categoryService: CategoryService,
+    public fb: FormBuilder,
+    public messageService: MessageService,
+    public attributeService: AttributeService,
+    public categoryService: CategoryService,
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     public userService: UserService,
@@ -52,7 +52,7 @@ export class UseRuleComponent implements OnInit {
     this.ruleForm = this.fb.group({
       name: [this.rule.name, Validators.required],
       description: [this.rule.description, Validators.required],
-      category: [this.rule.category, Validators.required],
+      category: [this.rule.category || {}, Validators.required],
       attributeDtos: this.fb.array([]),
       updateDescription: [''] ,
       imageUrl: [this.imageUrl]
@@ -103,7 +103,7 @@ export class UseRuleComponent implements OnInit {
   getAttributeControls() {
     return (this.ruleForm.get('attributeDtos') as FormArray).controls;
   }
-  private validateAttributeValues(): boolean {
+  public validateAttributeValues(): boolean {
     const attributeControls = this.getAttributeControls();
     for (const control of attributeControls) {
       const value = parseInt(control.value.value);

@@ -1,4 +1,5 @@
 package com.talan.adminmodule.controller;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,6 +16,8 @@ import com.talan.adminmodule.dto.UserDto;
 import com.talan.adminmodule.entity.Role;
 import com.talan.adminmodule.entity.User;
 import com.talan.adminmodule.repository.UserRepository;
+import com.talan.adminmodule.service.impl.UserService;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -27,7 +30,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 
-import com.talan.adminmodule.service.impl.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
@@ -39,7 +41,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -49,22 +50,25 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
+
 @ContextConfiguration(classes = {UserController.class})
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles("test")
 @DisabledInAotMode
 class UserControllerTest {
     @MockBean
     private ModelMapper modelMapper;
+
     @Autowired
     private UserController userController;
+
     @MockBean
     private UserService userService;
+
 
     @Test
     void testAddUser() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
+
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
             mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
@@ -87,12 +91,15 @@ class UserControllerTest {
             when(userRepository.save(Mockito.<User>any())).thenReturn(user);
             ModelMapper modelMapper = new ModelMapper();
             UserService userservice = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
+
             UserController userController = new UserController(userservice, new ModelMapper());
             RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
                     Role.BUSINESSEXPERT);
+
             // Act
             ResponseEntity<UserDto> actualAddUserResult = userController.addUser(dto,
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+
             // Assert
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
@@ -113,19 +120,19 @@ class UserControllerTest {
             assertTrue(actualAddUserResult.getHeaders().isEmpty());
         }
     }
-    /**
-     * Method under test: {@link UserController#addUser(RegisterDto, MultipartFile)}
-     */
+
+
     @Test
     void testAddUser2() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
+
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(false);
             mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
                     .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
             mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
                     .thenReturn(1L);
+
             User user = new User();
             user.setActive(true);
             user.setCompany("Company");
@@ -142,12 +149,15 @@ class UserControllerTest {
             when(userRepository.save(Mockito.<User>any())).thenReturn(user);
             ModelMapper modelMapper = new ModelMapper();
             UserService userservice = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
+
             UserController userController = new UserController(userservice, new ModelMapper());
             RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
                     Role.BUSINESSEXPERT);
+
             // Act
             ResponseEntity<UserDto> actualAddUserResult = userController.addUser(dto,
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+
             // Assert
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
@@ -169,13 +179,12 @@ class UserControllerTest {
             assertTrue(actualAddUserResult.getHeaders().isEmpty());
         }
     }
-    /**
-     * Method under test: {@link UserController#addUser(RegisterDto, MultipartFile)}
-     */
+
+
     @Test
     void testAddUser3() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
+
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
             mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
@@ -197,6 +206,7 @@ class UserControllerTest {
                     .role(Role.BUSINESSEXPERT)
                     .build();
             when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
+
             User user = new User();
             user.setActive(true);
             user.setCompany("Company");
@@ -212,12 +222,15 @@ class UserControllerTest {
             UserRepository userRepository = mock(UserRepository.class);
             when(userRepository.save(Mockito.<User>any())).thenReturn(user);
             UserService userservice = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
+
             UserController userController = new UserController(userservice, new ModelMapper());
             RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
                     Role.BUSINESSEXPERT);
+
             // Act
             ResponseEntity<UserDto> actualAddUserResult = userController.addUser(dto,
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+
             // Assert
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
             mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
@@ -228,13 +241,12 @@ class UserControllerTest {
             assertTrue(actualAddUserResult.getHeaders().isEmpty());
         }
     }
-    /**
-     * Method under test: {@link UserController#addUser(RegisterDto, MultipartFile)}
-     */
+
+
     @Test
     void testAddUser4() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
+
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
             mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
@@ -259,9 +271,11 @@ class UserControllerTest {
             UserController userController = new UserController(userservice, new ModelMapper());
             RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
                     Role.BUSINESSEXPERT);
+
             // Act
             ResponseEntity<UserDto> actualAddUserResult = userController.addUser(dto,
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+
             // Assert
             verify(userservice).addUser(isA(RegisterDto.class), isA(MultipartFile.class));
             assertEquals(201, actualAddUserResult.getStatusCodeValue());
@@ -269,19 +283,19 @@ class UserControllerTest {
             assertTrue(actualAddUserResult.getHeaders().isEmpty());
         }
     }
-    /**
-     * Method under test: {@link UserController#addUser(RegisterDto, MultipartFile)}
-     */
+
+
     @Test
     void testAddUser5() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
+
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
             mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
                     .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
             mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
                     .thenReturn(1L);
+
             User user = new User();
             user.setActive(true);
             user.setCompany("Company");
@@ -297,6 +311,7 @@ class UserControllerTest {
             UserRepository userRepository = mock(UserRepository.class);
             when(userRepository.save(Mockito.<User>any())).thenReturn(user);
             ModelMapper modelMapper = new ModelMapper();
+
             UserService userservice = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
             RegisterDto dto = RegisterDto.builder()
                     .company("Company")
@@ -318,9 +333,11 @@ class UserControllerTest {
                     .phone("6625550144")
                     .role(Role.BUSINESSEXPERT)
                     .build();
+
             // Act
             ResponseEntity<UserDto> actualAddUserResult = userController.addUser(dto2,
                     new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+
             // Assert
             mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)),
                     atLeast(1));
@@ -342,96 +359,98 @@ class UserControllerTest {
             assertTrue(actualAddUserResult.getHeaders().isEmpty());
         }
     }
+
     @Test
     void testDelete() throws Exception {
         // Arrange
         doNothing().when(userService).delete(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/users/{id}", 1);
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-    /**
-     * Method under test: {@link UserController#delete(int)}
-     */
+
     @Test
     void testDelete2() throws Exception {
         // Arrange
         doNothing().when(userService).delete(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/users/{id}", "Uri Variables",
                 "Uri Variables");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
-    /**
-     * Method under test: {@link UserController#delete(int)}
-     */
+
     @Test
     void testDelete3() throws Exception {
         // Arrange
         doNothing().when(userService).delete(Mockito.<Integer>any());
         SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-    /**
-     * Method under test: {@link UserController#delete(int)}
-     */
+
+
     @Test
     void testDelete4() throws Exception {
         // Arrange
         doNothing().when(userService).delete(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/users/{id}", 1);
         requestBuilder.accept("https://example.org/example");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-    /**
-     * Method under test: {@link UserController#delete(int)}
-     */
+
     @Test
     void testDelete5() throws Exception {
         // Arrange
         doNothing().when(userService).delete(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/users/{id}", "",
                 "Uri Variables");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(405));
     }
-    /**
-     * Method under test: {@link UserController#delete(int)}
-     */
+
+
     @Test
     void testDelete6() throws Exception {
         // Arrange
         doNothing().when(userService).delete(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/users/{id}", 1);
         requestBuilder.accept("");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-    /**
-     * Method under test: {@link UserController#expireUser(int)}
-     */
+
+
     @Test
     void testExpireUser() throws Exception {
         // Arrange
         doNothing().when(userService).expireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/expire", 1);
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -440,56 +459,57 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
                 .andExpect(MockMvcResultMatchers.content().string("User expired successfully"));
     }
-    /**
-     * Method under test: {@link UserController#expireUser(int)}
-     */
+
     @Test
     void testExpireUser2() throws Exception {
         // Arrange
         doNothing().when(userService).expireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/expire",
                 "Uri Variables", "Uri Variables");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
-    /**
-     * Method under test: {@link UserController#expireUser(int)}
-     */
+
     @Test
     void testExpireUser3() throws Exception {
         // Arrange
         doNothing().when(userService).expireUser(Mockito.<Integer>any());
         SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-    /**
-     * Method under test: {@link UserController#expireUser(int)}
-     */
+
+
     @Test
     void testExpireUser4() throws Exception {
         // Arrange
         doNothing().when(userService).expireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/expire", 1);
         requestBuilder.accept("https://example.org/example");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(406));
     }
-    /**
-     * Method under test: {@link UserController#expireUser(int)}
-     */
+
+
     @Test
     void testExpireUser5() throws Exception {
         // Arrange
         doNothing().when(userService).expireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/expire", 1);
         requestBuilder.accept("");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -498,14 +518,14 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
                 .andExpect(MockMvcResultMatchers.content().string("User expired successfully"));
     }
-    /**
-     * Method under test: {@link UserController#unexpireUser(int)}
-     */
+
+
     @Test
     void testUnexpireUser() throws Exception {
         // Arrange
         doNothing().when(userService).unexpireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/unexpire", 1);
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -514,56 +534,58 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
                 .andExpect(MockMvcResultMatchers.content().string("User unexpired successfully"));
     }
-    /**
-     * Method under test: {@link UserController#unexpireUser(int)}
-     */
+
+
     @Test
     void testUnexpireUser2() throws Exception {
         // Arrange
         doNothing().when(userService).unexpireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/unexpire",
                 "Uri Variables", "Uri Variables");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
-    /**
-     * Method under test: {@link UserController#unexpireUser(int)}
-     */
+
+
     @Test
     void testUnexpireUser3() throws Exception {
         // Arrange
         doNothing().when(userService).unexpireUser(Mockito.<Integer>any());
         SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-    /**
-     * Method under test: {@link UserController#unexpireUser(int)}
-     */
+
+
     @Test
     void testUnexpireUser4() throws Exception {
         // Arrange
         doNothing().when(userService).unexpireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/unexpire", 1);
         requestBuilder.accept("https://example.org/example");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(406));
     }
-    /**
-     * Method under test: {@link UserController#unexpireUser(int)}
-     */
+
     @Test
     void testUnexpireUser5() throws Exception {
         // Arrange
         doNothing().when(userService).unexpireUser(Mockito.<Integer>any());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/api/users/{id}/unexpire", 1);
         requestBuilder.accept("");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -572,9 +594,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
                 .andExpect(MockMvcResultMatchers.content().string("User unexpired successfully"));
     }
-    /**
-     * Method under test: {@link UserController#getUser(String)}
-     */
+
     @Test
     void testGetUser() throws Exception {
         // Arrange
@@ -607,6 +627,7 @@ class UserControllerTest {
         when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users/{email}",
                 "jane.doe@example.org");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -619,9 +640,8 @@ class UserControllerTest {
                                         + "\":true,\"profileImagePath\":\"Profile Image Path\",\"phone\":\"6625550144\",\"company\":\"Company\",\"role\":"
                                         + "\"BUSINESSEXPERT\",\"error\":\"An error occurred\"}"));
     }
-    /**
-     * Method under test: {@link UserController#getUser(String)}
-     */
+
+
     @Test
     void testGetUser2() throws Exception {
         // Arrange
@@ -654,6 +674,7 @@ class UserControllerTest {
         when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users/{email}", "Uri Variables",
                 "Uri Variables");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -667,11 +688,13 @@ class UserControllerTest {
                                         + "\"BUSINESSEXPERT\",\"error\":\"An error occurred\"}"));
     }
 
+
     @Test
     void testGetusers() throws Exception {
         // Arrange
         when(userService.getAll()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -680,9 +703,8 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
-    /**
-     * Method under test: {@link UserController#getusers()}
-     */
+
+
     @Test
     void testGetusers2() throws Exception {
         // Arrange
@@ -703,6 +725,7 @@ class UserControllerTest {
         userDtoList.add(buildResult);
         when(userService.getAll()).thenReturn(userDtoList);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -715,9 +738,7 @@ class UserControllerTest {
                                         + "\":true,\"profileImagePath\":\"Profile Image Path\",\"phone\":\"6625550144\",\"company\":\"Company\",\"role\":"
                                         + "\"BUSINESSEXPERT\",\"error\":\"An error occurred\"}]"));
     }
-    /**
-     * Method under test: {@link UserController#getusers()}
-     */
+
     @Test
     void testGetusers3() throws Exception {
         // Arrange
@@ -752,6 +773,7 @@ class UserControllerTest {
         userDtoList.add(buildResult2);
         when(userService.getAll()).thenReturn(userDtoList);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -766,42 +788,42 @@ class UserControllerTest {
                                         + "\"jane.doe@example.org\",\"active\":true,\"nonExpired\":true,\"profileImagePath\":\"Profile Image Path\",\"phone"
                                         + "\":\"6625550144\",\"company\":\"Company\",\"role\":\"BUSINESSEXPERT\",\"error\":\"An error occurred\"}]"));
     }
-    /**
-     * Method under test: {@link UserController#getusers()}
-     */
+
     @Test
     void testGetusers4() throws Exception {
         // Arrange
         when(userService.getAll()).thenReturn(new ArrayList<>());
         SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-    /**
-     * Method under test: {@link UserController#getusers()}
-     */
+
+
     @Test
     void testGetusers5() throws Exception {
         // Arrange
         when(userService.getAll()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users");
         requestBuilder.accept("https://example.org/example");
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(406));
     }
-    /**
-     * Method under test: {@link UserController#getusers()}
-     */
+
     @Test
     void testGetusers6() throws Exception {
         // Arrange
         when(userService.getAll()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/users");
         requestBuilder.accept("");
+
         // Act and Assert
         MockMvcBuilders.standaloneSetup(userController)
                 .build()
@@ -810,10 +832,8 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
-    /**
-     * Method under test:
-     * {@link UserController#updateUser(int, MultipartFile, String)}
-     */
+
+
     @Test
     void testUpdateUser() throws Exception {
         // Arrange
@@ -822,11 +842,14 @@ class UserControllerTest {
                 .param("dto", "foo");
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("file",
                 String.valueOf(new MockMultipartFile("Name", (InputStream) null)));
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
+
 
     @Test
     void testUpdateUser2() throws Exception {
@@ -838,8 +861,10 @@ class UserControllerTest {
                 .put("/api/users/{id}", "Uri Variables", "Uri Variables")
                 .param("dto", "foo")
                 .param("file", String.valueOf(new MockMultipartFile("Name", contentStream)));
+
         // Act
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+
         // Assert
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }

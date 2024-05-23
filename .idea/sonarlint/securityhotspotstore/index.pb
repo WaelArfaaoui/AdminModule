@@ -9,8 +9,6 @@ u
 EBackend/src/main/java/com/talan/AdminModule/config/OpenApiConfig.java,f\0\f083f7e6b8813cef844ef55dc252e8c6d575e52b
 y
 IBackend/src/main/java/com/talan/AdminModule/config/ApplicationConfig.java,d\2\d270ed7160182520a9d82fe4a2cd99184a6b66ac
-~
-NBackend/src/main/java/com/talan/AdminModule/service/AuthenticationService.java,0\4\04b6359facae69b0d1b832fd2a062093b269371e
 ?
 Backend/pom.xml,6\f\6f5a34a61856e01a5e5abd8b3142ee6665a5d397
 o
@@ -21,8 +19,6 @@ n
 MBackend/src/main/java/com/talan/AdminModule/config/SecurityConfiguration.java,3\0\30071f5a88b70bd8eb7d0402bd3d961c11b75d98
 q
 ABackend/src/main/java/com/talan/AdminModule/config/WebConfig.java,1\3\1341a33c1535081d91d190c12cf7a0ffdbac4aa8
-t
-DBackend/src/main/java/com/talan/AdminModule/service/UserService.java,7\3\73f16ba77fb363e83617c7952b063b45cd52b92d
 „
 TBackend/src/main/java/com/talan/AdminModule/controller/AuthenticationController.java,a\4\a4918160311b8067e0087c618001b0ceba20f1d5
 {
@@ -63,3 +59,7 @@ BBackend/src/main/java/com/talan/AdminModule/dto/UpdateRequest.java,1\2\12145cc
 NBackend/src/main/java/com/talan/AdminModule/config/GlobalExceptionHandler.java,7\a\7ae6b999aeadf6ce704b6a85850e1039b3ca17c5
 r
 BBackend/src/main/java/com/talan/AdminModule/dto/SearchRequest.java,7\1\714dbc956069df4c551ec90b216c809da3d789d1
+I
+docker/backend/Dockerfile,d\9\d99aa21f5bada484ca6b2954ef8767c524ea2c1e
+J
+docker/frontend/Dockerfile,d\e\de99846720c3c24b39a07edd85869b8c41518984

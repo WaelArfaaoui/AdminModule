@@ -55,7 +55,7 @@ import org.springframework.web.multipart.MultipartFile;
 @ContextConfiguration(classes = {UserService.class, PasswordEncoder.class})
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
-class UserServiceDiffblueTest {
+class UserServiceTest {
     @MockBean
     private ModelMapper modelMapper;
 
@@ -68,12 +68,9 @@ class UserServiceDiffblueTest {
     @Autowired
     private UserService userService;
 
-    /**
-     * Method under test: {@link UserService#mapUserToDto(User)}
-     */
+
     @Test
     void testMapUserToDto() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         ModelMapper modelMapper = new ModelMapper();
@@ -108,12 +105,9 @@ class UserServiceDiffblueTest {
         assertTrue(actualMapUserToDtoResult.isNonExpired());
     }
 
-    /**
-     * Method under test: {@link UserService#mapUserToDto(User)}
-     */
+
     @Test
     void testMapUserToDto2() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         ModelMapper modelMapper = mock(ModelMapper.class);
@@ -155,7 +149,6 @@ class UserServiceDiffblueTest {
 
     @Test
     void testStoreProfileImage() throws IOException {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         ModelMapper modelMapper = new ModelMapper();
@@ -165,13 +158,10 @@ class UserServiceDiffblueTest {
                 .storeProfileImage(null));
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
+
     @Test
     void testStoreProfileImage2() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -193,13 +183,10 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
+
     @Test
     void testStoreProfileImage3() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(false);
@@ -222,13 +209,10 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
+
     @Test
     void testStoreProfileImage4() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -245,13 +229,10 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
+
     @Test
     void testStoreProfileImage5() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -273,13 +254,9 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
     @Test
     void testStoreProfileImage6() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -307,13 +284,9 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
     @Test
     void testStoreProfileImage7() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -341,13 +314,10 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
+
     @Test
     void testStoreProfileImage8() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -371,13 +341,9 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
     @Test
     void testStoreProfileImage9() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -401,9 +367,6 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#storeProfileImage(MultipartFile)}
-     */
     @Test
     void testAddUser() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
@@ -457,12 +420,8 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test: {@link UserService#getAll()}
-     */
     @Test
     void testGetAll() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         UserRepository userRepository = mock(UserRepository.class);
@@ -477,12 +436,8 @@ class UserServiceDiffblueTest {
         assertTrue(actualAll.isEmpty());
     }
 
-    /**
-     * Method under test: {@link UserService#getAll()}
-     */
     @Test
     void testGetAll2() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = new User();
@@ -512,12 +467,9 @@ class UserServiceDiffblueTest {
         assertEquals(1, actualAll.size());
     }
 
-    /**
-     * Method under test: {@link UserService#getAll()}
-     */
+
     @Test
     void testGetAll3() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = new User();
@@ -561,12 +513,8 @@ class UserServiceDiffblueTest {
         assertEquals(2, actualAll.size());
     }
 
-    /**
-     * Method under test: {@link UserService#getAll()}
-     */
     @Test
     void testGetAll4() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         ModelMapper modelMapper = mock(ModelMapper.class);
@@ -612,14 +560,10 @@ class UserServiceDiffblueTest {
         assertEquals(1, actualAll.size());
     }
 
-    /**
-     * Method under test: {@link UserService#getAll()}
-     */
 
     @Test
     void testUpdate() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -684,14 +628,9 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
     @Test
     void testUpdate2() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(false);
@@ -757,14 +696,10 @@ class UserServiceDiffblueTest {
         }
     }
 
-    /**
-     * Method under test:
-     * {@link UserService#update(int, RegisterDto, MultipartFile)}
-     */
+
     @Test
     void testUpdate3() throws IOException {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
             // Arrange
             mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
@@ -834,7 +769,6 @@ class UserServiceDiffblueTest {
     }
     @Test
     void testFindbyemail() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = new User();
@@ -863,12 +797,9 @@ class UserServiceDiffblueTest {
         assertSame(user, actualFindbyemailResult);
     }
 
-    /**
-     * Method under test: {@link UserService#findbyemail(String)}
-     */
+
     @Test
     void testDelete() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = new User();
@@ -910,12 +841,9 @@ class UserServiceDiffblueTest {
         verify(userRepository).save(isA(User.class));
     }
 
-    /**
-     * Method under test: {@link UserService#delete(Integer)}
-     */
+
     @Test
     void testDelete2() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = mock(User.class);
@@ -979,12 +907,8 @@ class UserServiceDiffblueTest {
         verify(userRepository).save(isA(User.class));
     }
 
-    /**
-     * Method under test: {@link UserService#delete(Integer)}
-     */
     @Test
     void testDelete3() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         UserRepository userRepository = mock(UserRepository.class);
@@ -1001,7 +925,6 @@ class UserServiceDiffblueTest {
 
     @Test
     void testExpireUser() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = new User();
@@ -1043,12 +966,9 @@ class UserServiceDiffblueTest {
         verify(userRepository).save(isA(User.class));
     }
 
-    /**
-     * Method under test: {@link UserService#expireUser(Integer)}
-     */
+
     @Test
     void testExpireUser2() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = mock(User.class);
@@ -1111,13 +1031,8 @@ class UserServiceDiffblueTest {
         verify(userRepository).findById(1);
         verify(userRepository).save(isA(User.class));
     }
-
-    /**
-     * Method under test: {@link UserService#expireUser(Integer)}
-     */
     @Test
     void testExpireUser3() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         UserRepository userRepository = mock(UserRepository.class);
@@ -1132,13 +1047,10 @@ class UserServiceDiffblueTest {
         verify(userRepository).findById(1);
     }
 
-    /**
-     * Method under test: {@link UserService#expireUser(Integer)}
-     */
+
 
     @Test
     void testUnexpireUser() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = new User();
@@ -1180,12 +1092,9 @@ class UserServiceDiffblueTest {
         verify(userRepository).save(isA(User.class));
     }
 
-    /**
-     * Method under test: {@link UserService#unexpireUser(Integer)}
-     */
+
     @Test
     void testUnexpireUser2() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
 
         // Arrange
         User user = mock(User.class);
@@ -1249,13 +1158,8 @@ class UserServiceDiffblueTest {
         verify(userRepository).save(isA(User.class));
     }
 
-    /**
-     * Method under test: {@link UserService#unexpireUser(Integer)}
-     */
     @Test
     void testUnexpireUser3() {
-        //   Diffblue Cover was unable to create a Spring-specific test for this Spring method.
-
         // Arrange
         UserRepository userRepository = mock(UserRepository.class);
         Optional<User> emptyResult = Optional.empty();
@@ -1269,8 +1173,6 @@ class UserServiceDiffblueTest {
         verify(userRepository).findById(1);
     }
 
-    /**
-     * Method under test: {@link UserService#unexpireUser(Integer)}
-     */
+
 
 }

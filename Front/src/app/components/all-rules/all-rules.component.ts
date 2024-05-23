@@ -102,10 +102,6 @@ export class AllRulesComponent implements OnInit {
 
   }
 
-  consult(rule: RuleDto) {
-
-  }
-
   useRule(rule: RuleDto) {
     this.selectedRule = rule;
     const headerText = rule.status == 'Enabled' ? 'Use Rule' : 'Rule';

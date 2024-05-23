@@ -12,10 +12,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.talan.adminmodule.dto.AttributeDto;
-import com.talan.adminmodule.entity.Attribute;
 import com.talan.adminmodule.config.exception.EntityNotFoundException;
 import com.talan.adminmodule.config.exception.InvalidEntityException;
+import com.talan.adminmodule.dto.AttributeDto;
+import com.talan.adminmodule.entity.Attribute;
 import com.talan.adminmodule.repository.AttributeRepository;
 
 import java.util.ArrayList;
@@ -34,25 +34,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = {AttributeServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
-class AttributeServiceImplDiffblueTest {
+class AttributeServiceImplTest {
   @MockBean
   private AttributeRepository attributeRepository;
 
   @Autowired
   private AttributeServiceImpl attributeServiceImpl;
-
-  /**
-   * Method under test: {@link AttributeServiceImpl#save(AttributeDto)}
-   */
+  
   @Test
   void testSave() {
     // Arrange, Act and Assert
     assertThrows(InvalidEntityException.class, () -> attributeServiceImpl.save(null));
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#save(AttributeDto)}
-   */
   @Test
   void testSave2() {
     // Arrange
@@ -72,9 +66,7 @@ class AttributeServiceImplDiffblueTest {
     assertEquals(1, actualSaveResult.getId().intValue());
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#save(AttributeDto)}
-   */
+ 
   @Test
   void testSave3() {
     // Arrange
@@ -86,9 +78,7 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).save(isA(Attribute.class));
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#save(AttributeDto)}
-   */
+  
   @Test
   void testSave4() {
     // Arrange
@@ -110,9 +100,6 @@ class AttributeServiceImplDiffblueTest {
     assertEquals(1, actualSaveResult.getId().intValue());
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#save(AttributeDto)}
-   */
   @Test
   void testSave5() {
     // Arrange
@@ -124,9 +111,7 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeDTO).getName();
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#delete(Integer)}
-   */
+ 
   @Test
   void testDelete() {
     // Arrange
@@ -146,9 +131,6 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).findById(1);
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#delete(Integer)}
-   */
   @Test
   void testDelete2() {
     // Arrange
@@ -167,9 +149,6 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).findById(1);
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#delete(Integer)}
-   */
   @Test
   void testDelete3() {
     // Arrange
@@ -181,9 +160,7 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).findById(1);
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#findById(Integer)}
-   */
+  
   @Test
   void testFindById() {
     // Arrange
@@ -203,9 +180,7 @@ class AttributeServiceImplDiffblueTest {
     assertEquals(1, actualFindByIdResult.getId().intValue());
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#findById(Integer)}
-   */
+
   @Test
   void testFindById2() {
     // Arrange
@@ -217,9 +192,6 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).findById(1);
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#findById(Integer)}
-   */
   @Test
   void testFindById3() {
     // Arrange
@@ -231,9 +203,6 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).findById(1);
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#findAll()}
-   */
   @Test
   void testFindAll() {
     // Arrange
@@ -247,9 +216,6 @@ class AttributeServiceImplDiffblueTest {
     assertTrue(actualFindAllResult.isEmpty());
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#findAll()}
-   */
   @Test
   void testFindAll2() {
     // Arrange
@@ -272,10 +238,7 @@ class AttributeServiceImplDiffblueTest {
     assertEquals("Name", getResult.getName());
     assertEquals(1, getResult.getId().intValue());
   }
-
-  /**
-   * Method under test: {@link AttributeServiceImpl#findAll()}
-   */
+  
   @Test
   void testFindAll3() {
     // Arrange
@@ -308,9 +271,7 @@ class AttributeServiceImplDiffblueTest {
     assertEquals(2, getResult2.getId().intValue());
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#findAll()}
-   */
+  
   @Test
   void testFindAll4() {
     // Arrange
@@ -321,9 +282,7 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).findAll();
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#existByName(String)}
-   */
+  
   @Test
   void testExistByName() {
     // Arrange
@@ -337,9 +296,6 @@ class AttributeServiceImplDiffblueTest {
     assertTrue(actualExistByNameResult);
   }
 
-  /**
-   * Method under test: {@link AttributeServiceImpl#existByName(String)}
-   */
   @Test
   void testExistByName2() {
     // Arrange
@@ -352,10 +308,7 @@ class AttributeServiceImplDiffblueTest {
     verify(attributeRepository).existsByName("Name");
     assertFalse(actualExistByNameResult);
   }
-
-  /**
-   * Method under test: {@link AttributeServiceImpl#existByName(String)}
-   */
+  
   @Test
   void testExistByName3() {
     // Arrange

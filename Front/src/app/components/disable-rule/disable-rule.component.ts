@@ -10,13 +10,13 @@ import {UserService} from "../../services/user/user.service";
   styleUrls: ['./disable-rule.component.scss']
 })
 export class DisableRuleComponent implements OnInit {
-  private rule!: RuleDto;
-  private username: any;
-  private imageUrl: any;
+  public rule!: RuleDto;
+  public username: any;
+  public imageUrl: any;
 
   constructor(public ref: DynamicDialogRef , public config: DynamicDialogConfig ,
-              private ruleService:RuleService , public messageService:MessageService ,
-              private userService:UserService , private userControllerService:UserControllerService) { }
+              public ruleService:RuleService , public messageService:MessageService ,
+              public userService:UserService , public userControllerService:UserControllerService) { }
 
   ngOnInit(): void {
     this.retrieveUserFromLocalStorage() ;

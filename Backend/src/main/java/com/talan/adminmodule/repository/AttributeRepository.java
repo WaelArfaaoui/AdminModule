@@ -12,4 +12,6 @@ public interface AttributeRepository extends JpaRepository<Attribute, Integer> {
 
     @Query("SELECT a FROM Attribute a WHERE LOWER(a.name) = LOWER(:name)")
     Attribute findByNameIgnoreCase(@Param("name") String name);
+
+    Object findByName(String s);
 }

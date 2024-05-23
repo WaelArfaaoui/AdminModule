@@ -242,12 +242,6 @@ describe('NewRuleComponent', () => {
         expect(component.categoryVisible).toBe(false);
     });
 
-    it('should submit the form and save rule when form is valid', () => {
-        spyOn(console, 'log');
-        spyOn(component.router, 'navigate');
-        component.onSubmit();
-    });
-
     it('should not submit the form when form is invalid', () => {
         spyOn(component['ruleService'], 'saveRule');
         spyOn(component['messageService'], 'add');

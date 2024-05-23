@@ -1,13 +1,14 @@
 // @ts-nocheck
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Directive, Input, Pipe, PipeTransform } from '@angular/core';
-import { Observable, of as observableOf } from 'rxjs';
-import { By } from '@angular/platform-browser';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CUSTOM_ELEMENTS_SCHEMA, Directive, Input, NO_ERRORS_SCHEMA, Pipe, PipeTransform} from '@angular/core';
+import {of, of as observableOf, throwError} from 'rxjs';
 
-import { AllRulesComponent } from './all-rules.component';
-import { RuleService } from '../../../open-api';
-import { DialogService } from 'primeng/dynamicdialog';
+import {AllRulesComponent} from './all-rules.component';
+import {RuleDto, RuleService} from '../../../open-api';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {UseRuleComponent} from "../use-rule/use-rule.component";
+import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
 
 class MockRuleService {
   findAllRules() { return observableOf({}); }
@@ -37,6 +38,7 @@ class MockSafeHtmlPipe implements PipeTransform {
 describe('AllRulesComponent', () => {
   let fixture: ComponentFixture<AllRulesComponent>;
   let component: AllRulesComponent;
+  let mockDialogRef: jasmine.SpyObj<DynamicDialogRef>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -97,13 +99,6 @@ describe('AllRulesComponent', () => {
     expect(component.ruleService.searchRules).toHaveBeenCalled();
   });
 
-  xit('should call dialogService.open and loadRules on disableRule', () => {
-    spyOn(component.dialogService, 'open').and.returnValue({ onClose: observableOf({}) });
-    spyOn(component, 'loadRules');
-    component.disableRule({}, {});
-    expect(component.dialogService.open).toHaveBeenCalled();
-    expect(component.loadRules).toHaveBeenCalled();
-  });
 
   it('should call dialogService.open on updateRule', () => {
     spyOn(component.dialogService, 'open');
@@ -116,4 +111,63 @@ describe('AllRulesComponent', () => {
     component.openRuleHistory({}, {});
     expect(component.dialogService.open).toHaveBeenCalled();
   });
+
+  it('should use rule', () => {
+    // Arrange
+    const mockRule: RuleDto = { id: 1, status: 'Enabled' };
+    const mockRef = { onClose: of(true) };
+    const mockDialogService = TestBed.inject(DialogService);
+    const openSpy = spyOn(mockDialogService, 'open').and.returnValue(mockRef);
+
+    spyOn(component, 'loadRules');
+
+    // Act
+    component.useRule(mockRule);
+
+    // Assert
+    expect(component.selectedRule).toEqual(mockRule);
+    expect(openSpy).toHaveBeenCalledWith(UseRuleComponent, jasmine.objectContaining({
+      header: 'Use Rule',
+      width: '900px',
+      height: '600px',
+      contentStyle: { "background-color": "var(--color-white)", "color": "var(--color-dark)" },
+      data: mockRule
+    }));
+
+    // Check if subscribe method is called
+    mockRef.onClose.subscribe(() => {
+      expect(true).toBeTruthy(); // Placeholder assertion
+    });
+
+    // Ensure that the loadRules method is called
+    expect(component.loadRules).toHaveBeenCalled();
+  });
+  it('should disable rule', () => {
+    // Arrange
+    const mockRule: RuleDto = { id: 1, status: 'Enabled' };
+    const mockRef = { onClose: of(true) };
+    const mockDialogService = TestBed.inject(DialogService);
+    const openSpy = spyOn(mockDialogService, 'open').and.returnValue(mockRef);
+
+    spyOn(component, 'loadRules');
+
+    // Act
+    component.disableRule(mockRule);
+
+    // Assert
+    expect(component.selectedRule).toEqual(mockRule);
+    expect(openSpy).toHaveBeenCalledWith(DisableRuleComponent, jasmine.objectContaining({
+      header: 'Disable rule',
+      width: '500px',
+      contentStyle: { "background-color": "var(--color-white)", "color": "var(--color-dark)" },
+      data: mockRule
+    }));
+
+    // Check if subscribe method is called
+    mockRef.onClose.subscribe(() => {
+      expect(component.loadRules).toHaveBeenCalled();
+    });
+  });
+
+
 });

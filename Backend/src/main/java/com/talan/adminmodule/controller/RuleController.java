@@ -1,9 +1,6 @@
 package com.talan.adminmodule.controller;
 
-import com.talan.adminmodule.dto.DeleteRuleRequest;
-import com.talan.adminmodule.dto.RuleDto;
-import com.talan.adminmodule.dto.RuleModificationDto;
-import com.talan.adminmodule.dto.RuleUpdateDto;
+import com.talan.adminmodule.dto.*;
 import com.talan.adminmodule.service.RuleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +78,25 @@ public class RuleController {
 
     }
 
+    @GetMapping("/top-used-rules")
+    public ResponseEntity<List<RuleUsageDTO>> getTop5UsedRulesForLast18Days() {
+        return new ResponseEntity<>(ruleService.getTop5UsedRulesForLast18Days(), HttpStatus.OK);
+    }
+
+    @PostMapping("/rule-usage")
+    public void createRuleUsage(@RequestParam int ruleId) {
+        ruleService.createRuleUsage(ruleId);
+    }
+    @GetMapping("/total-rules-count")
+    public ResponseEntity<Long> getTotalRulesCount() {
+        long count = ruleService.getTotalRulesCount();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping("/total-rule-usages")
+    public ResponseEntity<Long> getTotalRuleUsages() {
+        long count = ruleService.getTotalRuleUsages();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 
 }

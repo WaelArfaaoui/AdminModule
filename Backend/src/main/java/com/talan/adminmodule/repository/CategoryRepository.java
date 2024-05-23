@@ -18,4 +18,8 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
             "GROUP BY c " +
             "ORDER BY COUNT(r) DESC")
     List<Object[]> findTopUsedCategoriesWithRuleCount(Pageable pageable);
-}
+
+    @Query("SELECT COUNT(r) " +
+            "FROM Category c " +
+            "JOIN c.rules r")
+    long findTotalRuleCount();}

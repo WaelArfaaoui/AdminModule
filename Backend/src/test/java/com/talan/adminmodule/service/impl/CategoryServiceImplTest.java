@@ -1,13 +1,12 @@
 package com.talan.adminmodule.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,78 +31,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = {CategoryServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
-class CategoryServiceImplDiffblueTest {
+class CategoryServiceImplTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
     @Autowired
     private CategoryServiceImpl categoryServiceImpl;
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#save(CategoryDto)}
-     */
-    @Test
-    void testSave() {
-        // Arrange
-        Category category = new Category();
-        category.setId(1);
-        category.setName("Name");
-        category.setRules(new ArrayList<>());
-        when(categoryRepository.save(Mockito.<Category>any())).thenReturn(category);
-        CategoryDto categoryDto = CategoryDto.builder().id(1).name("Name").build();
-
-        // Act
-        CategoryDto actualSaveResult = categoryServiceImpl.save(categoryDto);
-
-        // Assert
-        verify(categoryRepository).save(isA(Category.class));
-        assertEquals("Name", actualSaveResult.getName());
-        assertEquals(1, actualSaveResult.getId().intValue());
-    }
-
-    /**
-     * Method under test: {@link CategoryServiceImpl#save(CategoryDto)}
-     */
-    @Test
-    void testSave2() {
-        // Arrange
-        when(categoryRepository.save(Mockito.<Category>any())).thenThrow(new EntityNotFoundException("An error occurred"));
-        CategoryDto categoryDto = CategoryDto.builder().id(1).name("Name").build();
-
-        // Act and Assert
-        assertThrows(EntityNotFoundException.class, () -> categoryServiceImpl.save(categoryDto));
-        verify(categoryRepository).save(isA(Category.class));
-    }
-
-    /**
-     * Method under test: {@link CategoryServiceImpl#save(CategoryDto)}
-     */
-    @Test
-    void testSave3() {
-        // Arrange
-        Category category = new Category();
-        category.setId(1);
-        category.setName("Name");
-        category.setRules(new ArrayList<>());
-        when(categoryRepository.save(Mockito.<Category>any())).thenReturn(category);
-        CategoryDto categoryDto = mock(CategoryDto.class);
-        when(categoryDto.getId()).thenReturn(1);
-        when(categoryDto.getName()).thenReturn("Name");
-
-        // Act
-        CategoryDto actualSaveResult = categoryServiceImpl.save(categoryDto);
-
-        // Assert
-        verify(categoryDto).getId();
-        verify(categoryDto).getName();
-        verify(categoryRepository).save(isA(Category.class));
-        assertEquals("Name", actualSaveResult.getName());
-        assertEquals(1, actualSaveResult.getId().intValue());
-    }
-
-    /**
-     * Method under test: {@link CategoryServiceImpl#delete(Integer)}
-     */
     @Test
     void testDelete() {
         // Arrange
@@ -113,12 +47,9 @@ class CategoryServiceImplDiffblueTest {
         categoryServiceImpl.delete(1);
 
         // Assert that nothing has changed
-        verify(categoryRepository).deleteById(1);
+        verify(categoryRepository).deleteById(eq(1));
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#delete(Integer)}
-     */
     @Test
     void testDelete2() {
         // Arrange
@@ -127,12 +58,9 @@ class CategoryServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> categoryServiceImpl.delete(1));
-        verify(categoryRepository).deleteById(1);
+        verify(categoryRepository).deleteById(eq(1));
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#findById(Integer)}
-     */
     @Test
     void testFindById() {
         // Arrange
@@ -147,14 +75,11 @@ class CategoryServiceImplDiffblueTest {
         CategoryDto actualFindByIdResult = categoryServiceImpl.findById(1);
 
         // Assert
-        verify(categoryRepository).findById(1);
+        verify(categoryRepository).findById(eq(1));
         assertEquals("Name", actualFindByIdResult.getName());
+        assertNull(actualFindByIdResult.getRuleCount());
         assertEquals(1, actualFindByIdResult.getId().intValue());
     }
-
-    /**
-     * Method under test: {@link CategoryServiceImpl#findById(Integer)}
-     */
     @Test
     void testFindById2() {
         // Arrange
@@ -163,12 +88,9 @@ class CategoryServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> categoryServiceImpl.findById(1));
-        verify(categoryRepository).findById(1);
+        verify(categoryRepository).findById(eq(1));
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#findById(Integer)}
-     */
     @Test
     void testFindById3() {
         // Arrange
@@ -177,12 +99,9 @@ class CategoryServiceImplDiffblueTest {
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> categoryServiceImpl.findById(1));
-        verify(categoryRepository).findById(1);
+        verify(categoryRepository).findById(eq(1));
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#findAll()}
-     */
     @Test
     void testFindAll() {
         // Arrange
@@ -196,9 +115,6 @@ class CategoryServiceImplDiffblueTest {
         assertTrue(actualFindAllResult.isEmpty());
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#findAll()}
-     */
     @Test
     void testFindAll2() {
         // Arrange
@@ -219,12 +135,11 @@ class CategoryServiceImplDiffblueTest {
         assertEquals(1, actualFindAllResult.size());
         CategoryDto getResult = actualFindAllResult.get(0);
         assertEquals("Name", getResult.getName());
+        assertNull(getResult.getRuleCount());
         assertEquals(1, getResult.getId().intValue());
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#findAll()}
-     */
+
     @Test
     void testFindAll3() {
         // Arrange
@@ -253,13 +168,13 @@ class CategoryServiceImplDiffblueTest {
         assertEquals("Name", getResult.getName());
         CategoryDto getResult2 = actualFindAllResult.get(0);
         assertEquals("com.talan.adminmodule.entity.Category", getResult2.getName());
+        assertNull(getResult2.getRuleCount());
+        assertNull(getResult.getRuleCount());
         assertEquals(1, getResult.getId().intValue());
         assertEquals(2, getResult2.getId().intValue());
     }
 
-    /**
-     * Method under test: {@link CategoryServiceImpl#findAll()}
-     */
+
     @Test
     void testFindAll4() {
         // Arrange

@@ -18,7 +18,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleServiceImpl implements RuleService {
@@ -28,6 +31,8 @@ public class RuleServiceImpl implements RuleService {
     private final CategoryRepository categoryRepository;
     private final RuleModificationRepository ruleModificationRepository ;
     private final RuleAttributeRepository  ruleAttributeRepository ;
+    private final RuleUsageRepository  ruleUsageRepository ;
+
     private final String ruleMessage = "Rule with ID :" ;
     private final String ruleNotFound = "not found" ;
     private final Queue<UpdateRuleRequest> updateQueue = new LinkedList<>();
@@ -36,12 +41,13 @@ public class RuleServiceImpl implements RuleService {
 
 
     @Autowired
-    public RuleServiceImpl(RuleRepository ruleRepository, AttributeRepository attributeRepository, CategoryRepository categoryRepository, RuleModificationRepository ruleModificationRepository, RuleAttributeRepository ruleAttributeRepository) {
+    public RuleServiceImpl(RuleRepository ruleRepository, AttributeRepository attributeRepository, CategoryRepository categoryRepository, RuleModificationRepository ruleModificationRepository, RuleAttributeRepository ruleAttributeRepository, RuleUsageRepository ruleUsageRepository) {
         this.ruleRepository = ruleRepository;
         this.attributeRepository = attributeRepository;
         this.categoryRepository = categoryRepository;
         this.ruleModificationRepository = ruleModificationRepository;
         this.ruleAttributeRepository = ruleAttributeRepository;
+        this.ruleUsageRepository = ruleUsageRepository;
     }
 
 
@@ -225,6 +231,59 @@ public class RuleServiceImpl implements RuleService {
                 .toList();
 
         return sortedModifications;
+    }
+
+    @Override
+    public List<RuleUsageDTO> getTop5UsedRulesForLast18Days() {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.minusDays(17);
+
+        List<RuleUsage> ruleUsages = ruleUsageRepository.findAllByCreateDateBetween(startDate.atStartOfDay(), today.atTime(23, 59, 59));
+
+        Map<String, Map<LocalDate, Long>> ruleUsageMap = ruleUsages.stream()
+                .collect(Collectors.groupingBy(ruleUsage -> ruleUsage.getRule().getName(),
+                        Collectors.groupingBy(ruleUsage -> ruleUsage.getCreateDate().toLocalDate(), Collectors.counting())));
+
+        List<RuleUsageDTO> top5UsedRules = ruleUsageMap.entrySet().stream()
+                .map(entry -> {
+                    String ruleName = entry.getKey();
+                    List<DayUsageDTO> dayUsages = entry.getValue().entrySet().stream()
+                            .sorted(Map.Entry.comparingByKey())
+                            .map(subEntry -> new DayUsageDTO(subEntry.getKey(), subEntry.getValue().intValue()))
+                            .collect(Collectors.toList());
+                    return new RuleUsageDTO(ruleName, dayUsages);
+                })
+                .sorted(Comparator.comparingInt(ruleUsageDTO ->
+                        ruleUsageDTO.getDayUsages().stream().mapToInt(DayUsageDTO::getUsageCount).sum()))
+                .limit(5)
+                .collect(Collectors.toList());
+
+        return top5UsedRules;
+    }
+
+    @Override
+    public void createRuleUsage(int ruleId) {
+        Optional<Rule> ruleOptional = ruleRepository.findById(ruleId);
+        if (ruleOptional.isPresent()) {
+            Rule rule = ruleOptional.get();
+            RuleUsage ruleUsage = new RuleUsage();
+            ruleUsage.setRule(rule);
+            ruleUsage.setCreateDate(LocalDateTime.now());
+            ruleUsageRepository.save(ruleUsage);
+        } else {
+            throw new IllegalArgumentException("Rule with ID " + ruleId + " not found.");
+        }
+    }
+
+    @Override
+    public long getTotalRulesCount() {
+        return ruleRepository.count();
+
+    }
+
+    @Override
+    public long getTotalRuleUsages() {
+        return ruleUsageRepository.count();
     }
 
     @Scheduled(fixedDelay = 9000)

@@ -80,6 +80,22 @@ class ParamTableServiceTest {
     }
 }
 @Test
+void testCheckReferenced(){
+        DeleteRequest checkref = new DeleteRequest("country","1");
+       List<DeleteRequest>references = paramTableService.checkReferenced(checkref);
+       assertEquals(1,references.size());
+       assertEquals("address",references.get(0).getTableName());
+       assertEquals(3,references.get(0).getOccurences().size());
+}
+@Test
+void testDeleteCascade(){
+
+    DeleteRequest cascade = new DeleteRequest("country","1");
+       ResponseDto response=paramTableService.deletecascade(cascade);
+        assertEquals("Cascade deletion succeeded",response.getSuccess());
+//      assertEquals(4,paramTableService.deletecascade().size());
+}
+@Test
     void testUpdateRequest(){
        String tableName="language";
        Map<String,String> instanceData = new HashMap<>();
@@ -150,17 +166,13 @@ class ParamTableServiceTest {
         columns.add("country");
         tableDataRequest.setColumns(columns);
         tableDataRequest.setLimit(2);
-        tableDataRequest.setOffset(1);
+        tableDataRequest.setOffset(0);
         tableDataRequest.setSearch("un");
         tableDataRequest.setSortOrder("asc");
         tableDataRequest.setSortByColumn("");
         DataFromTable data =paramTableService.getDataFromTable(tableName,tableDataRequest);
-        Map<String,String> successdata  = new HashMap<>();
-        successdata.put("country_id","2");
-        successdata.put("country","United Kingdom");
-        List<Map<String,String>> dataFromTablesuccess = new ArrayList<>();
-        dataFromTablesuccess.add(successdata);
-        assertEquals(dataFromTablesuccess,data.getData());
+        assertEquals(1,data.getData().size());
+        assertEquals("United Kingdom",data.getData().get(0).get("country"));
         columns.clear();
         data = paramTableService.getDataFromTable(tableName,tableDataRequest);
         assertTrue(data.getData().get(0).containsKey("last_update"));

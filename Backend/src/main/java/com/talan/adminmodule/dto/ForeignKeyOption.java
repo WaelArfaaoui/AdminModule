@@ -1,2 +1,16 @@
-package com.talan.adminmodule.dto;public class ForeignKeyOption {
+package com.talan.adminmodule.dto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class ForeignKeyOption {
+    String column;
+    List<String> options;
 }

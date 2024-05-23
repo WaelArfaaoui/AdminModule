@@ -5,6 +5,8 @@ import com.talan.adminmodule.entity.ParamAudit;
 import com.talan.adminmodule.service.ParamTableService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,71 +23,91 @@ public class ParamTableController {
     @Autowired
     private HttpServletRequest request;
     @GetMapping("/{limit}/{offset}")
-    public TablesWithColumns retrieveAllTablesAndColumns(@PathVariable int limit, @PathVariable int offset) {
-        return tableService.retrieveAllTablesWithFilteredColumns(limit,offset);
+    public ResponseEntity<TablesWithColumns> retrieveAllTablesAndColumns(@PathVariable int limit, @PathVariable int offset) {
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.retrieveAllTablesWithFilteredColumns(limit,offset));
     }
 
     @GetMapping("/{tableName}")
-    public DataFromTable getDataFromTable(
+    public ResponseEntity<DataFromTable> getDataFromTable(
             @PathVariable String tableName,
             @ModelAttribute TableDataRequest request
     ) {
-        return tableService.getDataFromTable(
+        return ResponseEntity.status(HttpStatus.OK).body( tableService.getDataFromTable(
                 tableName,
                 request
-        );
+        ));
     }
     @PostMapping("/cancelupdate/{tableName}/{primaryKeyValue}")
-    public ResponseDto cancelupdaterequest(@PathVariable String primaryKeyValue,
+    public ResponseEntity< ResponseDto> cancelupdaterequest(@PathVariable String primaryKeyValue,
                                            @PathVariable String tableName){
-        return tableService.cancelUpdateRequest(primaryKeyValue,tableName);
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.cancelUpdateRequest(primaryKeyValue,tableName));
     }
-
+@GetMapping("/unicity/{tableName}/{primaryKeyValue}")
+public ResponseEntity<Boolean> checkunicity(@PathVariable  String primaryKeyValue ,@PathVariable String tableName){
+    return ResponseEntity.status(HttpStatus.OK).body(tableService.checkunicity(primaryKeyValue,tableName));
+}
 
    @PutMapping("/update/{tableName}")
-   public ResponseDto updateInstance(@RequestBody Map<String, String> instanceData,
+   public ResponseEntity<ResponseDto> updateInstance(@RequestBody Map<String, String> instanceData,
                                      @PathVariable String tableName) {
        SecurityContextHolderAwareRequestWrapper requestWrapper = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
        String username = requestWrapper.getRemoteUser();
        UpdateRequest updateRequest = new UpdateRequest(instanceData,tableName,username);
 
-       return tableService.addUpdateRequest(updateRequest);
+       return ResponseEntity.status(HttpStatus.OK).body(tableService.addUpdateRequest(updateRequest));
 
    }
     @PostMapping("/{tableName}")
-    public ResponseDto addInstance(@RequestBody Map<String, String> instanceData,
+    public ResponseEntity<ResponseDto> addInstance(@RequestBody Map<String, String> instanceData,
                                    @PathVariable("tableName") String tableName) {
 
-        return tableService.addInstance(instanceData, tableName);
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.addInstance(instanceData, tableName));
 
     }
-    @PostMapping("/fkoptions/{column}")
-    public List<String> fkOptions(@PathVariable String column,@RequestBody List<ForeignKey> fks)
+    @GetMapping("/dashboard")
+    public TreeMapData dataForDashboard()
     {
-        return tableService.foreignKeyoptions(column,fks);
+        return tableService.tablesforDashboard();
+    }
+    @GetMapping("/{tableName}/fkoptions")
+    public ResponseEntity<List<ForeignKeyOption>> fkOptions(@PathVariable String tableName)
+    {
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.foreignKeyoptions(tableName));
     }
     @GetMapping("/{tableName}/references/{primaryKeyValue}")
-    public List<DeleteRequest> checkReferences(@PathVariable String tableName, @PathVariable String primaryKeyValue)
+    public ResponseEntity<List<DeleteRequest>> checkReferences(@PathVariable String tableName, @PathVariable String primaryKeyValue)
     {
         DeleteRequest del = new DeleteRequest(tableName,primaryKeyValue);
-        return tableService.checkReferencedForRecursive(del);
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.checkReferenced(del));
+    }
+    @PostMapping("/{tableName}/cascade/{primaryKeyValue}")
+    public ResponseEntity<ResponseDto> deleteCascade(@PathVariable String tableName, @PathVariable String primaryKeyValue){
+       try{ DeleteRequest del = new DeleteRequest(tableName,primaryKeyValue);
+           return  ResponseEntity.status(HttpStatus.OK).body(tableService.deletecascade(del));
+
+       }catch (Exception e) {
+           ResponseDto result = new ResponseDto();
+           result.setError("Cascade Delete Failed");
+return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
+
+       }
     }
 @GetMapping("/{tableName}/delete/{primaryKeyValue}")
-public ResponseDto deleteRecord(@PathVariable String tableName, @PathVariable String primaryKeyValue) {
+public ResponseEntity<ResponseDto> deleteRecord(@PathVariable String tableName, @PathVariable String primaryKeyValue) {
     SecurityContextHolderAwareRequestWrapper requestWrapper = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
     String username = requestWrapper.getRemoteUser();
     DeleteRequest deleteRequest = new DeleteRequest(tableName, primaryKeyValue,username);
 
-    return tableService.addDeleteRequest(deleteRequest);
+    return ResponseEntity.status(HttpStatus.OK).body(tableService.addDeleteRequest(deleteRequest));
 
 }
     @PostMapping("/{tableName}/canceldeletion/{primaryKeyValue}")
-public ResponseDto canceldeleterequest(@PathVariable String tableName, @PathVariable String primaryKeyValue){
-        return tableService.cancelDeleteRequest(tableName,primaryKeyValue);
+public ResponseEntity<ResponseDto> canceldeleterequest(@PathVariable String tableName, @PathVariable String primaryKeyValue){
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.cancelDeleteRequest(tableName,primaryKeyValue));
     }
     @GetMapping("/{tableName}/history")
-       public List<ParamAudit> paramHistory(@PathVariable String tableName){
-        return tableService.paramHistory(tableName);
+       public ResponseEntity<List<ParamAudit>> paramHistory(@PathVariable String tableName){
+        return ResponseEntity.status(HttpStatus.OK).body(tableService.paramHistory(tableName));
     }
 
 

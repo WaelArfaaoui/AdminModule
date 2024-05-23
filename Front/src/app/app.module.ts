@@ -55,56 +55,59 @@ import { DonutComponent } from './components/donut/donut.component';
 import { StackedColumnsComponent } from './components/stacked-columns/stacked-columns.component';
 import {ParamHistoryComponent} from "./components/param-history/param-history.component";
 import {ListParamTablesComponent} from "./components/list-param-tables/list-param-tables.component";
-import { DashbordComponent } from './components/dashbord/dashbord.component';
+import { dashbordComponent } from './components/dashbord/dashbord.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import {DeleteParamComponent} from "./components/delete-param/delete-param.component";
 import { DeleteCascadeComponent } from './components/delete-cascade/delete-cascade.component';
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {CalendarModule} from "primeng/calendar";
 
 
 @NgModule({
-  declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent,ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent,ListParamTablesComponent, ParamHistoryComponent,DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, DashbordComponent, NotfoundComponent,DeleteParamComponent, DeleteCascadeComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    AppLayoutModule,
-    MatInputModule,
-    MatStepperModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    ToastModule,
-    StepsModule,
-    CheckboxModule,
-    PasswordModule,
-    FormsModule,
-    CommonModule,
-    FileUploadModule,
-    ButtonModule,
-    ToolbarModule,
-    RippleModule,
-    RatingModule,
-    InputTextModule,
-    InputTextareaModule,
-    DropdownModule,
-    RadioButtonModule,
-    InputNumberModule,
-    DialogModule,
-    OverlayModule,
-    MultiSelectModule,
-    SliderModule,
-    ToggleButtonModule,
-    ChartModule,
-    ToastModule,
-    DialogModule,
-    AvatarModule,
-    MatDialogModule,
-    HttpClientModule,
-    PaginatorModule,
-    NgApexchartsModule,
-    TableModule
+  declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent,ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent,ListParamTablesComponent, ParamHistoryComponent,DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, dashbordComponent, NotfoundComponent,DeleteParamComponent, DeleteCascadeComponent],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        AppLayoutModule,
+        MatInputModule,
+        MatStepperModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        ToastModule,
+        StepsModule,
+        CheckboxModule,
+        PasswordModule,
+        FormsModule,
+        CommonModule,
+        FileUploadModule,
+        ButtonModule,
+        ToolbarModule,
+        RippleModule,
+        RatingModule,
+        InputTextModule,
+        InputTextareaModule,
+        DropdownModule,
+        RadioButtonModule,
+        InputNumberModule,
+        DialogModule,
+        OverlayModule,
+        MultiSelectModule,
+        SliderModule,
+        ToggleButtonModule,
+        ChartModule,
+        ToastModule,
+        DialogModule,
+        AvatarModule,
+        MatDialogModule,
+        HttpClientModule,
+        PaginatorModule,
+        NgApexchartsModule,
+        TableModule,
+        ProgressSpinnerModule,
+        CalendarModule,
+    ],
 
-  ],
-
-  providers: [MessageService , DialogService,ParamTableComponent,HttpClient,PaginatorModule,TableModule,{
+  providers: [MessageService , DialogService,ParamTableComponent,HttpClient,PaginatorModule,TableModule,dashbordComponent,{
     provide: HTTP_INTERCEPTORS,
     useClass: InterceptorService,
     multi: true,

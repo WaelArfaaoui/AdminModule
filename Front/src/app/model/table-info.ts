@@ -1,12 +1,11 @@
 import {ColumnInfo} from "./column-info";
-import {ForeignKey} from "./foreign-key";
 
 export class TableInfo {
   name: string="";
   type: string |null = null;
-  pk: ColumnInfo ={name:"",type:""};
+  pk: ColumnInfo ={name:"",type:"",isNullable:""};
   totalRows: number=0;
-  columns: ColumnInfo[] =[{name:"",type:""}];
+  columns: ColumnInfo[] =[{name:"",type:"",isNullable:""}];
   selectedColumns: string[];
   sortByColumn: string="";
   sortOrder: string="";

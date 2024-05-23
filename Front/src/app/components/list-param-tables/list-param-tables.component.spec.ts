@@ -18,9 +18,9 @@ describe('ListParamTablesComponent', () => {
   let paramTableComponent: jasmine.SpyObj<ParamTableComponent>;
   const table: TableInfo = new TableInfo();
   table.columns = [
-    { name: 'Column1', type: 'string' },
-    { name: 'Column2', type: 'number' },
-    { name: 'Column3', type: 'boolean' },
+    { name: 'Column1', type: 'string' ,isNullable:"NO"},
+    { name: 'Column2', type: 'number',isNullable :"NO"},
+    { name: 'Column3', type: 'boolean',isNullable :"NO"},
   ];
   beforeEach(async () => {
     tableService = jasmine.createSpyObj('TableService', ['retrieveAllTablesAndColumns']);
@@ -49,9 +49,10 @@ describe('ListParamTablesComponent', () => {
       allTablesWithColumns: [{
         name: 'Table1',
         type: null,
-        pk: { name: "", type: "" },
+        pk: { name: "", type: "",isNullable:"" },
         totalRows: 0,
-        columns: [{ name: "Column1", type: "string" }],
+        columns: [{ name: "Column1", type: "string",isNullable:"NO" },{ name: "Column2", type: "int2",isNullable:"NO" },{ name: "Column3", type: "varchar",isNullable:"NO" }
+          ,{ name: "Column4", type: "bool",isNullable:"NO" } ,{ name: "Column5", type: "bool",isNullable:"NO" },{ name: "Column5", type: "timestamptz",isNullable:"NO" }],
         selectedColumns: [],
         sortByColumn: "",
         sortOrder: "",

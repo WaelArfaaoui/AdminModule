@@ -27,9 +27,7 @@ class DatabaseInitializerTest {
     @Test
     void testRetrieveAllTablesWithColumns() {
         DatabaseInitializer databaseInitializer = new DatabaseInitializer(dataSource, jdbcTemplate);
-
         TablesWithColumns result = databaseInitializer.retrieveAllTablesWithColumns();
-
 
    assertFalse(result.getAllTablesWithColumns().isEmpty());
 

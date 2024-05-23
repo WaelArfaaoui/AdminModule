@@ -8,7 +8,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {AllRulesComponent} from "./components/all-rules/all-rules.component";
 import {AddUserComponent} from "./components/add-user/add-user.component";
 import {GuardService} from "./services/gurad/guard.service";
-import {DashbordComponent} from "./components/dashbord/dashbord.component";
+import {dashbordComponent} from "./components/dashbord/dashbord.component";
 import {ListParamTablesComponent} from "./components/list-param-tables/list-param-tables.component";
 import {NotfoundComponent} from "./components/notfound/notfound.component";
 
@@ -21,7 +21,7 @@ const routes: Routes = [
     path: '',
     component: AppLayoutComponent, canActivate: [GuardService],
     children: [
-      {path: '', component: DashbordComponent},
+      {path: '', component: dashbordComponent},
       {path: 'all', component: AllUsersComponent},
       {path: 'users', component: AllUsersComponent},
       {path: 'configtable', component: ListParamTablesComponent},

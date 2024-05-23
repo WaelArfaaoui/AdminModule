@@ -24,7 +24,6 @@ export class DonutComponent {
     this.chartOptions = {
       series: [30, 30, 12, 15, 13],
       chart: {
-        width: 330,
         type: "pie"
       },
       dataLabels: {

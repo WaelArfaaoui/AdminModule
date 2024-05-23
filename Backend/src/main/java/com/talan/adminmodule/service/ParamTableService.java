@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -20,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,10 +33,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
-public class ParamTableService {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
+public class ParamTableService  {
+@Autowired
+private JdbcTemplate jdbcTemplate;
     @Autowired
     private DatabaseInitializer databaseInitializer;
     @Autowired
@@ -77,7 +77,6 @@ public class ParamTableService {
         }
         tablesWithColumns.setAllTablesWithColumns(paginatedTables);
         tablesWithColumns.setNumberTables(allTablesWithColumns.getNumberTables());
-        tablesWithColumns.setAllforeignKeys(allTablesWithColumns.getAllforeignKeys());
         return tablesWithColumns;
     }
 
@@ -131,7 +130,7 @@ public class ParamTableService {
         if (request.getSearch() != null && !request.getSearch().isEmpty() && !request.getSearch().equals("undefined") && !request.getColumns().isEmpty()) {
             sqlQuery.append(" AND (")
                      .append(request.getColumns().stream()
-                    .map(column -> "LOWER ( CAST ("+column+" AS TEXT ) )" + " LIKE  '%"+request.getSearch().toLowerCase()+"%'")
+                    .map(column -> "LOWER ( CAST ("+column+" AS TEXT ) )" + " LIKE  '"+request.getSearch().toLowerCase()+"%'")
                     .collect(Collectors.joining(" OR ")));
             sqlQuery.append(")");
         }
@@ -140,8 +139,6 @@ public class ParamTableService {
                 .append(limitOffsetClause(request));
         return sqlQuery;
     }
-
-    //STEP 1 SQLREQUEST FETCH DATA SELECT IF COLUMNS EMPTY APPEND ALL SELECTCOLUMNS
     public StringBuilder buildSelectClause(String tableName, TableDataRequest request) {
         StringBuilder selectClause = new StringBuilder("SELECT ");
         List<String> columns = getAllColumns(tableName).stream().filter(Objects::nonNull)
@@ -150,7 +147,7 @@ public class ParamTableService {
                 .toList();
         String pk = primaryKeyDetails(tableName).getName();
         if (request.getColumns().isEmpty()) {
-            appendAllColumns(selectClause, columns,pk);
+            appendAllColumns(selectClause, columns);
         } else {
             appendSpecifiedColumns(selectClause, columns,pk, request);
         }
@@ -160,25 +157,21 @@ public class ParamTableService {
         return selectClause;
 
     }
-
-    public void appendAllColumns(StringBuilder selectClause, List<String> columns, String pk) {
+    public void appendAllColumns(StringBuilder selectClause, List<String> columns) {
         for (String column : columns) {
             selectClause.append(column).append(", ");
 
         }
 
     }
-
     public void appendSpecifiedColumns(StringBuilder selectClause, List<String> columns,String pk, TableDataRequest request) {
+        selectClause.append(pk).append(", ");
         for (String column : request.getColumns()) {
-            if (columns.contains(column)) {
+            if (columns.contains(column)&& !column.equalsIgnoreCase(pk)) {
                 selectClause.append(column).append(", ");
             }
         }
     }
-
-
-
     public String orderByClause(String tableName, TableDataRequest request) {
         String sortByColumn = request.getSortByColumn() != null && !request.getSortByColumn().equals("null") && !request.getSortByColumn().isEmpty()
                 ? request.getSortByColumn()
@@ -186,8 +179,6 @@ public class ParamTableService {
         String order= request.getSortOrder()!=null &&!request.getSortOrder().equals("null") &&!request.getSortOrder().isEmpty()&& sortByColumn.equals(request.getSortByColumn()) ? request.getSortOrder() :" " ;
         return " ORDER BY " + sortByColumn +" "+order;
     }
-
-
     public String limitOffsetClause(TableDataRequest request) {
         StringBuilder limitOffsetClause = new StringBuilder();
         if (request.getLimit() > 0) {
@@ -199,26 +190,35 @@ public class ParamTableService {
         return limitOffsetClause.toString();
     }
 
-
-
-
-    //ADD ITERATION COLUMNS M STRUCTURE IF COLUMN ==key f instance data  affectation w !primaryKey
-    // ==> convert type instance datavalue l column type +column+ placeholder l vel value +value
     public ResponseDto addInstance(Map<String, String> instanceData, String tableName) {
-        List<ColumnInfo> allColumns = getAllColumns(tableName);
+        List<ColumnInfo> allColumns = getAllColumns(tableName).stream().filter(columnInfo -> !columnInfo.getName().equalsIgnoreCase(ACTIVE)).toList();
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
         List<Object> params = new ArrayList<>();
-
+        String primaryKeyName = primaryKeyDetails(tableName).getName();
+        String primaryKeyType = primaryKeyDetails(tableName).getType();
         for (ColumnInfo column : allColumns) {
-            if (!column.getName().equalsIgnoreCase(primaryKeyDetails(tableName).getName())) {
-                String dataValue = instanceData.get(column.getName());
+            String columnName = column.getName();
+
+
+            if (!columnName.equalsIgnoreCase(primaryKeyName) ||
+                    (columnName.equalsIgnoreCase(primaryKeyName) &&
+                            !(primaryKeyType.equalsIgnoreCase("serial") || primaryKeyType.equalsIgnoreCase("bigserial")))) {
+
+                String dataValue = instanceData.get(columnName);
 
                 params.add(convertToDataType(dataValue, column.getType()));
-                columns.append(column.getName()).append(",");
-                values.append("?,");
+String type =column.getType();
+                columns.append(columnName).append(",");
+                if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("text") || type.equalsIgnoreCase("bpchar") ) {
+                    values.append("?,");
+                }
+                else {
+                    values.append(" ?,");
+                }
             }
         }
+
 
         if (!columns.toString().isEmpty()) {
             columns.deleteCharAt(columns.length() - 1);
@@ -226,7 +226,6 @@ public class ParamTableService {
         }
         String sql = String.format("INSERT INTO %s (%s) VALUES (%s)", tableName, columns, values);
         jdbcTemplate.update(sql, params.toArray());
-
         String username = getUsernameFromSecurityContext();
         Integer version = findMaxVersionByTableName(tableName) + 1;
         Map<String, String> cleanmap = instanceData.entrySet().stream().filter(value -> !(value.getValue().isEmpty())&&!(value.getValue().equals("undefined"))) .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -299,62 +298,61 @@ public ResponseDto addUpdateRequest(UpdateRequest updateRequest) {
         return deleteRequests.stream()
                 .filter(deleteRequest -> deleteRequest.getTableName().equals(tableName)).toList();
     }
-        public ResponseDto updateInstance (UpdateRequest updateRequest,Integer version){
-            ResponseDto responseDto=new ResponseDto();
+    public ResponseDto updateInstance (UpdateRequest updateRequest,Integer version){
+        ResponseDto responseDto=new ResponseDto();
 
-                List<ColumnInfo> allColumns = getAllColumns(updateRequest.getTableName());
-                StringBuilder setClause = new StringBuilder();
-                StringBuilder sqlQuery = new StringBuilder();
+        List<ColumnInfo> allColumns = getAllColumns(updateRequest.getTableName());
+        StringBuilder setClause = new StringBuilder();
+        StringBuilder sqlQuery = new StringBuilder();
 
-                List<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
 
-                String primaryKeyColumn = primaryKeyDetails(updateRequest.getTableName()).getName();
-                sqlQuery.append("UPDATE ")
-                        .append(updateRequest.getTableName()) ;
+        String primaryKeyColumn = primaryKeyDetails(updateRequest.getTableName()).getName();
+        sqlQuery.append("UPDATE ")
+                .append(updateRequest.getTableName()) ;
 
 
-                Object primaryKeyValue = new Object();
-                for (ColumnInfo columnMap : allColumns) {
-                    String columnName = columnMap.getName();
-                    String columnType = columnMap.getType();
+        Object primaryKeyValue = new Object();
+        for (ColumnInfo columnMap : allColumns) {
+            String columnName = columnMap.getName();
+            String columnType = columnMap.getType();
 
-                    if (updateRequest.getInstanceData().containsKey(columnName)) {
-                        Object convertedValue = convertToDataType(updateRequest.getInstanceData().get(columnName), columnType);
-                        if (!columnName.equals(primaryKeyColumn)) {
-                            setClause.append(columnName).append(" = ?, ");
-                            params.add(convertedValue);
-                        } else {
-                            primaryKeyValue = convertedValue;
-                        }
-                    }
-                }
-                setClause.delete(setClause.length() - 2, setClause.length());
-                sqlQuery.append(" SET ")
-                        .append(setClause)
-                        .append(" WHERE ")
-                        .append(primaryKeyColumn);
-                if (primaryKeyValue!=null){
-                    sqlQuery.append(" = ")
-                            .append(primaryKeyValue);
-                }
+            if (updateRequest.getInstanceData().containsKey(columnName)) {
+                Object convertedValue = convertToDataType(updateRequest.getInstanceData().get(columnName), columnType);
 
-                int rowsUpdated = jdbcTemplate.update(sqlQuery.toString(), params.toArray());
-                if (rowsUpdated > 0 && primaryKeyValue!=null) {
-                    responseDto.setSuccess("Instance updated successfully");
-                    Map<String, String> cleanmap = updateRequest.getInstanceData().entrySet().stream().filter(value -> !(value.getValue().isEmpty())&&!(value.getValue().equals("undefined"))) .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                    String auditRow = cleanmap.toString().substring(1, cleanmap.toString().length()-1);
-                ParamAudit paramAudit = ParamAudit.constructForUpdate(updateRequest.getTableName(), primaryKeyValue.toString(), auditRow, "EDITED", version, updateRequest.getUsername());
 
-                paramAuditRepository.save(paramAudit);
-
+                if (!columnName.equals(primaryKeyColumn)) {
+                    setClause.append(columnName).append(" = ?, ");
+                    params.add(convertedValue);
                 } else {
-                    responseDto.setError( "message No records updated");
+                    primaryKeyValue = convertedValue;
                 }
-
-
-
-            return responseDto;
+            }
         }
+        setClause.delete(setClause.length() - 2, setClause.length());
+        sqlQuery.append(" SET ")
+                .append(setClause)
+                .append(" WHERE ")
+                .append(primaryKeyColumn);
+        if (primaryKeyValue!=null){
+            sqlQuery.append(" = ?");
+                    params.add(primaryKeyValue);
+        }
+
+        int rowsUpdated = jdbcTemplate.update(sqlQuery.toString(), params.toArray());
+        if (rowsUpdated > 0 && primaryKeyValue!=null) {
+            responseDto.setSuccess("Instance updated successfully");
+            Map<String, String> cleanmap = updateRequest.getInstanceData().entrySet().stream().filter(value -> !(value.getValue().isEmpty())&&!(value.getValue().equals("undefined"))) .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            String auditRow = cleanmap.toString().substring(1, cleanmap.toString().length()-1);
+            ParamAudit paramAudit = ParamAudit.constructForUpdate(updateRequest.getTableName(), primaryKeyValue.toString(), auditRow, "EDITED", version, updateRequest.getUsername());
+
+            paramAuditRepository.save(paramAudit);
+
+        } else {
+            responseDto.setError( "message No records updated");
+        }
+        return responseDto;
+    }
         public boolean simulateDelete(DeleteRequest request){
         boolean result=false;
         Integer version =5;
@@ -378,7 +376,8 @@ public ResponseDto addUpdateRequest(UpdateRequest updateRequest) {
         def.setName("simulateUpdateTransaction");
 
         TransactionStatus status = transactionManager.getTransaction(def);
-try { ResponseDto responseDto=updateInstance(updateRequest,version);
+    try {
+    ResponseDto responseDto=updateInstance(updateRequest,version);
     if (responseDto.getSuccess()!=null){
         result=true;}
     return result;
@@ -387,35 +386,34 @@ try { ResponseDto responseDto=updateInstance(updateRequest,version);
         }
     }
 
-public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys){
-    List<String> references = new ArrayList<>();
-    for (ForeignKey fk : foreignKeys) {
-        if (Objects.equals(column, fk.getFkColumnName())) {
-            StringBuilder sqlQuery = new StringBuilder();
-            sqlQuery.append("SELECT ")
-                    .append(fk.getReferencedColumn())
-                    .append(" FROM ")
-                    .append(fk.getReferencedTable());
+    public List<ForeignKeyOption> foreignKeyoptions(String tableName) {
+        List<ForeignKeyOption> result = new ArrayList<>();
+        List<ForeignKey> fks = allTablesWithColumns.getAllforeignKeys().stream()
+                .filter(fk -> fk.getFkTableName().equals(tableName))
+                .toList();
 
-            List<Map<String, Object>> execute = jdbcTemplate.queryForList(sqlQuery.toString());
-            for (Map<String, Object> map : execute) {
-                for (Object value : map.values()) {
-                    references.add(value.toString());
-                }
+        for (ForeignKey fk : fks) {
+            List<Map<String, Object>> options = jdbcTemplate.queryForList(
+                    "SELECT " + fk.getReferencedColumn() + " FROM " + fk.getReferencedTable() + " WHERE active = 'true'");
+            ForeignKeyOption ref = new ForeignKeyOption();
+            ref.setColumn(fk.getFkColumnName());
+
+            List<String> refoptions = new ArrayList<>();
+            for (Map<String, Object> option : options) {
+                refoptions.add(option.get(fk.getReferencedColumn()).toString());
             }
-
+            ref.setOptions(refoptions);
+            result.add(ref);
         }
+        return result;
     }
-
-    return references;
-
- }
 
     public ResponseDto addDeleteRequest(DeleteRequest deleteRequest) {
         ResponseDto responseDto = new ResponseDto();
         if (deleteRequests.stream().noneMatch(req ->
                 req.getTableName().equals(deleteRequest.getTableName()) &&
                         req.getPrimaryKeyValue().equals(deleteRequest.getPrimaryKeyValue()))&&simulateDelete(deleteRequest)){
+            deleteRequest.setUssername(getUsernameFromSecurityContext());
             deleteRequests.add(deleteRequest);
             responseDto.setSuccess("INSTANCE ADDED TO DELETE 8 AM");
         }
@@ -424,28 +422,42 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
         }
         return responseDto ;
     }
-    public List<DeleteRequest> checkReferencedForRecursive(DeleteRequest deleteRequest){
+    @Transactional
+    public ResponseDto deletecascade(DeleteRequest deleteRequest){
         List<DeleteRequest> response = new ArrayList<>();
+        response.add(deleteRequest);
         checkReferencedRecursive(deleteRequest, response);
-       /* for (DeleteRequest del : response){
+        for (DeleteRequest del : response){
             addDeleteRequest(del);
-        }*/
-        return response;
+        }
+        ResponseDto result = new ResponseDto();
+        result.setSuccess("Cascade deletion succeeded");
+        return result;
+    }
+
+    public TreeMapData tablesforDashboard(){
+        TreeMapData data = new TreeMapData();
+        data.setData(paramAuditRepository.paramTablesTreeMap());
+        data.setNumberupdates(paramAuditRepository.count());
+        return data;
     }
     private void checkReferencedRecursive(DeleteRequest deleteRequest, List<DeleteRequest> response) {
         List<ForeignKey> fks = allTablesWithColumns.getAllforeignKeys().stream().filter( fk -> fk.getReferencedTable().equals(deleteRequest.getTableName())).toList();
         ColumnInfo pk = primaryKeyDetails(deleteRequest.getTableName());
         String typePk = pk.getType();
         Object pkValue = convertToDataType(deleteRequest.getPrimaryKeyValue(),typePk);
-        Map<String,Object> row = jdbcTemplate.queryForMap("SELECT DISTINCT  * FROM "+deleteRequest.getTableName() + " WHERE "+pk.getName() +" = "+ pkValue);
+        String sql="SELECT DISTINCT  * FROM "+ deleteRequest.getTableName() + " WHERE "+pk.getName() +" = ? ";
+        Map<String,Object> row = jdbcTemplate.queryForMap(sql,pkValue);
         for (ForeignKey fk:fks){
             Object fkValue= row.get(fk.getReferencedColumn());
             List<Map<String,Object>>rowref = jdbcTemplate.queryForList("SELECT  "+ primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName() + " WHERE "+fk.getFkColumnName() +" = "+ fkValue);
             if (!rowref.isEmpty()) {
                 List<String> occurences = rowref.stream().map(map -> map.get(primaryKeyDetails(fk.getFkTableName()).getName()).toString()).collect(Collectors.toList());
+        for (String refId :occurences) {
+         DeleteRequest deleteRequest1 = new DeleteRequest(fk.getFkTableName(), refId);
 
-                DeleteRequest deleteRequest1 = new DeleteRequest(fk.getFkTableName(), occurences);
-                response.add(deleteRequest1);
+          response.add(deleteRequest1);
+           }
                 for (String primaryKeyValue : occurences) {
                     DeleteRequest childDeleteRequest = new DeleteRequest(fk.getFkTableName(), primaryKeyValue);
                     checkReferencedRecursive(childDeleteRequest, response);
@@ -453,6 +465,19 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
             }
         }
     }
+    public Boolean checkunicity(String primaryKeyValue ,String tableName){
+      String pkType  =primaryKeyDetails(tableName).getType();
+      Object convertedValue = convertToDataType(primaryKeyValue,pkType);
+        String sql = "SELECT COUNT(*) FROM " + tableName + " WHERE " + primaryKeyDetails(tableName).getName() + " = ?";
+//      List<Object> params = new ArrayList<>();
+//
+//        params.add(primaryKeyDetails(tableName).getName());
+//        params.add(convertedValue);
+        Object[] params = new Object[] { convertedValue };
+
+        Integer count = jdbcTemplate.queryForObject(sql,params, Integer.class);
+
+    return count ==0 ;}
 
     public List<DeleteRequest> checkReferenced(DeleteRequest deleteRequest){
       List<DeleteRequest>   response = new ArrayList<>();
@@ -460,10 +485,14 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
       ColumnInfo pk = primaryKeyDetails(deleteRequest.getTableName());
       String typePk = pk.getType();
       Object pkValue = convertToDataType(deleteRequest.getPrimaryKeyValue(),typePk);
-     Map<String,Object> row = jdbcTemplate.queryForMap("SELECT * FROM "+deleteRequest.getTableName() + " WHERE "+pk.getName() +" = "+ pkValue);
+        String sql = "SELECT * FROM " + deleteRequest.getTableName() + " WHERE " +pk.getName() + " = ?";
+        Map<String,Object> row = jdbcTemplate.queryForMap(sql,pkValue);
+
+
      for (ForeignKey fk:fks){
     Object fkValue= row.get(fk.getReferencedColumn());
-     List<Map<String,Object>>rowref = jdbcTemplate.queryForList("SELECT DISTINCT "+ primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName() + " WHERE "+fk.getFkColumnName() +" = "+ fkValue);
+    String querrysql ="SELECT DISTINCT "+ primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName() + " WHERE "+fk.getFkColumnName() +" = ? ";
+     List<Map<String,Object>>rowref = jdbcTemplate.queryForList(querrysql,fkValue);
          if (!rowref.isEmpty()) {
              List<String> occurences = rowref.stream().map(map -> map.get(primaryKeyDetails(fk.getFkTableName()).getName()).toString()).collect(Collectors.toList());
 
@@ -474,25 +503,33 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
      }
      return response;
     }
+    @Transactional
     public ResponseDto cancelDeleteRequest(String tableName, String primaryKeyValue) {
+
+        List<DeleteRequest> response = new ArrayList<>();
         ResponseDto responseDto = new ResponseDto();
         boolean requestFound = false;
-
+        DeleteRequest deleteRequest = new DeleteRequest(tableName,primaryKeyValue);
+        checkReferencedRecursive(deleteRequest, response);
+         response.add(deleteRequest);
+        for (DeleteRequest del :response) {
         for (DeleteRequest delete : deleteRequests) {
-            if (delete.getTableName().equals(tableName) &&
-                    delete.getPrimaryKeyValue().equals(primaryKeyValue)) {
-                int size = deleteRequests.size();
-                deleteRequests.remove(delete);
-                int newsize = deleteRequests.size();
 
-                if (size != newsize) {
-                    responseDto.setSuccess("Deletion of " + primaryKeyValue + " cancelled successfully");
-                } else {
-                    responseDto.setError("Deletion of " + primaryKeyValue + " not cancelled");
-                }
-                requestFound = true;
-                break;
-            }
+    if (delete.getTableName().equals(del.getTableName()) &&
+            delete.getPrimaryKeyValue().equals(del.getPrimaryKeyValue())) {
+        int size = deleteRequests.size();
+        deleteRequests.remove(delete);
+        int newsize = deleteRequests.size();
+
+        if (size != newsize) {
+            responseDto.setSuccess("Deletion of " + primaryKeyValue + " cancelled successfully");
+        } else {
+            responseDto.setError("Deletion of " + primaryKeyValue + " not cancelled");
+        }
+        requestFound = true;
+        break;
+    }
+}
         }
         if (!requestFound) {
             responseDto.setError("Request not found: " + primaryKeyValue);
@@ -501,7 +538,7 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
         return responseDto;
     }
     @Transactional
-    @Scheduled(cron = "0 56 21 * * *")
+    @Scheduled(cron = "0 07 11 * * *")
     public void executeUpdate() {
         List<String> uniqueTableNames = new ArrayList<>();
         for (UpdateRequest updateRequest : updateRequests) {
@@ -523,7 +560,7 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
         }
     }
     @Transactional
-   @Scheduled(cron = "0 56 21 * * *")
+   @Scheduled(cron = "0 07 11 * * *")
     public void executeDeletion () {
                 List<String> uniqueTableNames = new ArrayList<>();
         for (DeleteRequest deleteRequest : deleteRequests) {
@@ -557,8 +594,9 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
        sqlQuery.append("UPDATE ")
                .append(deleteRequest.getTableName())
                .append(" SET active = false WHERE ")
-               .append(primaryKeyColumn)
-               .append(" = ?");
+               .append(primaryKeyColumn);
+
+                  sqlQuery.append(" = ?");
 
        rowsUpdated =jdbcTemplate.update(sqlQuery.toString(), primaryKeyValue);
 
@@ -575,29 +613,35 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
          public Integer findMaxVersionByTableName(String tableName){
         return paramAuditRepository.findMaxVersionByTableName(tableName);
          }
-        public Object convertToDataType (String inputValue, String columnType){
-
-            Object convertedValue;
-
-                convertedValue = switch (columnType.toLowerCase()) {
-                    case "int8", "bigint", "bigserial", "serial" -> Long.parseLong(inputValue);
-                    case "int", "integer", "smallint"-> Integer.parseInt(inputValue);
-                    case "varchar", "text", "bpchar" -> inputValue;
-                    case "timestamptz" -> {
-                        LocalDateTime dateTime;
-                        if (inputValue.isEmpty()||inputValue.equals("null") ||inputValue.equals("undefined")) {
-                            dateTime = LocalDateTime.now();
-                        } else {
-                            dateTime = LocalDateTime.parse(inputValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                        }
-                        yield Timestamp.valueOf(dateTime);
+    public Object convertToDataType(String inputValue, String columnType) {
+        Object convertedValue;
+        convertedValue = switch (columnType.toLowerCase()) {
+            case "int8", "bigint" -> inputValue != null ? Long.parseLong(inputValue) : 0L;
+            case "bigserial", "serial" -> inputValue != null ? Long.parseLong(inputValue) : null; // Return null for these types
+            case "int", "int4", "integer", "int2" -> inputValue != null ? Integer.parseInt(inputValue) : 0;
+            case "varchar", "text", "bpchar" -> inputValue;
+            case "bool" -> Boolean.parseBoolean(inputValue);
+            case "bytea" -> inputValue != null ? Base64.getDecoder().decode(inputValue) : null;
+            case "timestamptz" -> {
+                ZonedDateTime zonedDateTime;
+                if (inputValue == null || inputValue.isEmpty() || inputValue.equalsIgnoreCase("null") || inputValue.equalsIgnoreCase("undefined")) {
+                    zonedDateTime = ZonedDateTime.now();
+                } else {
+                    try {
+                        zonedDateTime = ZonedDateTime.parse(inputValue);
+                    } catch (Exception e) {
+                        LocalDateTime dateTime = LocalDateTime.parse(inputValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                        zonedDateTime = dateTime.atZone(ZoneId.systemDefault());
                     }
+                }
+                yield Timestamp.from(zonedDateTime.toInstant());
+            }
+            default -> inputValue;
+        };
+        return convertedValue;
+    }
 
-                    default -> inputValue;
-                };
 
-            return convertedValue;
-        }
 
     public ColumnInfo primaryKeyDetails(String tableName) {
        Optional <ColumnInfo> optionalPk= allTablesWithColumns.getAllTablesWithColumns().stream()
@@ -606,26 +650,7 @@ public List<String> foreignKeyoptions(String column,List<ForeignKey> foreignKeys
         return optionalPk.orElseThrow(() -> new IllegalStateException("Primary key not found for table: " + tableName));
 
     }
-  /*public List<ColumnInfo> primaryKeyDetails(String tableName) {
-      Optional<TableInfo> optionalTable = allTablesWithColumns.getAllTablesWithColumns().stream()
-              .filter(table -> table.getName().equals(tableName))
-              .findFirst();
 
-      if (optionalTable.isPresent()) {
-          TableInfo tableInfo = optionalTable.get();
-          List<ColumnInfo> primaryKeyColumns = tableInfo.getColumns().stream()
-                  .filter(ColumnInfo::isPrimaryKey)
-                  .collect(Collectors.toList());
-
-          if (!primaryKeyColumns.isEmpty()) {
-              return primaryKeyColumns;
-          } else {
-              throw new IllegalStateException("Primary key not found for table: " + tableName);
-          }
-      } else {
-          throw new IllegalStateException("Table not found: " + tableName);
-      }
-      }*/
         public List<ParamAudit> paramHistory(String tableName){
         return paramAuditRepository.findByTableName(tableName);
         }

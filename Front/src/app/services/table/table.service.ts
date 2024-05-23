@@ -4,7 +4,6 @@ import {Observable} from "rxjs";
 import {TablesWithColumns} from "../../model/tables-with-columns";
 import {TableInfo} from "../../model/table-info";
 import {ParamAudit} from "../../model/param-audit";
-import {ForeignKey} from "../../model/foreign-key";
 @Injectable({
   providedIn: 'root'
 })
@@ -19,10 +18,17 @@ dataDeleteInstance:any;
   cancelDeletion(tableName: string, primaryKeyValue: string): Observable<any> {
     return this.http.post<string>(`${this.baseUrl}/${tableName}/canceldeletion/${primaryKeyValue}`, {},);
   }
+  deleteCascade(tableName:string,primaryKeyValue:string):Observable<any>{
+    return this.http.post<string>(`${this.baseUrl}/${tableName}/cascade/${primaryKeyValue}`,{},)
+  }
   retrieveAllTablesAndColumns(limit:number,offset:number): Observable<TablesWithColumns> {
     const url = `${this.baseUrl}/${limit}/${offset}`;
     return this.http.get<TablesWithColumns>(url);
 
+  }
+  paramTableTreemap(): Observable<any> {
+    const url = `${this.baseUrl}/dashboard`;
+    return this.http.get<any>(url);
   }
 
   getDataFromTable(table:TableInfo): Observable<any> {
@@ -30,20 +36,24 @@ dataDeleteInstance:any;
       ? table.selectedColumns.join(',')
       : '';
     const url = `${this.baseUrl}/${table.name}?columns=${columnsVar}&sortByColumn=${table.sortByColumn}&sortOrder=${table.sortOrder}&limit=${table.limit}&offset=${table.offset}&search=${table.search}`;
-    console.log("Making request to URL:", url);
 
     return this.http.get<any[]>(url);}
     addInstance(instanceData: any, tableName: string) {
     const url = `${this.baseUrl}/${tableName}`;
     return this.http.post(url, instanceData, { responseType: 'text' });
   }
+  checkunicity(primaryKeyvalue:string,tableName:string):Observable<boolean>{
+    const url = `${this.baseUrl}/unicity/${tableName}/${primaryKeyvalue}`;
+     return this.http.get<boolean>(url);
+
+  }
   updateInstance(instanceData: any, tableName: string) {
     const url = `${this.baseUrl}/update/${tableName}`;
     return this.http.put(url, instanceData, { responseType: 'text' });
   }
-  fkoptions(column :string,foreignKeys: ForeignKey[]): Observable<string[]> {
-    const url = `${this.baseUrl}/fkoptions/${column}`;
-    return this.http.post<string[]>(url, foreignKeys);
+  fkoptions(tableName :string):Observable<any[]> {
+    const url = `${this.baseUrl}/${tableName}/fkoptions`;
+    return this.http.get<any[]>(url,);
   }
 cancelUpdateInstance(tableName:string,primaryKeyValue :string):Observable<any> {
     const url = `${this.baseUrl}/cancelupdate/${tableName}/${primaryKeyValue}`;
@@ -54,5 +64,9 @@ cancelUpdateInstance(tableName:string,primaryKeyValue :string):Observable<any> {
     const url = `${this.baseUrl}/${tableName}/history`;
     return this.http.get<ParamAudit[]>(url);
   }
+checkreferences(tableName: string, primaryKeyValue: string): Observable<any[]>{
+  const url = `${this.baseUrl}/${tableName}/references/${primaryKeyValue}`;
+  return this.http.get<any[]>(url);
+}
 
 }

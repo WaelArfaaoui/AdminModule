@@ -5,7 +5,6 @@ import {TableService} from "../../services/table/table.service";
 import {ParamTableComponent} from "../param-table/param-table.component";
 import {TablesWithColumns} from "../../model/tables-with-columns";
 import {ColumnInfo} from "../../model/column-info";
-import {ForeignKey} from "../../model/foreign-key";
 
 @Component({
   selector: 'app-list-param-tables',
@@ -13,22 +12,19 @@ import {ForeignKey} from "../../model/foreign-key";
   styleUrls: ['./list-param-tables.component.scss']
 })
 export class ListParamTablesComponent implements OnInit {
-
   tablesInfo: TableInfo[] = [];
-
   currentPage: number = 1;
   numberTables: number = 20;
   limit: number = 5;
   totalPageCount: number = Math.ceil(this.numberTables / this.limit);
   offset: number = 0;
-  dataLoaded:boolean=false;
-
+  dataLoaded: boolean = false;
   constructor(private messageService: MessageService, private tableService: TableService, public paramTableComponent: ParamTableComponent) {
   }
 
-   ngOnInit() {
+  ngOnInit() {
     this.retrieveData();
-    this.dataLoaded=true
+    this.dataLoaded = true
 
   }
 
@@ -42,6 +38,7 @@ export class ListParamTablesComponent implements OnInit {
         this.tablesInfo.forEach((table: TableInfo) => {
           table.currentPage = 1;
           table.offset = 0;
+          table.isExpanded=false;
           table.limit = 5;
           table.newRow = {};
           table.newRows = [];
@@ -58,20 +55,26 @@ export class ListParamTablesComponent implements OnInit {
       }
     });
   }
-
+  isTableExpanded(table: TableInfo): boolean {
+    console.log(table.name +" "+table.isExpanded)
+    return table.isExpanded;
+  }
 
   handleColumnInfo(table: TableInfo) {
     for (let column of table.columns) {
-      switch(column.type) {
+      switch (column.type) {
         case "int8":
         case "int2":
+        case "int4":
         case "bigint":
-        case "bigserial":
-        case "serial":
         case "int":
         case "integer":
         case "smallint":
           column.type = "number";
+          break;
+        case "bigserial":
+        case "serial":
+          column.type = "auto";
           break;
         case "varchar":
         case "text":
@@ -81,24 +84,27 @@ export class ListParamTablesComponent implements OnInit {
           column.type = "boolean";
           break;
         case "timestamptz":
-          column.type ="date"
+          column.type = "date"
           break;
         default:
           column.type = "string";
           break;
       }
     }
+
   }
+
   changeLimit(newLimit: number) {
     this.limit = newLimit;
     this.retrieveData();
   }
+
   getColumnNames(table: TableInfo): string[] {
     return table.columns.map((column: ColumnInfo) => column.name);
   }
 
   onModelChange(table: TableInfo) {
-    if(this.dataLoaded) {
+    if (this.dataLoaded) {
       this.paramTableComponent.getDataTable(table);
       this.messageService.add({severity: 'success', summary: 'Data Loaded', detail: `Data loaded for ${table.name}`});
     }
@@ -113,25 +119,20 @@ export class ListParamTablesComponent implements OnInit {
     }
     table.isExpanded = !table.isExpanded;
   }
-/*  fkoptions(column: string, foreignKeys: ForeignKey[]): string[] {
-    console.log("COLUMN "+ column +"FOREIGN KEYS "+foreignKeys)
-    let options: string[] = [];
-    let response = this.tableService.fkoptions(column, foreignKeys).subscribe({
-      next: (data: string[]) => {
-        options = data.map(item => item.toString());
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
-    return options;
-  }*/
+
   changePage(pageNumber: number) {
+
     if (pageNumber >= 1 && pageNumber <= this.totalPageCount) {
+      this.tablesInfo.forEach((table: TableInfo) => {
+        // table.isExpanded=false;
+        console.log(table.name + table.isExpanded)
+      });
       this.currentPage = pageNumber;
       this.offset = (this.currentPage - 1) * this.limit;
       this.retrieveData();
+
     }
+
   }
 
 }

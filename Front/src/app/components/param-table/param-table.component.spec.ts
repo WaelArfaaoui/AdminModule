@@ -32,7 +32,8 @@ describe('ParamTableComponent', () => {
       'cancelDeletion',
       'updateInstance',
       'dataDeleteInstance',
-      'checkreferences'
+      'checkreferences',
+      'checkunicity'
     ]);
 
     messageService = jasmine.createSpyObj('MessageService', ['add']);
@@ -64,7 +65,7 @@ describe('ParamTableComponent', () => {
    component.table.name="_user"
    component.table.limit=5
    component.table.offset=0
-   component.table.columns=[{name:"first_name",type:"string",isNullable:"NO"},{name:"last_name",type:"string",isNullable:"NO"},{name:"id",type:"string",isNullable:"NO"}]
+   component.table.columns=[{name:"firstname",type:"string",isNullable:"NO"},{name:"lastname",type:"string",isNullable:"NO"},{name:"id",type:"string",isNullable:"NO"}]
     component.table.pk.name ="id"
     component.table.selectedColumns=['id', 'firstname', 'lastname']
 component.table.totalPageCount=20
@@ -210,12 +211,23 @@ component.table.totalPageCount=20
       deleteRequests: [],
       updateRequests: []
     };
-    const row = { id: '5', firstname: 'Wirtz',
-      lastname: 'XabiAlonso' };
+    const row = { id: '5'};
     let response=""
     tableService.updateInstance.and.returnValue(of(response));
     tableService.getDataFromTable.and.returnValue(of(dataFromTable));
     component.editValue(component.table,row)
+    await fixture.whenStable()
+    expect(tableService.updateInstance).toHaveBeenCalled()
+    expect(messageService.add).toHaveBeenCalledWith(jasmine.objectContaining({
+      severity: 'success',
+      summary: 'Parameter Updated'
+    }));
+    const editedrow = { id: '5', firstname: 'Wirtz',
+      lastname: 'XabiAlonso' };
+     response=""
+    tableService.updateInstance.and.returnValue(of(response));
+    tableService.getDataFromTable.and.returnValue(of(dataFromTable));
+    component.editValue(component.table,editedrow)
     await fixture.whenStable()
     expect(tableService.updateInstance).toHaveBeenCalled()
     expect(messageService.add).toHaveBeenCalledWith(jasmine.objectContaining({
@@ -268,9 +280,10 @@ component.table.totalPageCount=20
     expect(tableService.getDataFromTable).toHaveBeenCalled()
     expect(component.table.limit).toEqual(20)
   });
-  it('should open delete instance dialog', () => {
+  it('should open delete instance dialog',async () => {
+    tableService.checkreferences.and.returnValue(of([]));
     component.checkReferences("2",component.table)
-fixture.detectChanges()
+await fixture.whenStable()
     expect(dialogService.open).toHaveBeenCalledWith(DeleteParamComponent,jasmine.objectContaining({
       header: 'Delete Parameter',
       width: '500px'}));
@@ -302,6 +315,8 @@ fixture.detectChanges()
       const row = { id: '5', firstname: 'Wirtz',
         lastname: 'XabiAlonso' };
       const response=""
+      tableService.checkunicity.and.returnValue(of(true));
+
       tableService.getDataFromTable.and.returnValue(of(dataFromTable));
       tableService.addInstance.and.returnValue(of(response));
       component.addNewInstance(component.table,row)
@@ -393,6 +408,5 @@ let  result= component.checkForeignKey("lastname",component.table)
   expect(result).toBe(true)
   result= component.checkForeignKey("firstname",component.table)
   expect(result).toBe(false)
-
 })
 });

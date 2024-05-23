@@ -319,49 +319,56 @@ editValue (table: TableInfo, row: any) {
   addNewInstance(table: TableInfo, newRow: any) {
     const instanceData = this.createInstanceData(newRow, table);
     const invalidColumns = this.getInvalidColumns(instanceData, table);
-    if (table.pk.type !== "auto" && instanceData[table.pk.name]!=="" ) {
-      this.tableService.checkunicity(instanceData[table.pk.name], table.name).subscribe({
-        next: (response: boolean) => {
-          if (!response) {
-            this.messageService.add({
-              severity: 'warn',
-              summary: 'Validation Error',
-              detail: `Primary Key value: ${newRow[table.pk.name]} must be unique`
-            });
-            return; // Exit if primary key is not unique
-          }
-        },
-        error: (error: any) => {
-          console.error('Error checking unicity:', error);
-        }
-      });
-    }else if (invalidColumns.length > 0){
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Validation Error',
-          detail: `Please fill the required fields: ${invalidColumns.join(', ')}`
-        });
-        return; // Exit if there are validation issues
 
-    }else {
-          this.tableService.addInstance(instanceData, table.name).subscribe({
-            next: (response: any) => {
-              this.getDataTable(table);
+    if (table.pk.type !== "auto" && instanceData[table.pk.name] !== "") {
+      this.tableService.checkunicity(instanceData[table.pk.name], table.name)
+        .subscribe({
+          next: (response: boolean) => {
+            if (!response) {
               this.messageService.add({
-                severity: 'success',
-                summary: 'Parameter Added',
-                detail: `Parameter added to ${table.name}`
+                severity: 'warn',
+                summary: 'Validation Error',
+                detail: `Primary Key value: ${newRow[table.pk.name]} must be unique`
               });
-              const index = table.newRows.indexOf(newRow);
-              if (index !== -1) {
-                table.newRows.splice(index, 1);
-              }
-            },
-            error: (error: any) => {
-              console.error('Error adding instance:', error);
+            } else {
+              this.executeAddInstance(instanceData, table, newRow, invalidColumns);
             }
-          });
+          },
+          error: (error: any) => {
+            console.error('Error checking unicity:', error);
+          }
+        });
+    } else {
+      this.executeAddInstance(instanceData, table, newRow, invalidColumns);
+    }
+  }
 
+  executeAddInstance(instanceData: any, table: TableInfo, newRow: any, invalidColumns: string[]) {
+    if (invalidColumns.length > 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validation Error',
+        detail: `Please fill the required fields: ${invalidColumns.join(', ')}`
+      });
+    } else {
+      this.tableService.addInstance(instanceData, table.name)
+        .subscribe({
+          next: (response: any) => {
+            this.getDataTable(table);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Parameter Added',
+              detail: `Parameter added to ${table.name}`
+            });
+            const index = table.newRows.indexOf(newRow);
+            if (index !== -1) {
+              table.newRows.splice(index, 1);
+            }
+          },
+          error: (error: any) => {
+            console.error('Error adding instance:', error);
+          }
+        });
     }
   }
 

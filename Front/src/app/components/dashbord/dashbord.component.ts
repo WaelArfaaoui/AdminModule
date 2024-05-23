@@ -10,7 +10,7 @@ import {StackedColumnsComponent} from "../stacked-columns/stacked-columns.compon
 })
 export class dashbordComponent implements OnInit {
 tablenumberupdates=1;
-heatMapdata=[];
+heatMapdata=[{x:"",y:""}];
   subscription: Subscription;
   constructor(public layoutService: LayoutService,public tableService:TableService) {
     this.subscription = this.layoutService.configUpdate$.subscribe(config => {
@@ -19,9 +19,6 @@ heatMapdata=[];
   }
   ngOnInit(): void {
     this.dataforTreeMap()
-  }
-  initCharts() {
-
   }
   dataforTreeMap(){
     this.tableService.paramTableTreemap().subscribe({

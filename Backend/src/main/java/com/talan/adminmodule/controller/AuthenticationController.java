@@ -1,8 +1,13 @@
 package com.talan.adminmodule.controller;
 
 
+
 import com.talan.adminmodule.dto.AuthenticationRequest;
 import com.talan.adminmodule.dto.AuthenticationResponse;
+
+import com.talan.adminmodule.entity.Role;
+import com.talan.adminmodule.entity.User;
+import com.talan.adminmodule.repository.UserRepository;
 import com.talan.adminmodule.service.impl.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,7 +25,8 @@ import java.io.IOException;
 @RestController
 @Tag(name = "Authentication")
 @RequestMapping("/api/auth")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200/**")
+
 public class AuthenticationController {
 
   private final AuthenticationService authenticationService;
@@ -28,7 +35,6 @@ public class AuthenticationController {
   public AuthenticationController(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
-
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(
           @RequestBody AuthenticationRequest request
@@ -48,14 +54,44 @@ public class AuthenticationController {
                       .build());
     }
   }
+ /*@Autowired
+
+ private PasswordEncoder passwordEncoder;
+
+  @Autowired
+
+  private UserRepository userRepository;
+
+
+  @PostMapping("/authenticate")
+
+  public ResponseEntity<AuthenticationResponse> authenticate(
+
+          @RequestBody AuthenticationRequest request
+
+  ) {
+
+    User user = new User() ;
+
+    user.setEmail("jatlaouimedfedi@gmail.com.com");
+
+    user.setPassword(passwordEncoder.encode("123"));
+
+    user.setFirstname("fedi");
+
+    user.setLastname("jatt");
+
+    user.setRole(Role.ADMIN);
+
+    user.setPhone("111111");
+
+    this.userRepository.save(user); return null ; }*/
 
   @PostMapping("/refresh-token")
   public void refreshToken(
-      HttpServletRequest request,
-      HttpServletResponse response
+          HttpServletRequest request,
+          HttpServletResponse response
   ) throws IOException {
     authenticationService.refreshToken(request, response);
   }
-
-
 }

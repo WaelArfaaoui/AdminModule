@@ -61,7 +61,7 @@ public class UserService {
         }
         return path;
     }
-    public UserDto addUser(RegisterDto dto, MultipartFile file) throws IOException {
+    public UserDto addUser(RegisterDto dto, @Nullable MultipartFile file) throws IOException {
         String profileImagePath = null;
         if (file != null && !file.isEmpty()) {
             profileImagePath = storeProfileImage(file);

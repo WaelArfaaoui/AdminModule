@@ -13,6 +13,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {of} from "rxjs";
 import {DeleteParamComponent} from "../delete-param/delete-param.component";
 import {ParamHistoryComponent} from "../param-history/param-history.component";
+import any = jasmine.any;
+import {DeleteCascadeComponent} from "../delete-cascade/delete-cascade.component";
+import {NO_ERRORS_SCHEMA} from "@angular/core";
 
 
 describe('ParamTableComponent', () => {
@@ -28,7 +31,8 @@ describe('ParamTableComponent', () => {
       'cancelUpdateInstance',
       'cancelDeletion',
       'updateInstance',
-      'dataDeleteInstance'
+      'dataDeleteInstance',
+      'checkreferences'
     ]);
 
     messageService = jasmine.createSpyObj('MessageService', ['add']);
@@ -49,7 +53,8 @@ describe('ParamTableComponent', () => {
         { provide: TableService, useValue: tableService },
         { provide: MessageService, useValue: messageService },
         { provide: DialogService, useValue: dialogService },
-      ]
+      ],
+      schemas:[NO_ERRORS_SCHEMA]
     })
       .compileComponents();
 
@@ -59,7 +64,7 @@ describe('ParamTableComponent', () => {
    component.table.name="_user"
    component.table.limit=5
    component.table.offset=0
-   component.table.columns=[{name:"first_name",type:"string"},{name:"last_name",type:"string"}]
+   component.table.columns=[{name:"first_name",type:"string",isNullable:"NO"},{name:"last_name",type:"string",isNullable:"NO"},{name:"id",type:"string",isNullable:"NO"}]
     component.table.pk.name ="id"
     component.table.selectedColumns=['id', 'firstname', 'lastname']
 component.table.totalPageCount=20
@@ -215,7 +220,7 @@ component.table.totalPageCount=20
     expect(tableService.updateInstance).toHaveBeenCalled()
     expect(messageService.add).toHaveBeenCalledWith(jasmine.objectContaining({
       severity: 'success',
-      summary: 'Parameter EDITED'
+      summary: 'Parameter Updated'
     }));
   });
   it('should toggle Edit Mode', () => {
@@ -237,8 +242,8 @@ component.table.totalPageCount=20
     expect(row.editMode).toEqual(true)
   });
   it('should get column type', () => {
-    component.table.columns=[{name: "id",type:"number"},{name:"firstname",type:"string"}]
-   const type =component.getColumnType("id")
+    component.table.columns=[{name: "id",type:"number",isNullable:"NO"},{name:"firstname",type:"string",isNullable:"NO"}]
+   const type =component.getColumnType("id",component.table)
     fixture.detectChanges()
     expect(type).toEqual("number")
   });
@@ -264,7 +269,7 @@ component.table.totalPageCount=20
     expect(component.table.limit).toEqual(20)
   });
   it('should open delete instance dialog', () => {
-    component.deleteinstance(component.table,"2")
+    component.checkReferences("2",component.table)
 fixture.detectChanges()
     expect(dialogService.open).toHaveBeenCalledWith(DeleteParamComponent,jasmine.objectContaining({
       header: 'Delete Parameter',
@@ -330,29 +335,64 @@ fixture.detectChanges()
 
     }));
     });
-  /*  it('should toggle plus mode', () => {
-      // Mock table information
-      component.table.newRows = [
-        { id: 1, name: 'New Row 1' },
-        { id: 2, name: 'New Row 2' }
-      ];
+    it('should toggle plus mode', () => {
+      const newRow: { [anycolumn: string]: any } = {};
+      const newRow1: { [anycolumn: string]: any } = {};
+      newRow1['id']='1'
+        newRow1['firstname']='Sergio'
+        newRow1['lastname']='Ramos'
+      component.table.newRows.push(newRow1)
+      newRow['id']='2'
+      newRow['firstname']='Freddy'
+      newRow['lastname']='Mercury'
+      component.table.newRows.push(newRow)
+      console.log('Before toggle:', component.table.newRows);
 
-      // Mock new row to toggle
-      const newRow = { id: 1, name: 'New Row 1' }; // Existing row in newRows array
-
-      console.log('Before toggle:', component.table.newRows); // Log the state before toggling
-
-      // Call the method
       component.toggleplusMode(component.table, newRow);
       fixture.detectChanges();
 
-      console.log('After toggle:', component.table.newRows); // Log the state after toggling
+      console.log('After toggle:', component.table.newRows);
 
-      // Verify that the newRow is removed from the newRows array
+      expect(component.table.newRows).toContain(newRow1);
       expect(component.table.newRows).not.toContain(newRow);
 
-      // Verify that the length of newRows array is still 1
       expect(component.table.newRows.length).toEqual(1);
-    });*/
 
+    });
+  it('should Check instance References', async () => {
+const reference: any[] =["1","123"]
+    tableService.checkreferences.and.returnValue(of([]));
+
+    component.checkReferences('1',component.table)
+    await fixture.whenStable()
+    expect(tableService.checkreferences).toHaveBeenCalled()
+    expect(dialogService.open).toHaveBeenCalledWith(DeleteParamComponent,jasmine.objectContaining({
+      header: 'Delete Parameter',
+      width: '500px'
+    }));
+    tableService.checkreferences.and.returnValue(of(reference));
+
+    component.checkReferences('1',component.table)
+    await fixture.whenStable()
+    expect(tableService.checkreferences).toHaveBeenCalled()
+    expect(dialogService.open).toHaveBeenCalledWith(DeleteCascadeComponent,jasmine.objectContaining({
+      header: 'Delete Parameter Cascade',
+      width: '500px'
+    }));
+  });
+it('should get Foreign key options',()=>{
+  component.table.foreignKeyoptions=[{column: "lastname",options:["2","3","4","1","5"]}]
+  const options= component.getForeignKeyOptionspercolumn("lastname","1")
+
+  expect(options.length).toEqual(6)
+});
+
+it('should check Foreign Table Key',()=>{
+  component.table.foreignKeys=["lastname"]
+let  result= component.checkForeignKey("lastname",component.table)
+  expect(result).toBe(true)
+  result= component.checkForeignKey("firstname",component.table)
+  expect(result).toBe(false)
+
+})
 });

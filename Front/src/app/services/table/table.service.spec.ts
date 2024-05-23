@@ -19,7 +19,6 @@ describe('TableService', () => {
   });
 
   afterEach(() => {
-    // After each test, assert that there are no more pending requests
     httpTestingController.verify();
   });
 
@@ -37,7 +36,7 @@ describe('TableService', () => {
     });
 
     const req = httpTestingController.expectOne(`${service.baseUrl}/${tableName}/delete/${primaryKeyValue}`);
-    expect(req.request.method).toEqual('POST');
+    expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
   });
@@ -193,6 +192,49 @@ describe('TableService', () => {
 
     req.flush(expectedHistory);
   });
+  it('should delete cascade an instance', () => {
+    const tableName = 'example_table';
+    const primaryKeyValue = 'example_primary_key';
+    const expectedResponse = 'success';
+    service.deleteCascade(tableName, primaryKeyValue).subscribe(response => {
+      expect(response).toEqual(expectedResponse);
+    });
 
+    const url = `${service.baseUrl}/${tableName}/cascade/${primaryKeyValue}`;
+    const req = httpTestingController.expectOne(url);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({});
+    expect(req.request.responseType).toEqual('json');
+    req.flush(expectedResponse);
+  });
+it('should have foreignKey options for input dropdown',()=>{
+  const tableName = "test_table";
+  const expectedResponse =[{column:"1",options:["1","2"]}];
+  service.fkoptions(tableName).subscribe(response=>
+  {
+    expect(response).toEqual(expectedResponse)
+  })
+  const url = `${service.baseUrl}/${tableName}/fkoptions`;
+  const req = httpTestingController.expectOne(url);
+  expect(req.request.method).toEqual('GET');
+  expect(req.request.body).toEqual(null);
+  expect(req.request.responseType).toEqual('json');
+  req.flush(expectedResponse);
+});
+  it('should Check References',()=>{
+    const tableName = "test_table";
+    const primaryKeyValue = 'example_primary_key';
+    const expectedResponse =[{column:"1",options:["1","2"]}];
+    service.checkreferences(tableName,primaryKeyValue).subscribe(response=>
+    {
+      expect(response).toEqual(expectedResponse)
+    })
+    const url = `${service.baseUrl}/${tableName}/references/${primaryKeyValue}`;
+    const req = httpTestingController.expectOne(url);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toEqual(null);
+    expect(req.request.responseType).toEqual('json');
+    req.flush(expectedResponse);
+  });
 });
 

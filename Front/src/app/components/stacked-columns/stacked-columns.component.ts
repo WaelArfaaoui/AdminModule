@@ -1,93 +1,65 @@
-import {Component, ViewChild} from '@angular/core';
-import {ChartComponent} from "chart.js";
-
-
-export type ChartOptions = {
-  series: any;
-  chart: any;
-  dataLabels: any;
-  plotOptions: any;
-  responsive: any[];
-  xaxis: any;
-  legend: any;
-  fill: any;
-};
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import ApexCharts from 'apexcharts';
 
 @Component({
   selector: 'app-stacked-columns',
   templateUrl: './stacked-columns.component.html',
   styleUrls: ['./stacked-columns.component.scss']
 })
-export class StackedColumnsComponent {
-  @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+export class StackedColumnsComponent implements OnChanges, OnDestroy {
+  @Input() heatMapdata: any[] = [];
+  @ViewChild('chart', { static: true }) chart: ElementRef | undefined;
 
-  constructor() {
+  chartOptions: any;
+  apexChart: ApexCharts | undefined;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['heatMapdata']) {
+      this.updateChartOptions();
+    }
+  }
+
+  updateChartOptions() {
     this.chartOptions = {
-      series: [
-        {
-          name: "PRODUCT A",
-          data: [44, 55, 41, 67, 22, 43]
-        },
-        {
-          name: "PRODUCT B",
-          data: [13, 23, 20, 8, 13, 27]
-        },
-        {
-          name: "PRODUCT C",
-          data: [11, 17, 15, 15, 21, 14]
-        },
-        {
-          name: "PRODUCT D",
-          data: [21, 7, 25, 13, 22, 8]
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 200,
-        stacked: true,
-        toolbar: {
-          show: false
-        },
-        zoom: {
-          enabled: true
-        }
+      series: [{
+        data: this.heatMapdata
+      }],
+      legend: {
+        show: false
       },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: "bottom",
-              offsetX: -10,
-              offsetY: 0
-            }
-          }
-        }
+      chart: {
+        type: 'treemap'
+      },
+      title: {
+        text: 'Parameter tables updates this year',
+        align: 'center'
+      },
+      colors: [
+        '#3B93A5', '#F7B844', '#ADD8C7', '#EC3C65', '#CDD7B6',
+        '#C1F666', '#D43F97', '#1E5D8C', '#421243', '#7F94B0',
+        '#EF6537', '#C0ADDB'
       ],
       plotOptions: {
-        bar: {
-          horizontal: false
+        treemap: {
+          distributed: true,
+          enableShades: false
         }
-      },
-      xaxis: {
-        type: "category",
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "June"
-        ]
-      },
-      legend: {
-        position: "right",
-        offsetY: 40
-      },
-      fill: {
-        opacity: 1
       }
     };
+
+    if (this.apexChart) {
+      this.apexChart.destroy();
+    }
+
+    if (this.chart && this.chart.nativeElement) {
+      this.apexChart = new ApexCharts(this.chart.nativeElement, this.chartOptions);
+      this.apexChart.render();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.apexChart) {
+      this.apexChart.destroy();
+    }
   }
 }

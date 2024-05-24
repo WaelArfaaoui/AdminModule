@@ -2,6 +2,7 @@ package com.talan.adminmodule.controller;
 
 import com.talan.adminmodule.dto.*;
 import com.talan.adminmodule.entity.ParamAudit;
+import com.talan.adminmodule.service.ParamTableService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;

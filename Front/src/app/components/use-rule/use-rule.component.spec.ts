@@ -74,11 +74,11 @@ describe('UseRuleComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should initialize form with rule data', () => {
+  it('should initialize form with rule data', () => {
     spyOn(component, 'initializeForm');
     spyOn(component, 'loadCategories');
     spyOn(component, 'loadAttributes');
@@ -87,14 +87,14 @@ describe('UseRuleComponent', () => {
     expect(component.loadCategories).toHaveBeenCalled();
     expect(component.loadAttributes).toHaveBeenCalled();});
 
-  xit('should load categories on initialization', () => {
+  it('should load categories on initialization', () => {
     const dummyCategories = [{ name: 'Category 1' }, { name: 'Category 2' }];
     const httpResponse = new HttpResponse({ body: dummyCategories });
     spyOn(component['categoryService'], 'getAllCategories').and.returnValue(of(httpResponse));
     component.loadCategories();
   });
 
-  xit('should handle error during category loading', () => {
+  it('should handle error during category loading', () => {
     categoryService.getAllCategories.and.returnValue(throwError('Error'));
     spyOn(console, 'error');
     component.loadCategories();
@@ -102,14 +102,14 @@ describe('UseRuleComponent', () => {
     expect(console.error).toHaveBeenCalledWith('Error loading categories:', 'Error');
   });
 
-  xit('should load attributes on initialization', () => {
+  it('should load attributes on initialization', () => {
     const dummyCategories = [{ name: 'Category 1' }, { name: 'Category 2' }];
     const httpResponse = new HttpResponse({ body: dummyCategories });
     spyOn(component['categoryService'], 'getAllCategories').and.returnValue(of(httpResponse));
     component.loadCategories();
   });
 
-  xit('should handle error during attribute loading', () => {
+  it('should handle error during attribute loading', () => {
     attributeService.getAllAttributes.and.returnValue(throwError('Error'));
     spyOn(console, 'error');
     component.loadAttributes();
@@ -117,7 +117,7 @@ describe('UseRuleComponent', () => {
     expect(console.error).toHaveBeenCalledWith('Error loading attributes:', 'Error');
   });
 
-  xit('should add existing attributes to the form', () => {
+  it('should add existing attributes to the form', () => {
     component.addExistingAttributes();
     const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
     expect(attributeArray.length).toBe(2);
@@ -125,7 +125,7 @@ describe('UseRuleComponent', () => {
     expect(attributeArray.at(1).get('name')?.value).toEqual({ id: 2, name: 'Attribute 2' });
   });
 
-  xit('should validate attribute values correctly', () => {
+  it('should validate attribute values correctly', () => {
     component.ruleForm = component.fb.group({
       attributeDtos: component.fb.array([
         component.fb.group({ name: 'attr1', percentage: 50, value: '5' }),
@@ -141,7 +141,7 @@ describe('UseRuleComponent', () => {
     });
   });
 
-  xit('should calculate the note correctly and close the dialog on submit', () => {
+  it('should calculate the note correctly and close the dialog on submit', () => {
     spyOn(Swal, 'fire');
     component.ruleForm = component.fb.group({
       attributeDtos: component.fb.array([

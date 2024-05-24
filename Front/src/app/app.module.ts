@@ -61,9 +61,11 @@ import {DeleteParamComponent} from "./components/delete-param/delete-param.compo
 import {DeleteCascadeComponent} from './components/delete-cascade/delete-cascade.component';
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {CalendarModule} from "primeng/calendar";
+import {UseRuleComponent} from "./components/use-rule/use-rule.component";
+import * as Sweetalert2 from "sweetalert2";
 
 @NgModule({
-    declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, ListParamTablesComponent, ParamHistoryComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, dashbordComponent, NotfoundComponent, DeleteParamComponent, DeleteCascadeComponent],
+    declarations: [AppComponent, AllUsersComponent, AllRulesComponent, NewRuleComponent, LoginComponent, ParamTableComponent, AddUserComponent, UpdateUserComponent, LockUserComponent, DeleteUserComponent, ListParamTablesComponent, ParamHistoryComponent, DisableRuleComponent, UpdateRuleComponent, RuleHistoryComponent,UseRuleComponent, HeatmapComponent, DonutComponent, StackedColumnsComponent, dashbordComponent, NotfoundComponent, DeleteParamComponent, DeleteCascadeComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -77,6 +79,7 @@ import {CalendarModule} from "primeng/calendar";
         CheckboxModule,
         PasswordModule,
         FormsModule,
+
         CommonModule,
         FileUploadModule,
         ButtonModule,

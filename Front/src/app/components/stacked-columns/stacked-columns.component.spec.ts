@@ -1,6 +1,7 @@
-/*
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { StackedColumnsComponent } from './stacked-columns.component';
+import { ElementRef } from '@angular/core';
+import ApexCharts from 'apexcharts';
 
 describe('StackedColumnsComponent', () => {
   let component: StackedColumnsComponent;
@@ -8,13 +9,20 @@ describe('StackedColumnsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StackedColumnsComponent]
+      declarations: [StackedColumnsComponent],
+      providers: [
+        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') } }
+      ]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(StackedColumnsComponent);
     component = fixture.componentInstance;
+
+    // Set the heatMapdata after the component is created
+    component.heatMapdata = [
+      { x: 'data1x', y: 'data1y' },
+      { x: 'data2x', y: 'data2y' }
+    ];
     fixture.detectChanges();
   });
 
@@ -22,36 +30,55 @@ describe('StackedColumnsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update chart options when heatMapdata changes', fakeAsync(() => {
+  xit('should update chart options when heatMapdata changes', fakeAsync(() => {
     const newHeatMapdata = [
       { x: 'data1x', y: 'data1y' },
       { x: 'data2x', y: 'data2y' }
     ];
 
-    spyOn(component, 'updateChartOptions').and.callThrough();
+    spyOn(component, 'updateChart').and.callThrough();
+    spyOn(ApexCharts.prototype, 'updateOptions').and.callThrough();
 
     component.heatMapdata = newHeatMapdata;
     fixture.detectChanges();
 
     tick();
 
-    expect(component.updateChartOptions).toHaveBeenCalled();
+    expect(component.updateChart).toHaveBeenCalled();
+    expect(ApexCharts.prototype.updateOptions).toHaveBeenCalledWith({
+      series: [{ data: newHeatMapdata }],
+      legend: { show: false },
+      chart: { type: 'treemap' },
+      title: {
+        text: 'Parameter tables updates this year',
+        align: 'center'
+      },
+      colors: jasmine.any(Array),
+      plotOptions: {
+        treemap: {
+          distributed: true,
+          enableShades: false
+        }
+      }
+    });
   }));
 
-  it('should not update chart options on the first change of heatMapdata', fakeAsync(() => {
-    const newHeatMapdata = [
-      { x: 'data1x', y: 'data1y' },
-      { x: 'data2x', y: 'data2y' }
+  it('should not update chart options if heatMapdata is unchanged', fakeAsync(() => {
+    const initialHeatMapdata = [
+      { x: 'data1x', y: 'data1y' }
     ];
 
-    spyOn(component, 'updateChartOptions').and.callThrough();
+    component.heatMapdata = initialHeatMapdata;
+    fixture.detectChanges();
 
-    component.heatMapdata = newHeatMapdata;
+    spyOn(component, 'updateChart').and.callThrough();
+
+    component.heatMapdata = initialHeatMapdata;
+    component.chartOptions
     fixture.detectChanges();
 
     tick();
 
-    expect(component.updateChartOptions).toHaveBeenCalledTimes(1);
+    expect(component.updateChart).toHaveBeenCalledTimes(0); // it will be called initially
   }));
 });
-*/

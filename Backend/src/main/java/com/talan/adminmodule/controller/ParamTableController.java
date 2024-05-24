@@ -60,7 +60,6 @@ public ResponseEntity<Boolean> checkunicity(@PathVariable  String primaryKeyValu
     @PostMapping("/{tableName}")
     public ResponseEntity<ResponseDto> addInstance(@RequestBody Map<String, String> instanceData,
                                    @PathVariable("tableName") String tableName) {
-
         return ResponseEntity.status(HttpStatus.OK).body(tableService.addInstance(instanceData, tableName));
 
     }
@@ -82,7 +81,8 @@ public ResponseEntity<Boolean> checkunicity(@PathVariable  String primaryKeyValu
     }
     @PostMapping("/{tableName}/cascade/{primaryKeyValue}")
     public ResponseEntity<ResponseDto> deleteCascade(@PathVariable String tableName, @PathVariable String primaryKeyValue){
-       try{ DeleteRequest del = new DeleteRequest(tableName,primaryKeyValue);
+       try{
+           DeleteRequest del = new DeleteRequest(tableName,primaryKeyValue);
            return  ResponseEntity.status(HttpStatus.OK).body(tableService.deletecascade(del));
 
        }catch (Exception e) {

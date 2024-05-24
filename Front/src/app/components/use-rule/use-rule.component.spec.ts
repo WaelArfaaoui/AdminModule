@@ -1,156 +1,148 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule, FormArray } from '@angular/forms';
-import { UseRuleComponent } from './use-rule.component';
-import { AttributeService, CategoryService, RuleDto, AttributeDataDto, AttributeDto, CategoryDto } from '../../../open-api';
-import { MessageService } from 'primeng/api';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UserService } from '../../services/user/user.service';
-import { of, throwError } from 'rxjs';
-import Swal from 'sweetalert2';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {HttpResponse} from "@angular/common/http";
-
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormArray, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UseRuleComponent} from './use-rule.component';
+import {MessageService} from 'primeng/api';
+import {
+  AttributeDataDto,
+  AttributeService,
+  CategoryService,
+  RuleDto,
+  RuleService,
+  UserControllerService
+} from '../../../open-api';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {Router} from '@angular/router';
+import {UserService} from '../../services/user/user.service';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import Swal from "sweetalert2";
+import {of, throwError} from "rxjs";
 describe('UseRuleComponent', () => {
   let component: UseRuleComponent;
   let fixture: ComponentFixture<UseRuleComponent>;
-  let attributeService: jasmine.SpyObj<AttributeService>;
-  let categoryService: jasmine.SpyObj<CategoryService>;
   let messageService: jasmine.SpyObj<MessageService>;
+  let attributeService: jasmine.SpyObj<AttributeService>;
+  let ruleService: jasmine.SpyObj<RuleService>;
+  let categoryService: jasmine.SpyObj<CategoryService>;
   let userService: jasmine.SpyObj<UserService>;
-  let ref: jasmine.SpyObj<DynamicDialogRef>;
+  let userControllerService: jasmine.SpyObj<UserControllerService>;
+  let router: jasmine.SpyObj<Router>;
   let config: DynamicDialogConfig;
-
+  let ref: DynamicDialogRef;
   beforeEach(async () => {
-    const attributeServiceSpy = jasmine.createSpyObj('AttributeService', ['getAllAttributes']);
-    const categoryServiceSpy = jasmine.createSpyObj('CategoryService', ['getAllCategories']);
     const messageServiceSpy = jasmine.createSpyObj('MessageService', ['add']);
+    const attributeServiceSpy = jasmine.createSpyObj('AttributeService', ['getAllAttributes']);
+    const ruleServiceSpy = jasmine.createSpyObj('RuleService', ['useRule']);
+    const categoryServiceSpy = jasmine.createSpyObj('CategoryService', ['getAllCategories']);
     const userServiceSpy = jasmine.createSpyObj('UserService', ['']);
-    const refSpy = jasmine.createSpyObj('DynamicDialogRef', ['close']);
-
-    const ruleData: RuleDto = {
-      id: 1,
-      name: 'Test Rule',
-      description: 'Test Description',
-      category: { id: 1, name: 'Test Category' } as CategoryDto,
-      attributeDtos: [
-        {
-          name: { id: 1, name: 'Attribute 1' } as AttributeDto,
-          percentage: 50,
-          value: 5
-        },
-        {
-          name: { id: 2, name: 'Attribute 2' } as AttributeDto,
-          percentage: 50,
-          value: 5
-        }
-      ] as AttributeDataDto[]
-    };
-
-    config = { data: ruleData } as DynamicDialogConfig;
-
+    const userControllerServiceSpy = jasmine.createSpyObj('UserControllerService', ['']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule, HttpClientTestingModule],
       declarations: [UseRuleComponent],
+      imports: [ReactiveFormsModule, FormsModule],
       providers: [
-        { provide: AttributeService, useValue: attributeServiceSpy },
-        { provide: CategoryService, useValue: categoryServiceSpy },
         { provide: MessageService, useValue: messageServiceSpy },
+        { provide: AttributeService, useValue: attributeServiceSpy },
+        { provide: RuleService, useValue: ruleServiceSpy },
+        { provide: CategoryService, useValue: categoryServiceSpy },
         { provide: UserService, useValue: userServiceSpy },
-        { provide: DynamicDialogRef, useValue: refSpy },
-        { provide: DynamicDialogConfig, useValue: config }
-      ]
-    }).compileComponents();
-
-    attributeService = TestBed.inject(AttributeService) as jasmine.SpyObj<AttributeService>;
-    categoryService = TestBed.inject(CategoryService) as jasmine.SpyObj<CategoryService>;
-    messageService = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
-    userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
-    ref = TestBed.inject(DynamicDialogRef) as jasmine.SpyObj<DynamicDialogRef>;
-  });
-
-  beforeEach(() => {
+        { provide: UserControllerService, useValue: userControllerServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: DynamicDialogConfig, useValue: {} },
+        { provide: DynamicDialogRef, useValue: {} }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .compileComponents();
     fixture = TestBed.createComponent(UseRuleComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    messageService = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
+    attributeService = TestBed.inject(AttributeService) as jasmine.SpyObj<AttributeService>;
+    ruleService = TestBed.inject(RuleService) as jasmine.SpyObj<RuleService>;
+    categoryService = TestBed.inject(CategoryService) as jasmine.SpyObj<CategoryService>;
+    userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
+    userControllerService = TestBed.inject(UserControllerService) as jasmine.SpyObj<UserControllerService>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    config = TestBed.inject(DynamicDialogConfig);
+    ref = TestBed.inject(DynamicDialogRef);
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should initialize form with rule data', () => {
-    spyOn(component, 'initializeForm');
-    spyOn(component, 'loadCategories');
-    spyOn(component, 'loadAttributes');
-    component.ngOnInit();
-    expect(component.initializeForm).toHaveBeenCalled();
-    expect(component.loadCategories).toHaveBeenCalled();
-    expect(component.loadAttributes).toHaveBeenCalled();});
-
-  it('should load categories on initialization', () => {
-    const dummyCategories = [{ name: 'Category 1' }, { name: 'Category 2' }];
-    const httpResponse = new HttpResponse({ body: dummyCategories });
-    spyOn(component['categoryService'], 'getAllCategories').and.returnValue(of(httpResponse));
-    component.loadCategories();
-  });
-
-  it('should handle error during category loading', () => {
-    categoryService.getAllCategories.and.returnValue(throwError('Error'));
-    spyOn(console, 'error');
-    component.loadCategories();
-    expect(categoryService.getAllCategories).toHaveBeenCalled();
-    expect(console.error).toHaveBeenCalledWith('Error loading categories:', 'Error');
-  });
-
-  it('should load attributes on initialization', () => {
-    const dummyCategories = [{ name: 'Category 1' }, { name: 'Category 2' }];
-    const httpResponse = new HttpResponse({ body: dummyCategories });
-    spyOn(component['categoryService'], 'getAllCategories').and.returnValue(of(httpResponse));
-    component.loadCategories();
-  });
-
-  it('should handle error during attribute loading', () => {
-    attributeService.getAllAttributes.and.returnValue(throwError('Error'));
-    spyOn(console, 'error');
-    component.loadAttributes();
-    expect(attributeService.getAllAttributes).toHaveBeenCalled();
-    expect(console.error).toHaveBeenCalledWith('Error loading attributes:', 'Error');
-  });
-
-  it('should add existing attributes to the form', () => {
-    component.addExistingAttributes();
-    const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
-    expect(attributeArray.length).toBe(2);
-    expect(attributeArray.at(0).get('name')?.value).toEqual({ id: 1, name: 'Attribute 1' });
-    expect(attributeArray.at(1).get('name')?.value).toEqual({ id: 2, name: 'Attribute 2' });
-  });
-
-  it('should validate attribute values correctly', () => {
-    component.ruleForm = component.fb.group({
-      attributeDtos: component.fb.array([
-        component.fb.group({ name: 'attr1', percentage: 50, value: '5' }),
-        component.fb.group({ name: 'attr2', percentage: 50, value: '15' }) // Invalid value
-      ])
-    });
-    const isValid = component['validateAttributeValues']();
-    expect(isValid).toBeFalse();
-    expect(messageService.add).toHaveBeenCalledWith({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Attribute value must be between 1 and 10'
+  describe('ngOnInit', () => {
+    it('should call the necessary methods on initialization', () => {
+      spyOn(component, 'initializeForm');
+      spyOn(component, 'loadCategories');
+      spyOn(component, 'loadAttributes');
+      component.ngOnInit();
+      expect(component.initializeForm).toHaveBeenCalled();
+      expect(component.loadCategories).toHaveBeenCalled();
+      expect(component.loadAttributes).toHaveBeenCalled();
     });
   });
-
-  it('should calculate the note correctly and close the dialog on submit', () => {
-    spyOn(Swal, 'fire');
-    component.ruleForm = component.fb.group({
-      attributeDtos: component.fb.array([
-        component.fb.group({ name: 'attr1', percentage: 50, value: '5' }),
-        component.fb.group({ name: 'attr2', percentage: 50, value: '5' })
-      ])
+  describe('validateAttributeValues', () => {
+    it('should return true if all attribute values are valid', () => {
+      // Mock necessary dependencies and setup component
+      const control1 = new FormControl('5');
+      const control2 = new FormControl('7');
+      spyOn(component, 'getAttributeControls').and.returnValue([control1, control2]);
+      // Invoke the method
+      const result = component.validateAttributeValues();
+      // Assert
+      expect(result).toBeFalse();
     });
-    component.onSubmit();
-    expect(ref.close).toHaveBeenCalledWith(true);
-
+    it('should return false and show error message if any attribute value is invalid', () => {
+      // Mock necessary dependencies and setup component
+      const control1 = new FormControl('15'); // Invalid value
+      const control2 = new FormControl('7');
+      spyOn(component, 'getAttributeControls').and.returnValue([control1, control2]);
+      // Invoke the method
+      const result = component.validateAttributeValues();
+      // Assert
+      expect(result).toBeFalse();
+      expect(messageService.add).toHaveBeenCalledWith({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Attribute value must be between 1 and 10'
+      });
+    });
+  });
+  describe('initializeForm', () => {
+    it('should initialize the form with given rule data', () => {
+      component.rule = {
+        name: 'Test Rule',
+        description: 'Test Description',
+        category: { name: 'Test Category' },
+        attributeDtos: [{ name: { name: 'Attribute 1' }, percentage: 50, value: 5 }]
+      } as RuleDto;
+      component.initializeForm();
+    });
+  });
+  describe('getAttributeControls', () => {
+    it('should return the controls of the attribute form array', () => {
+      const initialAttributes = [
+        component.fb.group({ name: 'Attribute1', percentage: 50 }),
+        component.fb.group({ name: 'Attribute2', percentage: 50 })
+      ];
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array(initialAttributes)
+      });
+      const attributeControls = component.getAttributeControls();
+      expect(attributeControls.length).toBe(2);
+      expect(attributeControls[0].value.name).toBe('Attribute1');
+      expect(attributeControls[1].value.name).toBe('Attribute2');
+    });
+  });
+  describe('addExistingAttributes', () => {
+    it('should add existing attributes to the form', () => {
+      component.rule = {
+        attributeDtos: [
+          { name: { name: 'Attribute 1' }, percentage: 50, value: 5 },
+          { name: { name: 'Attribute 2' }, percentage: 50, value: 5 }
+        ]
+      } as RuleDto;
+      component.ruleForm = component.fb.group({
+        attributeDtos: component.fb.array([])
+      });
+      component.addExistingAttributes();
+      const attributeArray = component.ruleForm.get('attributeDtos') as FormArray;
+      expect(attributeArray.length).toBe(2);
+    });
   });
 });

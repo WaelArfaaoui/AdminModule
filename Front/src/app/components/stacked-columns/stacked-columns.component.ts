@@ -7,26 +7,15 @@ import ApexCharts from 'apexcharts';
   styleUrls: ['./stacked-columns.component.scss']
 })
 export class StackedColumnsComponent implements OnChanges, OnDestroy {
-  @Input() heatMapdata: any[] = [];
+  @Input() heatMapdata: { x: string, y: string }[] = [{ x: "string", y: "20" }];
   @ViewChild('chart', { static: true }) chart: ElementRef | undefined;
 
-  chartOptions: any;
   apexChart: ApexCharts | undefined;
+  chartOptions: any;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['heatMapdata']) {
-      this.updateChartOptions();
-    }
-  }
-
-  updateChartOptions() {
+  constructor() {
     this.chartOptions = {
-      series: [{
-        data: this.heatMapdata
-      }],
-      legend: {
-        show: false
-      },
+      series: [{ data: this.heatMapdata }],
       chart: {
         type: 'treemap'
       },
@@ -46,12 +35,22 @@ export class StackedColumnsComponent implements OnChanges, OnDestroy {
         }
       }
     };
+  }
 
-    if (this.apexChart) {
-      this.apexChart.destroy();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['heatMapdata']) {
+      this.updateChart();
+    }
+  }
+
+  updateChart() {
+    if (!this.heatMapdata || this.heatMapdata.length === 0) {
+      return; // Exit early if heatMapdata is not available or empty
     }
 
-    if (this.chart && this.chart.nativeElement) {
+    if (this.apexChart) {
+      this.apexChart.updateOptions({ series: [{ data: this.heatMapdata }] }, true); // Second parameter true ensures deep merge
+    } else if (this.chart && this.chart.nativeElement) {
       this.apexChart = new ApexCharts(this.chart.nativeElement, this.chartOptions);
       this.apexChart.render();
     }

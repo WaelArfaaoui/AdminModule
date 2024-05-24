@@ -1,6 +1,6 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ChartComponent} from "ng-apexcharts";
-import {CategoryDto, CategoryService} from "../../../open-api";
+import {CategoryService} from "../../../open-api";
 export type ChartOptions = {
   series: any;
   chart: any;
@@ -14,22 +14,23 @@ export type ChartOptions = {
   templateUrl: './donut.component.html',
   styleUrls: ['./donut.component.scss']
 })
-export class DonutComponent {
+export class DonutComponent implements OnInit {
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  categories!: CategoryDto[];
+  catLabels!: string[] ;
+  catCounts!: number[];
 
-
-    constructor( private categoryService: CategoryService) {
+  constructor(private categoryService: CategoryService) {
+    this.loadCategories();
     this.chartOptions = {
-      series: [30, 30, 12, 15, 13],
+      series: this.catCounts,
       chart: {
         type: "pie"
       },
       dataLabels: {
         enabled: false
       },
-      labels: ["Vehicles", "Real estate", "Industrial", "Medical", "Agricultural"],
+      labels: this.catLabels,
       responsive: [
         {
           breakpoint: 480,
@@ -48,17 +49,29 @@ export class DonutComponent {
       ]
     };
   }
-    ngOnInit(): void {
-        this.loadCategories();
-    }
-    loadCategories() {
-        this.categoryService.getAllCategories().subscribe({
-            next: data => {
-                this.categories = data;
-            },
-            error: error => {
-                console.error('Error loading categories:', error);
-            }
-        });
-    }
+
+  ngOnInit(): void {
+  }
+
+  loadCategories() {
+    this.categoryService.getTopUsedCategories().subscribe({
+      next: data => {
+        this.catLabels = data.map(category => category.name ?? '');
+        this.catCounts = data.map(category => category.ruleCount ?? 0);
+
+        this.updateChartOptions();
+      },
+      error: error => {
+        console.error('Error loading categories:', error);
+      }
+    });
+  }
+
+  updateChartOptions() {
+    this.chartOptions = {
+      ...this.chartOptions,
+      series : this.catCounts ,
+      labels : this.catLabels
+    };
+  }
 }

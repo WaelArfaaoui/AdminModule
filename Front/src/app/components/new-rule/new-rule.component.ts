@@ -22,12 +22,12 @@ export class NewRuleComponent implements OnInit {
   newAttributeName: string = '';
 
   constructor(
-      private fb: FormBuilder,
-      private messageService: MessageService,
-      private attributeService: AttributeService,
-      private ruleService: RuleService,
-      private categoryService: CategoryService,
-      private router: Router
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private attributeService: AttributeService,
+    private ruleService: RuleService,
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +84,7 @@ export class NewRuleComponent implements OnInit {
     return this.fb.group({
       name: ['', Validators.required],
       percentage: ['', Validators.required],
-      value: ['', Validators.required]
+      value: [0]
     });
   }
 
@@ -186,7 +186,7 @@ export class NewRuleComponent implements OnInit {
   onSubmit() {
     const formData = this.ruleForm.value;
     if (this.ruleForm.valid) {
-      if (!this.validateAttributeNames() || !this.validateAttributeValues() || !this.validateAttributePercentages()) {
+      if (!this.validateAttributeNames() || !this.validateAttributePercentages()) {
         return;
       }
       const formData = this.ruleForm.value;

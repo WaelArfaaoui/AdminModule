@@ -1,6 +1,8 @@
 package com.talan.adminmodule.validator;
+
 import com.talan.adminmodule.dto.RuleDto;
 import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 

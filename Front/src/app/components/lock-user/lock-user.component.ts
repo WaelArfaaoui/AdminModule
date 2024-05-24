@@ -23,8 +23,9 @@ export class LockUserComponent implements OnInit {
   }
 
   lockUser() {
-    this.userService._delete(this.user.id) ;
-    this.ref.close();
-    this.messageService.add({severity:'success', summary:'User locked !', detail:'User locked successfully'});
-  }
+  //   this.userService._delete(this.user.id) ;
+  //   this.ref.close();
+  //   this.messageService.add({severity:'success', summary:'User locked !', detail:'User locked successfully'});
+  //
+    }
 }

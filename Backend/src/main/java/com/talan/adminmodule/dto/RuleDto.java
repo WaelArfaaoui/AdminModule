@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -16,7 +15,7 @@ public class RuleDto {
     private String name;
     private String description;
     private CategoryDto category ;
-    private boolean enabled;
+    private String status;
     private LocalDateTime createDate;
     private LocalDateTime lastModified;
     private Integer createdBy;
@@ -32,7 +31,7 @@ public class RuleDto {
                 .id(rule.getId())
                 .name(rule.getName())
                 .description(rule.getDescription())
-                .enabled(rule.isEnabled())
+                .status(rule.getStatus())
                 .createDate(rule.getCreateDate())
                 .lastModified(rule.getLastModified())
                 .createdBy(rule.getCreatedBy())
@@ -62,7 +61,7 @@ public class RuleDto {
         Rule rule = new Rule();
         rule.setName(ruleDTO.getName());
         rule.setDescription(ruleDTO.getDescription());
-        rule.setEnabled(ruleDTO.isEnabled());
+        rule.setStatus(ruleDTO.getStatus());
         return rule;
     }
 }

@@ -25,12 +25,19 @@ public class RuleModification {
     private LocalDateTime modificationDate;
 
     @Column(name = "modified_by")
-    private Integer modifiedBy;
+    private String modifiedBy;
 
     @Column(name = "rule_name")
     private String ruleName;
 
     @Column(name = "modification_description")
     private String modificationDescription;
+
+    @Column(name = "modification_type")
+    private String modificationType;
+
+    @Column(name = "profile_image_path")
+    private String profileImagePath ;
+
 
 }

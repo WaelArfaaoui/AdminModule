@@ -16,8 +16,11 @@ export interface RuleModificationDto {
     id?: number;
     ruleDto?: RuleDto;
     modificationDate?: string;
-    modifiedBy?: number;
+    modifiedBy?: string;
     ruleName?: string;
+    ruleId?: number;
     modificationDescription?: string;
+    modificationType?: string;
+    profileImagePath?: string;
 }
 

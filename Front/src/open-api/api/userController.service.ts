@@ -21,8 +21,6 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { AddUserRequest } from '../model/addUserRequest';
 // @ts-ignore
-import { ChangePassword } from '../model/changePassword';
-// @ts-ignore
 import { UpdateUserRequest } from '../model/updateUserRequest';
 // @ts-ignore
 import { UserDto } from '../model/userDto';
@@ -141,7 +139,7 @@ export class UserControllerService {
         }
 
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -217,7 +215,7 @@ export class UserControllerService {
             localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -233,86 +231,6 @@ export class UserControllerService {
             {
                 context: localVarHttpContext,
                 body: addUserRequest,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param changePassword
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public changePassword(changePassword: ChangePassword, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<ChangePassword>;
-    public changePassword(changePassword: ChangePassword, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangePassword>>;
-    public changePassword(changePassword: ChangePassword, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangePassword>>;
-    public changePassword(changePassword: ChangePassword, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (changePassword === null || changePassword === undefined) {
-            throw new Error('Required parameter changePassword was null or undefined when calling changePassword.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (bearerAuth) required
-        localVarCredential = this.configuration.lookupCredential('bearerAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                '*/*'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-        let localVarTransferCache: boolean | undefined = options && options.transferCache;
-        if (localVarTransferCache === undefined) {
-            localVarTransferCache = true;
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json'  = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-
-            }
-        }
-
-        let localVarPath = `/api/users/changepassword`;
-        return this.httpClient.request<ChangePassword>('patch', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: changePassword,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -368,7 +286,7 @@ export class UserControllerService {
         }
 
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -438,7 +356,7 @@ export class UserControllerService {
         }
 
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -504,7 +422,7 @@ export class UserControllerService {
         }
 
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -574,7 +492,7 @@ export class UserControllerService {
         }
 
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -664,7 +582,7 @@ export class UserControllerService {
             localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
 
-        let responseType_: 'text' | 'json'  = 'json';
+        let responseType_: 'text' | 'json' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';

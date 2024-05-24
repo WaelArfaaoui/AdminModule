@@ -63,12 +63,8 @@
                       <label class="form-label">Criteria percentage *</label>
                       <input type="number" class="form-control inp-control" formControlName="percentage" placeholder="" min="0" max="100">
                     </div>
-                    <div>
-                      <label class="form-label">Criteria value *</label>
-                      <input type="number" class="form-control inp-control" formControlName="value" placeholder="" min="0" max="10">
-                    </div>
-                    <div class=" mt-4">
-                      <button *ngIf="i === getAttributeControls().length - 1" (click)="addAttribute()" class="btn btn-success btn-config mt-2">
+                    <div class=" mt-4" *ngIf="rule.status=='Enabled'">
+                      <button *ngIf="i === getAttributeControls().length - 1" (click)="addAttribute()" class="btn btn-success btn-config mt-2" >
                         <i class="pi pi-fw pi-plus"></i>Add
                       </button>
                       <button *ngIf="i !== getAttributeControls().length - 1" (click)="removeAttribute(i)" class="btn btn-danger btn-config mt-2">
@@ -78,7 +74,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 rule-name mt-4">
+              <div class="col-md-6 rule-name mt-4" *ngIf="rule.status=='Enabled'">
                 <label class="form-label">Update description *</label>
                 <input type="text" class="form-control" formControlName="updateDescription" placeholder="">
               </div>
@@ -87,7 +83,7 @@
 
         </div>
 
-        <div class="gap-3 d-md-flex justify-content-md-end text-center">
+        <div class="gap-3 d-md-flex justify-content-md-end text-center" *ngIf="rule.status=='Enabled'">
           <button type="submit" class="btn save-conf mt-3">Update rule</button>
         </div>
       </form>

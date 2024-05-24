@@ -35,7 +35,7 @@ public class Rule {
     private String description;
 
     @Column(name = "status")
-    private boolean enabled = true ;
+    private String status = "Enabled" ;
 
     @CreatedDate
     @Column(
@@ -65,6 +65,7 @@ public class Rule {
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RuleModification> ruleModifications;
+
 
 
 

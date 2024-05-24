@@ -12,4 +12,6 @@ public interface CategoryService {
     CategoryDto findById(Integer id);
 
     List<CategoryDto> findAll();
+
+     List<CategoryDto> getTopUsedCategories() ;
 }

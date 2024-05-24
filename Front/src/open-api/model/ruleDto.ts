@@ -18,7 +18,7 @@ export interface RuleDto {
     name?: string;
     description?: string;
     category?: CategoryDto;
-    enabled?: boolean;
+    status?: string;
     createDate?: string;
     lastModified?: string;
     createdBy?: number;

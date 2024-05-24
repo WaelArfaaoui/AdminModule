@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS public.address (
 
 
 CREATE TABLE IF NOT EXISTS public.language (
-                                 language_id SERIAL PRIMARY KEY,
+                                 language_id TEXT PRIMARY KEY,
                                  name character varying,
                                  active boolean,
                                  last_update timestamp with time zone

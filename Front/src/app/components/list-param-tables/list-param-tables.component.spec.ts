@@ -98,6 +98,7 @@ describe('ListParamTablesComponent', () => {
     component.changePage(3);
     await fixture.whenStable();
     expect(component.currentPage).toEqual(3);
+    expect(component.isTableExpanded(table)).toEqual(false)
     expect(tableService.retrieveAllTablesAndColumns).toHaveBeenCalled();
 
   });

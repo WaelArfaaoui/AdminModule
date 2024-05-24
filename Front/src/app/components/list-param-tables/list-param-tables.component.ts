@@ -56,7 +56,6 @@ export class ListParamTablesComponent implements OnInit {
     });
   }
   isTableExpanded(table: TableInfo): boolean {
-    console.log(table.name +" "+table.isExpanded)
     return table.isExpanded;
   }
 
@@ -123,10 +122,6 @@ export class ListParamTablesComponent implements OnInit {
   changePage(pageNumber: number) {
 
     if (pageNumber >= 1 && pageNumber <= this.totalPageCount) {
-      this.tablesInfo.forEach((table: TableInfo) => {
-        // table.isExpanded=false;
-        console.log(table.name + table.isExpanded)
-      });
       this.currentPage = pageNumber;
       this.offset = (this.currentPage - 1) * this.limit;
       this.retrieveData();

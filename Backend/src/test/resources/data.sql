@@ -13,10 +13,10 @@ VALUES ('Tunisia', true, CURRENT_TIMESTAMP),
        ('Canada', true, CURRENT_TIMESTAMP);
 
 -- Languages
-INSERT INTO public.language (name, active, last_update)
-VALUES ('English', true, CURRENT_TIMESTAMP),
-       ('Spanish', true, CURRENT_TIMESTAMP),
-       ('French', true, CURRENT_TIMESTAMP);
+INSERT INTO public.language (language_id,name, active, last_update)
+VALUES ('lan1','English', true, CURRENT_TIMESTAMP),
+       ('lan2','Spanish', true, CURRENT_TIMESTAMP),
+       ('lan3','French', true, CURRENT_TIMESTAMP);
 -- Addresses
 INSERT INTO public.address (address, address2, district, postal_code, phone,country_id, last_update)
 VALUES ('123 Main St', 'Apt 101', 'Downtown',  '12345', '555-1234', 1 ,CURRENT_TIMESTAMP),

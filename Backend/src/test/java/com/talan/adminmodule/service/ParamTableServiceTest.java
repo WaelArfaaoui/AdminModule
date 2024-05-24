@@ -32,8 +32,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 
 class ParamTableServiceTest {
-
-
     @Autowired
     private ParamTableService paramTableService;
 
@@ -93,13 +91,19 @@ void testDeleteCascade(){
     DeleteRequest cascade = new DeleteRequest("country","1");
        ResponseDto response=paramTableService.deletecascade(cascade);
         assertEquals("Cascade deletion succeeded",response.getSuccess());
-//      assertEquals(4,paramTableService.deletecascade().size());
+}
+@Test
+void testFkOptions()
+{
+    List<ForeignKeyOption> foreignKeyList=paramTableService.foreignKeyoptions("address");
+    assertEquals(1,foreignKeyList.size());
+    assertEquals(3,foreignKeyList.get(0).getOptions().size());
 }
 @Test
     void testUpdateRequest(){
        String tableName="language";
        Map<String,String> instanceData = new HashMap<>();
-       instanceData.put("language_id","1");
+       instanceData.put("language_id","lan1");
        instanceData.put("name","Guejmi");
        String username = "Kroos";
     UpdateRequest updateRequest = new UpdateRequest(instanceData,tableName,username);
@@ -107,8 +111,8 @@ void testDeleteCascade(){
     assertEquals("Update request validated and added successfully.",responseDto.getSuccess());
     ResponseDto response =paramTableService.addUpdateRequest(updateRequest);
     assertEquals("Update request already exists.",response.getError());
-    response =paramTableService.cancelUpdateRequest("1",tableName);
-    assertEquals("Update of 1 cancelled successfully",response.getSuccess());
+    response =paramTableService.cancelUpdateRequest("lan1",tableName);
+    assertEquals("Update of lan1 cancelled successfully",response.getSuccess());
     response =paramTableService.cancelUpdateRequest("3000",tableName);
     assertEquals("Request not found: 3000",response.getError());
     instanceData.replace("language_id","3000");
@@ -121,7 +125,7 @@ void testDeleteCascade(){
     void testSimulateUpdateRequest(){
     String tableName="language";
     Map<String,String> instanceData = new HashMap<>();
-    instanceData.put("language_id","1");
+    instanceData.put("language_id","lan1");
     instanceData.put("name","Guejmi");
     String username = "Kroos";
     UpdateRequest updateRequest = new UpdateRequest(instanceData,tableName,username);
@@ -135,22 +139,22 @@ void testDeleteCascade(){
     @Test
     void testDeleteRequest(){
         String tableName="language";
-        DeleteRequest deleteRequest = new DeleteRequest(tableName,"3","Marhoum");
+        DeleteRequest deleteRequest = new DeleteRequest(tableName,"lan3","Marhoum");
         ResponseDto responseDto =paramTableService.addDeleteRequest(deleteRequest);
         assertEquals("INSTANCE ADDED TO DELETE 8 AM",responseDto.getSuccess());
         ResponseDto response =paramTableService.addDeleteRequest(deleteRequest);
         assertEquals("INSTANCE ALREADY EXISTS",response.getError());
-        ResponseDto cancel =paramTableService.cancelDeleteRequest(tableName,"3");
-        assertEquals("Deletion of 3 cancelled successfully",cancel.getSuccess());
-        ResponseDto alreadycanceled =paramTableService.cancelDeleteRequest(tableName,"3");
-        assertEquals("Request not found: 3",alreadycanceled.getError());
+        ResponseDto cancel =paramTableService.cancelDeleteRequest(tableName,"lan3");
+        assertEquals("Deletion of lan3 cancelled successfully",cancel.getSuccess());
+        ResponseDto alreadycanceled =paramTableService.cancelDeleteRequest(tableName,"lan3");
+        assertEquals("Request not found: lan3",alreadycanceled.getError());
 
 
     }
     @Test
     void testSimulateDeleteRequest(){
         String tableName="language";
-        DeleteRequest deleteRequest = new DeleteRequest(tableName,"3","Marhoum");
+        DeleteRequest deleteRequest = new DeleteRequest(tableName,"lan3","Marhoum");
         boolean result =paramTableService.simulateDelete(deleteRequest);
         assertTrue(result);
         DeleteRequest deleteRequestfail = new DeleteRequest(tableName,"3000","T.Henry");
@@ -212,21 +216,41 @@ void testDeleteCascade(){
       assertEquals(0,paramTableService.getDeleteRequestByTable("actor").size());
 
     }
+@Test
+void testgetDataForDashboard()
+{
+    DeleteRequest deleteRequest1 = new DeleteRequest("actor","1","AlPacino");
+    paramTableService.addDeleteRequest(deleteRequest1);
+    paramTableService.executeDeletion();
+  TreeMapData treeMap =  paramTableService.tablesforDashboard();
+  assertEquals(1,treeMap.getNumberupdates());
+  assertEquals(1,treeMap.getData().size());
+  assertEquals("actor",treeMap.getData().get(0).getX());
+  assertEquals(1,treeMap.getData().get(0).getY());
 
+}
     @Test
     void testExecuteUpdate(){
         Map<String,String> instanceData= new HashMap<>();
-        instanceData.put("actor_id","3");
-        instanceData.put("first_name","Shaggy");
-        UpdateRequest updateRequest1 = new UpdateRequest(instanceData,"actor","Samalapa");
+        instanceData.put("language_id","lan1");
+        instanceData.put("name","Mandarian");
+        UpdateRequest updateRequest1 = new UpdateRequest(instanceData,"language","Samalapa");
         paramTableService.addUpdateRequest(updateRequest1);
-        assertEquals(1,paramTableService.getUpdateRequestByTable("actor").size());
+        assertEquals(1,paramTableService.getUpdateRequestByTable("language").size());
         paramTableService.executeUpdate();
-        assertEquals(0,paramTableService.getUpdateRequestByTable("actor").size());
-        List<ParamAudit> history = paramTableService.paramHistory("actor");
+        assertEquals(0,paramTableService.getUpdateRequestByTable("language").size());
+        List<ParamAudit> history = paramTableService.paramHistory("language");
         assertEquals(1,history.size());
     }
+@Test
+    void testCheckUnicity()
+{
+   Boolean unicity = paramTableService.checkunicity("lan2","language");
+   assertFalse(unicity);
+     unicity = paramTableService.checkunicity("lan116","language");
+     assertTrue(unicity);
 
+}
 
 
 }

@@ -23,6 +23,13 @@ public class GlobalExceptionHandler {
         responseDto.setError("An error occurred while accessing data.");
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(StackOverflowError.class)
+    public ResponseEntity<ResponseDto> handleDataAccessException(StackOverflowError ex, WebRequest request) {
+        String requestDetails =request.getDescription(false) ;
+        LOGGER.error("Data Access error {}: {}",requestDetails, ex.getMessage(), ex);
+        responseDto.setError("Infinite Loop");
+        return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ResponseDto> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {

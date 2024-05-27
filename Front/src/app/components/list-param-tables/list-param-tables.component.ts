@@ -83,6 +83,7 @@ export class ListParamTablesComponent implements OnInit {
           column.type = "boolean";
           break;
         case "timestamptz":
+        case "date":
           column.type = "date"
           break;
         default:

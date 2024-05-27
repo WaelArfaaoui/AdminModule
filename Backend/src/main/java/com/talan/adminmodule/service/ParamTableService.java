@@ -14,11 +14,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DecimalStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -27,6 +29,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+
 @Service
 public class ParamTableService  {
     @Autowired
@@ -419,6 +423,9 @@ public class ParamTableService  {
         return data;
     }
     private void checkReferencedRecursive(DeleteRequest deleteRequest, List<DeleteRequest> response) {
+Set<DeleteRequest> deleted= new HashSet<>(response);
+
+if (!deleted.contains(deleteRequest)){
         List<ForeignKey> fks = allTablesWithColumns.getAllforeignKeys().stream().filter( fk -> fk.getReferencedTable().equals(deleteRequest.getTableName())).toList();
         ColumnInfo pk = primaryKeyDetails(deleteRequest.getTableName());
         String typePk = pk.getType();
@@ -427,7 +434,7 @@ public class ParamTableService  {
         Map<String,Object> row = jdbcTemplate.queryForMap(sql,pkValue);
         for (ForeignKey fk:fks){
             Object fkValue= row.get(fk.getReferencedColumn());
-            List<Map<String,Object>>rowref = jdbcTemplate.queryForList("SELECT  "+ primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName() + " WHERE "+fk.getFkColumnName() +" = "+ fkValue);
+            List<Map<String,Object>>rowref = jdbcTemplate.queryForList("SELECT  "+ primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName() + " WHERE "+fk.getFkColumnName() +" = ?",fkValue);
             if (!rowref.isEmpty()) {
                 List<String> occurences = rowref.stream().map(map -> map.get(primaryKeyDetails(fk.getFkTableName()).getName()).toString()).collect(Collectors.toList());
                 for (String refId :occurences) {
@@ -439,7 +446,7 @@ public class ParamTableService  {
                     checkReferencedRecursive(childDeleteRequest, response);
                 }
             }
-        }
+        }}
     }
     public Boolean checkunicity(String primaryKeyValue ,String tableName){
         String pkType  =primaryKeyDetails(tableName).getType();
@@ -479,8 +486,9 @@ public class ParamTableService  {
         ResponseDto responseDto = new ResponseDto();
         boolean requestFound = false;
         DeleteRequest deleteRequest = new DeleteRequest(tableName,primaryKeyValue);
-        checkReferencedRecursive(deleteRequest, response);
         response.add(deleteRequest);
+        checkReferencedRecursive(deleteRequest, response);
+
         for (DeleteRequest del :response) {
             for (DeleteRequest delete : deleteRequests) {
                 if (delete.getTableName().equals(del.getTableName()) &&
@@ -573,12 +581,15 @@ public class ParamTableService  {
         Object convertedValue;
         convertedValue = switch (columnType.toLowerCase()) {
             case "int8", "bigint" -> inputValue != null ? Long.parseLong(inputValue) : 0L;
-            case "bigserial", "serial" -> inputValue != null ? Long.parseLong(inputValue) : null;
-            case "int", "int4", "integer", "int2" -> inputValue != null ? Integer.parseInt(inputValue) : 0;
+            case "bigserial", "serial","serial4","serial8" -> inputValue != null ? Long.parseLong(inputValue) : null;
+            case "int", "int4", "integer", "int2" ,"numeric"-> inputValue != null ? Integer.parseInt(inputValue) : 0;
             case "varchar", "text", "bpchar" -> inputValue;
+            case "real","float4" ->inputValue != null ?  Float.parseFloat(inputValue):0f ;
+//            case "decimal","bigdecimal" -> Decimal.parseBig(inputValue) ;
+            case "double","precision","float8" ->inputValue != null ?  Double.parseDouble(inputValue) :0d;
             case "bool" -> Boolean.parseBoolean(inputValue);
             case "bytea" -> inputValue != null ? Base64.getDecoder().decode(inputValue) : null;
-            case "timestamptz","date" -> {
+            case "timestamptz","date","timetz" -> {
                 ZonedDateTime zonedDateTime;
                 if (inputValue == null || inputValue.isEmpty() || inputValue.equalsIgnoreCase("null") || inputValue.equalsIgnoreCase("undefined")) {
                     zonedDateTime = ZonedDateTime.now();

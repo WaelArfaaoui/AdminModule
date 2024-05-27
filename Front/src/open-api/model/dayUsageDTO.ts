@@ -11,9 +11,8 @@
  */
 
 
-export interface CategoryDto { 
-    id?: number;
-    name?: string;
-    ruleCount?: number;
+export interface DayUsageDTO { 
+    date?: string;
+    usageCount?: number;
 }
 

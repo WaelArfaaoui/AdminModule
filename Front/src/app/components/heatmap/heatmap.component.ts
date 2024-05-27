@@ -1,6 +1,6 @@
-import {Component, ViewChild} from "@angular/core";
-
-import {ChartComponent} from "ng-apexcharts";
+import { Component, ViewChild, OnInit } from "@angular/core";
+import { ChartComponent } from "ng-apexcharts";
+import { RuleService, RuleUsageDTO } from "../../../open-api";
 
 export type ChartOptions = {
   series: any;
@@ -13,57 +13,22 @@ export type ChartOptions = {
   grid: any;
   plotOptions: any;
 };
+
 @Component({
   selector: 'app-heatmap',
   templateUrl: './heatmap.component.html',
   styleUrls: ['./heatmap.component.scss']
 })
-export class HeatmapComponent {
+export class HeatmapComponent implements OnInit {
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  constructor() {
+  constructor(private ruleService: RuleService) {
     this.chartOptions = {
-      series: [
-        {
-          name: "Metric1",
-          data: this.generateData(18, {
-            min: 0,
-            max: 90
-          })
-        },
-        {
-          name: "Metric2",
-          data: this.generateData(18, {
-            min: 0,
-            max: 90
-          })
-        },
-        {
-          name: "Metric3",
-          data: this.generateData(18, {
-            min: 0,
-            max: 90
-          })
-        },
-        {
-          name: "Metric4",
-          data: this.generateData(18, {
-            min: 0,
-            max: 90
-          })
-        },
-        {
-          name: "Metric5",
-          data: this.generateData(18, {
-            min: 0,
-            max: 90
-          })
-        }
-      ],
+      series: [],
       chart: {
         height: 200,
-        type: "heatmap" ,
+        type: "heatmap",
         toolbar: {
           show: false,
         }
@@ -71,24 +36,45 @@ export class HeatmapComponent {
       dataLabels: {
         enabled: false
       },
-      colors: ["#0275d8"]
+      colors: ["#0275d8"],
+      xaxis: {
+        type: 'category',
+        labels: {
+          rotate: -45,
+          rotateAlways: true,
+        },
+        tickPlacement: 'on'
+      }
     };
   }
 
-  public generateData(count:any, yrange:any) {
-    let i = 0;
-    let series = [];
-    while (i < count) {
-      let x = "jan " + (i + 1).toString();
-      let y =
-        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+  ngOnInit() {
+    this.fetchChartData();
+  }
 
-      series.push({
-        x: x,
-        y: y
-      });
-      i++;
-    }
-    return series;
+  fetchChartData() {
+    this.ruleService.getTop5UsedRulesForLast18Days().subscribe(
+        (data: RuleUsageDTO[]) => {
+          const dataSeries = data.map(rule => ({
+            name: rule.ruleName,
+            data: (rule.dayUsages?.map(dayUsage => ({
+              x: dayUsage.date,
+              y: dayUsage.usageCount
+            })) || []).reverse()
+          }));
+
+          this.updateChartOptions(dataSeries);
+        },
+        (error) => {
+          console.error("Error fetching chart data:", error);
+        }
+    );
+  }
+
+  updateChartOptions(dataSeries: any[]) {
+    this.chartOptions = {
+      ...this.chartOptions,
+      series: dataSeries
+    };
   }
 }

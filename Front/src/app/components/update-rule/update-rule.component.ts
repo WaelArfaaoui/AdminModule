@@ -236,7 +236,7 @@ export class UpdateRuleComponent implements OnInit {
   saveRule(formData: any) {
     let ruleId = this.rule.id;
     if (ruleId != null) {
-      this.ruleService.updateRule("wael", ruleId, formData.updateDescription , formData).subscribe({
+      this.ruleService.updateRule(this.username, ruleId, formData.updateDescription , formData).subscribe({
         next: response => {
           this.messageService.add({severity: 'success', summary: 'Update scheduled', detail: 'Rule update scheduled'});
           this.ref.close(true);

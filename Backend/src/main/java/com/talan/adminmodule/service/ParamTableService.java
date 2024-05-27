@@ -9,6 +9,7 @@ import jakarta.annotation.PostConstruct;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.postgresql.jdbc.PgArray;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -98,11 +99,27 @@ private JdbcTemplate jdbcTemplate;
         StringBuilder sqlQuery = buildSqlQuery(tableName, request);
         LOGGER.debug("Executing SQL: {}", sqlQuery);
         DataFromTable dataFromTable =new DataFromTable();
-     List<String> deletedRequestsData =new ArrayList<>();
-     List<String> updatedRequestsData =new ArrayList<>();
-     dataFromTable.setData (jdbcTemplate.queryForList(sqlQuery.toString()));
+        List<String> deletedRequestsData =new ArrayList<>();
+        List<String> updatedRequestsData =new ArrayList<>();
+        List<Map<String, Object>> queryResult = jdbcTemplate.queryForList(sqlQuery.toString());
+        Optional< TableInfo> tab = allTablesWithColumns.getAllTablesWithColumns().stream().filter(tableInfo -> tableInfo.getName().equalsIgnoreCase(tableName)).findFirst();
+        if (tab.isPresent()){
+            TableInfo table= tab.get();
+            Optional< ColumnInfo> column=  table.getColumns().stream().filter(columnInfo -> columnInfo.getType().startsWith("_")).findFirst();
+            if (column.isPresent()){
+                for (Map<String, Object> row : queryResult) {
+                    if (row.containsKey(column.get().getName())) {
+                        Object columnValue = row.get(column.get().getName());
+                        if (columnValue instanceof PgArray) {
+                            row.put(column.get().getName(), columnValue.toString());
+                        }
+                    }
+                }
+            }
+        }
 
-
+        dataFromTable.setData(queryResult);
+//     dataFromTable.setData (jdbcTemplate.queryForList(sqlQuery.toString()));
         for (Map<String, Object> row : dataFromTable.getData()) {
             String primaryKeyValue = row.get(primaryKeyDetails(tableName).getName()).toString();
             for (DeleteRequest deleteRequest : getDeleteRequestByTable(tableName)) {
@@ -118,7 +135,7 @@ private JdbcTemplate jdbcTemplate;
         }
         dataFromTable.setDeleteRequests(deletedRequestsData);
         dataFromTable.setUpdateRequests(updatedRequestsData);
-      return  dataFromTable;
+        return  dataFromTable;
 
     }
     public StringBuilder buildSqlQuery(String tableName, TableDataRequest request) {

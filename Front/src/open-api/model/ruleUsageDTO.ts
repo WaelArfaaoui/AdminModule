@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DayUsageDTO } from './dayUsageDTO';
 
 
-export interface CategoryDto { 
-    id?: number;
-    name?: string;
-    ruleCount?: number;
+export interface RuleUsageDTO { 
+    ruleName?: string;
+    dayUsages?: Array<DayUsageDTO>;
 }
 

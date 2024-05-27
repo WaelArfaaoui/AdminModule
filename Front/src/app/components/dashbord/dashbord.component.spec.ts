@@ -3,6 +3,7 @@ import { dashbordComponent } from './dashbord.component';
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { TableService } from "../../services/table/table.service";
 import { of } from 'rxjs';
+import {HttpClientModule} from "@angular/common/http";
 
 describe('dashbordComponent', () => {
     let component: dashbordComponent;
@@ -15,6 +16,7 @@ describe('dashbordComponent', () => {
         await TestBed.configureTestingModule({
             declarations: [dashbordComponent],
             providers: [{ provide: TableService, useValue: tableService }],
+            imports: [ HttpClientModule ] ,
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 

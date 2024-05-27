@@ -147,7 +147,7 @@ export class AuthenticationService {
             localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
 
-        let responseType_: 'text' | 'json' = 'json';
+        let responseType_: 'text' | 'json'= 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';
@@ -213,7 +213,7 @@ export class AuthenticationService {
         }
 
 
-        let responseType_: 'text' | 'json' = 'json';
+        let responseType_: 'text' | 'json'= 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
                 responseType_ = 'text';

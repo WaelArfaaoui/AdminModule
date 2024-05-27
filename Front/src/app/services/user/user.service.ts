@@ -33,11 +33,17 @@ export class UserService {
     return this.http.post<any>('http://localhost:8090/api/users', formData);
   }
   getUserDetails() {
-    this.token = localStorage.getItem('accessToken')
-    let decodedJwt: any = jwtDecode(this.token);
-    this.email = decodedJwt.sub;
-    return {
-      'email': this.email,
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      const decodedJwt: any = jwtDecode(token);
+      const email = decodedJwt.sub;
+      return {
+        email: email
+      };
+    } else {
+      return {
+        email: "wael.arfaoui@talan.com"
+      } ;
     }
   }
 

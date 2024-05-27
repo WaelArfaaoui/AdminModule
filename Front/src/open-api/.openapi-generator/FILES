@@ -20,6 +20,7 @@ model/authenticationResponse.ts
 model/categoryDto.ts
 model/columnInfo.ts
 model/dataFromTable.ts
+model/dayUsageDTO.ts
 model/deleteRuleRequest.ts
 model/foreignKey.ts
 model/models.ts
@@ -31,6 +32,7 @@ model/responseDto.ts
 model/ruleDto.ts
 model/ruleModificationDto.ts
 model/ruleUpdateDto.ts
+model/ruleUsageDTO.ts
 model/sortObject.ts
 model/tableDataRequest.ts
 model/tableInfo.ts

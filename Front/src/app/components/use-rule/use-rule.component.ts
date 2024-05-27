@@ -6,12 +6,13 @@ import {
   AttributeService,
   CategoryDto,
   CategoryService,
-  RuleDto
+  RuleDto, RuleService
 } from "../../../open-api";
 import {MessageService} from "primeng/api";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {UserService} from "../../services/user/user.service";
 import Swal from 'sweetalert2' ;
+import {error} from "@angular/compiler-cli/src/transformers/util";
 @Component({
   selector: 'app-use-rule',
   templateUrl: './use-rule.component.html',
@@ -29,13 +30,14 @@ export class UseRuleComponent implements OnInit {
   imageUrl: string | undefined;
 
   constructor(
-    public fb: FormBuilder,
-    public messageService: MessageService,
-    public attributeService: AttributeService,
-    public categoryService: CategoryService,
-    public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig,
-    public userService: UserService,
+      public fb: FormBuilder,
+      public messageService: MessageService,
+      public attributeService: AttributeService,
+      public categoryService: CategoryService,
+      public ref: DynamicDialogRef,
+      public config: DynamicDialogConfig,
+      public userService: UserService,
+      public ruleService:RuleService
   ) {
   }
 
@@ -52,7 +54,7 @@ export class UseRuleComponent implements OnInit {
     this.ruleForm = this.fb.group({
       name: [this.rule.name, Validators.required],
       description: [this.rule.description, Validators.required],
-      category: [this.rule.category || {}, Validators.required],
+      category: [this.rule.category, Validators.required],
       attributeDtos: this.fb.array([]),
       updateDescription: [''] ,
       imageUrl: [this.imageUrl]
@@ -127,13 +129,25 @@ export class UseRuleComponent implements OnInit {
       const value = parseFloat(control.get('value')!.value); // Parse as float
       note += percentage / 100 * value;
     }
+    const formattedNote = note.toFixed(2); // Format note to two decimal places
+    if (this.rule.id != null) {
+      this.ruleService.createRuleUsage(this.rule.id).subscribe({
+        next: data => {
+          console.log("rule used !")
+        },
+        error: error => {
+          console.error('Error using rule:', error);
+        }
+      });
+    }
     this.ref.close(true);
     Swal.fire({
       title: "Note",
-      text: note.toString(),
+      text: formattedNote,
       icon: "success"
     });
   }
+
 
 
 }

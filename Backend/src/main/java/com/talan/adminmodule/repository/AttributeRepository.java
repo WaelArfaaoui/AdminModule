@@ -1,6 +1,7 @@
 package com.talan.adminmodule.repository;
 
 import com.talan.adminmodule.entity.Attribute;
+import org.junit.experimental.categories.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +14,6 @@ public interface AttributeRepository extends JpaRepository<Attribute, Integer> {
     @Query("SELECT a FROM Attribute a WHERE LOWER(a.name) = LOWER(:name)")
     Attribute findByNameIgnoreCase(@Param("name") String name);
 
-    Object findByName(String s);
+    Attribute findByName(String name);
+
 }

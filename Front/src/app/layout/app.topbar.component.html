@@ -24,13 +24,9 @@
         layoutService.state.profileSidebarVisible
     }"
   >
-    <button class="p-link layout-topbar-button">
-      <i class="pi pi-calendar"></i>
-      <span>Calendar</span>
-    </button>
+
     <button class="p-link layout-topbar-button" (click)="toggleDropdown($event)">
       <i class="pi pi-user"></i>
-      <span>Profile</span>
     </button>
     <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible}">
       <div class="user-info">
@@ -46,17 +42,10 @@
       </div>
       </div>
       <div class="separator"></div>
-      <div class="logout" [routerLink]="'/table'" (click)="getUserByEmail()">
-        <i class="pi pi-user"></i> Profile
-      </div>
-      <div class="separator"></div>
       <div class="logout" (click)="logout()">
         <i class="pi pi-sign-out"></i> Logout
       </div>
     </div>
-    <button class="p-link layout-topbar-button">
-      <i class="pi pi-bell"></i>
-      <span>Notifications</span>
-    </button>
+
   </div>
 </div>

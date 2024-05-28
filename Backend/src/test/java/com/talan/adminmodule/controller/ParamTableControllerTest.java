@@ -3,7 +3,7 @@ package com.talan.adminmodule.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talan.adminmodule.dto.*;
 import com.talan.adminmodule.entity.ParamAudit;
-import com.talan.adminmodule.service.ParamTableService;
+import com.talan.adminmodule.service.impl.ParamTableServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,9 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,7 +37,7 @@ class ParamTableControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ParamTableService tableService;
+    private ParamTableServiceImpl tableService;
     @Autowired
     ParamTableController paramTableController;
 

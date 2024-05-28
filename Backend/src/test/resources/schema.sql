@@ -4,13 +4,17 @@ CREATE TABLE IF NOT EXISTS public.country (
                                               country_id SERIAL PRIMARY KEY,
                                               country text,
                                               active boolean,
-                                              last_update timestamp with time zone
+                                              last_update timestamp with time zone,
+                                              areas _text
 );
 CREATE TABLE IF NOT EXISTS public.actor (
                     actor_id SERIAL PRIMARY KEY,
                               active boolean,
                               first_name text,
                               last_name text,
+                              height real,
+                              accepted bool DEFAULT true,
+                              phone bigint,
                               last_update timestamp with time zone
 );
 

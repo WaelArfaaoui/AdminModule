@@ -122,10 +122,7 @@ export class UseRuleComponent implements OnInit {
   }
 
   onSubmit() {
-
-
       if (!this.validateAttributeValues()) {
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Criteria values should be between 1 and 10.'});
         return;
       }
       else {

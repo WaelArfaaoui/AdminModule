@@ -1,27 +1,18 @@
 package com.talan.adminmodule.config;
 
 import com.talan.adminmodule.dto.*;
-import com.talan.adminmodule.entity.Role;
-import com.talan.adminmodule.entity.User;
-import com.talan.adminmodule.repository.UserRepository;
-import com.talan.adminmodule.service.ParamTableService;
-import com.talan.adminmodule.service.impl.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 public class DatabaseInitializer {

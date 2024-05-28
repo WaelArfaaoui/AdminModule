@@ -21,6 +21,7 @@ public class ParamAudit {
     private String action;
     private Integer version;
     private String rowId;
+    @Column(columnDefinition = "TEXT")
     private String newRow;
     private String createdBy;
     private LocalDateTime createdAt;

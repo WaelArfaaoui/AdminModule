@@ -585,7 +585,7 @@ if (!deleted.contains(deleteRequest)){
             case "int", "int4", "integer", "int2" ,"numeric"-> inputValue != null ? Integer.parseInt(inputValue) : 0;
             case "varchar", "text", "bpchar" -> inputValue;
             case "real","float4" ->inputValue != null ?  Float.parseFloat(inputValue):0f ;
-//            case "decimal","bigdecimal" -> Decimal.parseBig(inputValue) ;
+//            case "decimal","bigdecimal" -> Decimal.parseBig(inpudouble","precision","float8"tValue) ;
             case "double","precision","float8" ->inputValue != null ?  Double.parseDouble(inputValue) :0d;
             case "bool" -> Boolean.parseBoolean(inputValue);
             case "bytea" -> inputValue != null ? Base64.getDecoder().decode(inputValue) : null;

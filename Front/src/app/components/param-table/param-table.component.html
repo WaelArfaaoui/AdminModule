@@ -63,8 +63,6 @@
                     (ngModelChange)="updateEditedValue(table, row, column, $event)"
                     [style]="{'width': '80px'}">
         </p-dropdown>
-
-
       </ng-template>
     </td>
     <td [ngClass]="{ 'marked-for-deletion': isRowMarkedForDeletion(table,row),'marked-for-update': isRowMarkedForUpdate(table,row)  }" >
@@ -86,6 +84,7 @@
       <td>
         <ng-container [ngSwitch]="getColumnType(column,table)" >
           <input *ngSwitchCase="'number'" type="number"  [(ngModel)]="newrow[column]" pInputText>
+          <input *ngSwitchCase="'float'" type="number" [(ngModel)]="newrow[column]" pInputText step="0.01">
           <p-calendar *ngSwitchCase="'date'" [(ngModel)]="newrow[column]" ></p-calendar>
           <input *ngSwitchCase="'string'" type="text"  [(ngModel)]="newrow[column]" pInputText>
           <p-dropdown [options]="['true','false']" *ngSwitchCase="'boolean'" [(ngModel)]="newrow[column]" [style]="{'width': '80px'}"></p-dropdown>

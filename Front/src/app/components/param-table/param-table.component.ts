@@ -36,13 +36,26 @@ isLoading:boolean=false
   getInvalidColumns(row: any, table: any): string[] {
   const columnNames = table.columns.map((column:ColumnInfo) => column.name)
     const invalidColumns: string[] = [];
+  const wrongsize:String[]=[];
     columnNames.forEach((column: any) => {
       if (this.checkNullable(column, table)&&(!row[column] || row[column]==='' )) {
         invalidColumns.push(column);
       }
+
     });
     return invalidColumns;
   }
+  checksizes(row:any,table:any){
+  const wrongsize:string[]=[];
+  table.columns.forEach((column:ColumnInfo)=> {
+  if (row[column.name]&&column.size&& row[column.name].length>column.size){
+    wrongsize.push(column.name)
+  }
+  });
+  return wrongsize;
+  };
+
+
   constructor(private messageService: MessageService, private tableService: TableService, private http: HttpClient,private dialogService:DialogService) {}
   getDataTable(table: TableInfo) {
     table.data=[];
@@ -308,7 +321,7 @@ editValue (table: TableInfo, row: any) {
 
         instanceData[column] =""
       }
-      if (this.getColumnType(column,table)==="number"&&newRow[column]===""){
+      if (this.getColumnType(column,table)===("number"||"real")&&(newRow[column]===""||instanceData[column]==="")){
         instanceData[column]="0"
       }
       instanceData[column] = newRow[column];
@@ -319,7 +332,7 @@ editValue (table: TableInfo, row: any) {
   addNewInstance(table: TableInfo, newRow: any) {
     const instanceData = this.createInstanceData(newRow, table);
     const invalidColumns = this.getInvalidColumns(instanceData, table);
-
+ const wrongsize =this.checksizes(instanceData,table);
     if (table.pk.type !== "auto" && instanceData[table.pk.name] !== "") {
       this.tableService.checkunicity(instanceData[table.pk.name], table.name)
         .subscribe({
@@ -331,7 +344,7 @@ editValue (table: TableInfo, row: any) {
                 detail: `Primary Key value: ${newRow[table.pk.name]} must be unique`
               });
             } else {
-              this.executeAddInstance(instanceData, table, newRow, invalidColumns);
+              this.executeAddInstance(instanceData, table, newRow, invalidColumns,wrongsize);
             }
           },
           error: (error: any) => {
@@ -339,18 +352,24 @@ editValue (table: TableInfo, row: any) {
           }
         });
     } else {
-      this.executeAddInstance(instanceData, table, newRow, invalidColumns);
+      this.executeAddInstance(instanceData, table, newRow, invalidColumns,wrongsize);
     }
   }
 
-  executeAddInstance(instanceData: any, table: TableInfo, newRow: any, invalidColumns: string[]) {
+  executeAddInstance(instanceData: any, table: TableInfo, newRow: any, invalidColumns: string[],wrongsize:string[]) {
     if (invalidColumns.length > 0) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Validation Error',
         detail: `Please fill the required fields: ${invalidColumns.join(', ')}`
       });
-    } else {
+    } else if (wrongsize.length>0){
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validation Error',
+        detail: `Wrong size of : ${invalidColumns.join(', ')}`
+      });
+    }else {
       this.tableService.addInstance(instanceData, table.name)
         .subscribe({
           next: (response: any) => {

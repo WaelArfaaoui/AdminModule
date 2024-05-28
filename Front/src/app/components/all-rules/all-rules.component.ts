@@ -20,7 +20,7 @@ interface PageEvent {
 })
 export class AllRulesComponent implements OnInit {
   first: number = 0;
-  rows: number = 9;
+  rows: number = 10;
   searchQuery: string = '';
   rules: Array<RuleDto> | undefined = [];
   totalRecords: number | undefined = 0;

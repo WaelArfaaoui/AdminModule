@@ -37,7 +37,7 @@
                   <div [formGroupName]="i" class="info-control mt-4">
                     <div class="attr-cont">
                       <div class="col-md-6">
-                        <label class="form-label">Attribute name *</label>
+                        <label class="form-label">Criteria name *</label>
                         <div class="flex-disp">
                           <p-dropdown [options]="attributes" [(ngModel)]="selectedAttributes[i]" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" formControlName="name" [readonly]="true">
                             <ng-template pTemplate="selectedItem" let-selectedOption>

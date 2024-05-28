@@ -122,32 +122,42 @@ export class UseRuleComponent implements OnInit {
   }
 
   onSubmit() {
-    let note = 0.0;
-    const attributeControls = this.getAttributeControls();
-    for (const control of attributeControls) {
-      const percentage = parseFloat(control.get('percentage')!.value); // Parse as float
-      const value = parseFloat(control.get('value')!.value); // Parse as float
-      note += percentage / 100 * value;
-    }
-    const formattedNote = note.toFixed(2); // Format note to two decimal places
-    if (this.rule.id != null) {
-      this.ruleService.createRuleUsage(this.rule.id).subscribe({
-        next: data => {
-          console.log("rule used !")
-        },
-        error: error => {
-          console.error('Error using rule:', error);
+
+
+      if (!this.validateAttributeValues()) {
+        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Criteria values should be between 1 and 10.'});
+        return;
+      }
+      else {
+        let note = 0.0;
+        const attributeControls = this.getAttributeControls();
+        for (const control of attributeControls) {
+          const percentage = parseFloat(control.get('percentage')!.value); // Parse as float
+          const value = parseFloat(control.get('value')!.value); // Parse as float
+          note += percentage / 100 * value;
         }
-      });
+        const formattedNote = note.toFixed(2); // Format note to two decimal places
+        if (this.rule.id != null) {
+          this.ruleService.createRuleUsage(this.rule.id).subscribe({
+            next: data => {
+              console.log("rule used !")
+            },
+            error: error => {
+              console.error('Error using rule:', error);
+            }
+          });
+        }
+        this.ref.close(true);
+        Swal.fire({
+          title: "Note",
+          text: formattedNote,
+          icon: "success"
+        });
+      }
     }
-    this.ref.close(true);
-    Swal.fire({
-      title: "Note",
-      text: formattedNote,
-      icon: "success"
-    });
-  }
 
 
 
 }
+
+

@@ -69,12 +69,11 @@ export class ListParamTablesComponent implements OnInit {
         case "int":
         case "integer":
         case "smallint":
-          column.type = "number";
-          break;
         case "bigserial":
         case "serial":
-          column.type = "auto";
+          column.type = "number";
           break;
+
         case "real":
         case "decimal":
         case "double":
@@ -83,6 +82,7 @@ export class ListParamTablesComponent implements OnInit {
           break;
         case "varchar":
         case "text":
+        case "pchar":
           column.type = "string";
           break;
         case "bool":
@@ -93,7 +93,7 @@ export class ListParamTablesComponent implements OnInit {
           column.type = "date"
           break;
         default:
-          const charSizeMatch = column.type.match(/^char(?:acter)?\((\d+)\)$/);
+        /*  const charSizeMatch = column.type.match(/^char(?:acter)?\((\d+)\)$/);
           const varcharSizeMatch = column.type.match(/^(?:varchar|character varying)\((\d+)\)$/);
 
           if (charSizeMatch) {
@@ -102,9 +102,9 @@ export class ListParamTablesComponent implements OnInit {
           } else if (varcharSizeMatch) {
             column.type = "string";
             column.size = parseInt(varcharSizeMatch[1], 10);
-          } else {
+          } else {*/
             column.type = "string";
-          }
+          // }
           break;
       }}
 

@@ -26,9 +26,10 @@
         <button pButton type="button" icon="pi pi-calculator" style="margin-right:10px" class="p-button-secondary" (click)="useRule(rule)" *ngIf="rule.status=='Enabled'"></button>
       </td>
 
-      <td class="primary details" *ngIf="rule.status=='Enabled'">
-        <button pButton type="button" icon="pi pi-pencil" style="margin-right:10px" class="p-button-warning" (click)="updateRule(rule)"></button>
-        <button pButton type="button" icon="pi pi-trash" style="margin-right:10px ; color: white;" class="p-button-danger" (click)="disableRule(rule)"></button>
+      <td class="primary details" *ngIf="rule.status=='Enabled'" >
+
+        <button pButton type="button" icon="pi pi-pencil" style="margin-right:10px" class="p-button-warning" *ngIf="getuserRole()!=='CONSULTANT'"  (click)="updateRule(rule)"></button>
+        <button pButton type="button" icon="pi pi-trash" style="margin-right:10px ; color: white;" class="p-button-danger" *ngIf="getuserRole()!=='CONSULTANT'" (click)="disableRule(rule)"></button>
         <button pButton type="button" icon="pi pi-history" class="p-button-info" (click)="openRuleHistory(rule)"></button>
       </td>
       <td class="primary details" *ngIf="!(rule.status=='Enabled')">

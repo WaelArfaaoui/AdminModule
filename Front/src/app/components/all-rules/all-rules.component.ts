@@ -5,6 +5,7 @@ import {DisableRuleComponent} from "../disable-rule/disable-rule.component";
 import {UpdateRuleComponent} from "../update-rule/update-rule.component";
 import {RuleHistoryComponent} from "../rule-history/rule-history.component";
 import {UseRuleComponent} from "../use-rule/use-rule.component";
+import {UserService} from "../../services/user/user.service";
 
 interface PageEvent {
   first: number;
@@ -26,8 +27,10 @@ export class AllRulesComponent implements OnInit {
   totalRecords: number | undefined = 0;
   private selectedRule!: RuleDto;
 
-  constructor(private ruleService: RuleService  , private dialogService: DialogService) {}
-
+  constructor(private ruleService: RuleService,private userService:UserService  , private dialogService: DialogService) {}
+getuserRole():string{
+return this.userService.getTokenRole()
+}
   onPageChange(event: PageEvent) {
     this.first = event.first/10;
     this.rows = event.rows;

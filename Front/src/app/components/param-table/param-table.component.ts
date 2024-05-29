@@ -36,7 +36,6 @@ isLoading:boolean=false
   getInvalidColumns(row: any, table: any): string[] {
   const columnNames = table.columns.map((column:ColumnInfo) => column.name)
     const invalidColumns: string[] = [];
-  const wrongsize:String[]=[];
     columnNames.forEach((column: any) => {
       if (this.checkNullable(column, table)&&(!row[column] || row[column]==='' )) {
         invalidColumns.push(column);
@@ -47,11 +46,12 @@ isLoading:boolean=false
   }
   checksizes(row:any,table:any){
   const wrongsize:string[]=[];
-  table.columns.forEach((column:ColumnInfo)=> {
-  if (row[column.name]&&column.size&& row[column.name].length>column.size){
+    table.columns.forEach((column:ColumnInfo)=> {
+      const columnSize = parseInt(column.size, 10);
+  if (row[column.name]&& row[column.name].length>columnSize){
     wrongsize.push(column.name)
-  }
-  });
+   }
+   });
   return wrongsize;
   };
 
@@ -333,7 +333,7 @@ editValue (table: TableInfo, row: any) {
     const instanceData = this.createInstanceData(newRow, table);
     const invalidColumns = this.getInvalidColumns(instanceData, table);
  const wrongsize =this.checksizes(instanceData,table);
-    if (table.pk.type !== "auto" && instanceData[table.pk.name] !== "") {
+    if (table.pk.isAutoIncrement !== "YES" && instanceData[table.pk.name] !== "") {
       this.tableService.checkunicity(instanceData[table.pk.name], table.name)
         .subscribe({
           next: (response: boolean) => {
@@ -367,7 +367,7 @@ editValue (table: TableInfo, row: any) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Validation Error',
-        detail: `Wrong size of : ${invalidColumns.join(', ')}`
+        detail: `Wrong size of : ${wrongsize.join(', ')  }`
       });
     }else {
       this.tableService.addInstance(instanceData, table.name)
@@ -399,6 +399,17 @@ editValue (table: TableInfo, row: any) {
 
       this.getDataTable(table);
     }
+  }
+  iscolumndisabled(columnName:string,table:any):boolean{
+    let auto: boolean = false;
+    for (let column of table.columns) {
+      if (column.name === columnName && column.isAutoIncrement ==="YES") {
+        auto = true;
+        break;
+      }
+    }
+
+    return auto;
   }
   openparamhistory(tableName: string) {
     this.dialogService.open(ParamHistoryComponent, {

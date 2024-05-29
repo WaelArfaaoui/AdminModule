@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
 
-      <form class="file-upload" (ngSubmit)="addUser()" [formGroup]="formSave" enctype="multipart/form-data">
+      <form class="file-upload"  [formGroup]="formSave" enctype="multipart/form-data">
         <div class="row gx-5">
           <!-- Contact detail -->
           <div class="col-xxl-8 mb-xxl-0">
@@ -79,9 +79,10 @@
 
         <!-- button -->
         <div class="gap-3 d-md-flex justify-content-md-end text-center">
-          <button type="submit" class="btn btn-lg save-btn">Save profile</button>
+          <button (click)="addUser()" class="btn btn-lg save-btn">Save profile</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+<p-toast></p-toast>

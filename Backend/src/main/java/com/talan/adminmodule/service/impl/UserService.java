@@ -85,7 +85,7 @@ public class UserService {
                 .map(this::mapUserToDto)
                 .toList();
     }
-    public UserDto update(int id, RegisterDto dto, MultipartFile file) throws IOException {
+    public UserDto update(int id, RegisterDto dto,@Nullable MultipartFile file) throws IOException {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             return null;

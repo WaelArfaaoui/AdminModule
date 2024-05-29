@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 public class InvalidEntityException extends RuntimeException {
-
+//NOSONAR
     private  ErrorCodes errorCode;
 
     private List<String> errors;

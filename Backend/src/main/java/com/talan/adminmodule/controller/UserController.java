@@ -5,6 +5,7 @@ import com.talan.adminmodule.dto.RegisterDto;
 import com.talan.adminmodule.dto.UserDto;
 import com.talan.adminmodule.entity.User;
 import com.talan.adminmodule.service.impl.UserService;
+import io.micrometer.common.lang.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,14 +37,14 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<UserDto> addUser(@ModelAttribute RegisterDto dto,
+    public ResponseEntity<UserDto> addUser(@ModelAttribute RegisterDto dto,@Nullable
                                            @RequestParam("file") MultipartFile file) throws IOException {
 
         UserDto userDto = this.userservice.addUser(dto, file);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable int id,
+    public ResponseEntity<UserDto> updateUser(@PathVariable int id,@Nullable
                                               @RequestParam("file") MultipartFile file,
                                               @RequestParam("dto") String dtoJson) {
         try {

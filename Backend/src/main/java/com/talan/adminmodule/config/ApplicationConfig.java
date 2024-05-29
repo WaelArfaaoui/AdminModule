@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -62,7 +62,7 @@ public class ApplicationConfig {
   }
 
 @Bean
-  public DatabaseInitializer databaseInitializer(DataSource dataSource, JdbcTemplate jdbcTemplate){ return new DatabaseInitializer(dataSource, jdbcTemplate);}
+  public DatabaseInitializer databaseInitializer(DataSource dataSource, NamedParameterJdbcTemplate jdbcTemplate){ return new DatabaseInitializer(dataSource, jdbcTemplate);}
   @Bean
   public AuditorAware<Integer> auditorAware() {
     return new ApplicationAuditAware();

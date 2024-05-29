@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -16,12 +16,12 @@ import java.util.List;
 
 @Component
 public class DatabaseInitializer {
-    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
     private final DataSource dataSource;
     private static final Logger log =  LoggerFactory.getLogger(DatabaseInitializer.class);
     @Autowired
 
-    public DatabaseInitializer( DataSource dataSource,JdbcTemplate jdbcTemplate) {
+    public DatabaseInitializer(DataSource dataSource, NamedParameterJdbcTemplate jdbcTemplate) {
         this.dataSource = dataSource;
         this.jdbcTemplate=jdbcTemplate;
     }
@@ -34,7 +34,7 @@ public class DatabaseInitializer {
         for (TableInfo tableInfo : allTablesWithColumns.getAllTablesWithColumns()) {
             String active="active";
             if (tableInfo.getColumns().stream().noneMatch(columnInfo -> columnInfo.getName().equals(active))){
-                jdbcTemplate.execute("ALTER TABLE " + tableInfo.getName() + " ADD COLUMN "+ active +" BOOLEAN DEFAULT TRUE");
+                jdbcTemplate.getJdbcOperations().execute("ALTER TABLE " + tableInfo.getName() + " ADD COLUMN "+ active +" BOOLEAN DEFAULT TRUE");
             }
         }
          allTablesWithColumns =retrieveAllTablesWithColumns();
@@ -67,8 +67,10 @@ public class DatabaseInitializer {
                     String columnName = tableColumns.getString("COLUMN_NAME");
                     String columnType = tableColumns.getString("TYPE_NAME");
                     String isNullable = tableColumns.getString("IS_NULLABLE");
+                    String columnSize = tableColumns.getString("COLUMN_SIZE");
+                    String isAutoIncrement = tableColumns.getString("IS_AUTOINCREMENT");
 
-                    columns.add(new ColumnInfo(columnName, columnType,isNullable));
+                    columns.add(new ColumnInfo(columnName, columnType,isNullable,columnSize,isAutoIncrement));
                 }
 
 
@@ -122,7 +124,7 @@ public class DatabaseInitializer {
         int totalRows = 0;
 
         String sql = String.format("SELECT COUNT(*) FROM %s", tableName);
-        Integer result = jdbcTemplate.queryForObject(sql,Integer.class);
+        Integer result = jdbcTemplate.getJdbcOperations().queryForObject(sql,Integer.class);
         if (result!=null){
             totalRows=result;
         }

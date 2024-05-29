@@ -12,4 +12,6 @@ public class ColumnInfo {
     private String name;
     private String type;
     private String isNullable;
+    private String size;
+    private String isAutoIncrement;
 }

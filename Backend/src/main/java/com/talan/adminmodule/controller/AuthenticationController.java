@@ -35,6 +35,38 @@ public class AuthenticationController {
   public AuthenticationController(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
+/*  @Autowired
+
+ private PasswordEncoder passwordEncoder;
+
+  @Autowired
+
+  private UserRepository userRepository;
+
+
+  @PostMapping("/authenticate")
+
+  public ResponseEntity<AuthenticationResponse> authenticate(
+
+          @RequestBody AuthenticationRequest request
+
+  ) {
+
+    User user = new User() ;
+
+    user.setEmail("jatlaouimedfedi@gmail.com.com");
+
+    user.setPassword(passwordEncoder.encode("123"));
+
+    user.setFirstname("fedi");
+
+    user.setLastname("jatt");
+
+    user.setRole(Role.ADMIN);
+
+    user.setPhone("111111");
+
+    this.userRepository.save(user); return null ; }*/
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(
           @RequestBody AuthenticationRequest request

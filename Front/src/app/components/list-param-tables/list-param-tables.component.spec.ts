@@ -18,9 +18,9 @@ describe('ListParamTablesComponent', () => {
   let paramTableComponent: jasmine.SpyObj<ParamTableComponent>;
   const table: TableInfo = new TableInfo();
   table.columns = [
-    { name: 'Column1', type: 'string' ,isNullable:"NO"},
-    { name: 'Column2', type: 'number',isNullable :"NO"},
-    { name: 'Column3', type: 'boolean',isNullable :"NO"},
+    { name: 'Column1', type: 'string' ,isNullable:"NO",size:"200",isAutoIncrement:"NO"},
+    { name: 'Column2', type: 'number',isNullable :"NO",size:"200",isAutoIncrement:"NO"},
+    { name: 'Column3', type: 'boolean',isNullable :"NO",size:"200",isAutoIncrement:"NO"},
   ];
   beforeEach(async () => {
     tableService = jasmine.createSpyObj('TableService', ['retrieveAllTablesAndColumns']);
@@ -49,10 +49,10 @@ describe('ListParamTablesComponent', () => {
       allTablesWithColumns: [{
         name: 'Table1',
         type: null,
-        pk: { name: "", type: "",isNullable:"" },
+        pk: { name: "", type: "",isNullable:"",size:"200",isAutoIncrement:"NO" },
         totalRows: 0,
-        columns: [{ name: "Column1", type: "string",isNullable:"NO" },{ name: "Column2", type: "int2",isNullable:"NO" },{ name: "Column3", type: "varchar",isNullable:"NO" }
-          ,{ name: "Column4", type: "bool",isNullable:"NO" } ,{ name: "Column5", type: "bool",isNullable:"NO" },{ name: "Column5", type: "timestamptz",isNullable:"NO" }],
+        columns: [{ name: "Column1", type: "string",isNullable:"NO",size:"200",isAutoIncrement:"NO" },{ name: "Column2", type: "int2",isNullable:"NO",size:"200",isAutoIncrement:"NO" },{ name: "Column3", type: "varchar",isNullable:"NO" ,size:"200",isAutoIncrement:"NO"}
+          ,{ name: "Column4", type: "bool",isNullable:"NO",size:"200",isAutoIncrement:"NO" } ,{ name: "Column5", type: "bool",isNullable:"NO" ,size:"200",isAutoIncrement:"NO"},{ name: "Column5", type: "timestamptz",isNullable:"NO" ,size:"200",isAutoIncrement:"NO"}],
         selectedColumns: [],
         sortByColumn: "",
         sortOrder: "",

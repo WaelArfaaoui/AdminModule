@@ -25,9 +25,9 @@ export class AllRulesComponent implements OnInit {
   searchQuery: string = '';
   rules: Array<RuleDto> | undefined = [];
   totalRecords: number | undefined = 0;
-  private selectedRule!: RuleDto;
+  public selectedRule!: RuleDto;
 
-  constructor(private ruleService: RuleService,private userService:UserService  , private dialogService: DialogService) {}
+  constructor(public ruleService: RuleService,public userService:UserService  , public dialogService: DialogService) {}
 getuserRole():string{
 return this.userService.getTokenRole()
 }

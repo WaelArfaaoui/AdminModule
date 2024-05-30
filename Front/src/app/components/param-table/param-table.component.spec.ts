@@ -65,7 +65,7 @@ describe('ParamTableComponent', () => {
    component.table.name="_user"
    component.table.limit=5
    component.table.offset=0
-   component.table.columns=[{name:"firstname",type:"string",isNullable:"NO"},{name:"lastname",type:"string",isNullable:"NO"},{name:"id",type:"string",isNullable:"NO"}]
+   component.table.columns=[{name:"firstname",type:"string",isNullable:"NO",size:"200",isAutoIncrement:"NO"},{name:"lastname",type:"string",isNullable:"NO",size:"200",isAutoIncrement:"NO"},{name:"id",type:"string",isNullable:"NO",size:"200",isAutoIncrement:"NO"}]
     component.table.pk.name ="id"
     component.table.selectedColumns=['id', 'firstname', 'lastname']
 component.table.totalPageCount=20
@@ -254,7 +254,7 @@ component.table.totalPageCount=20
     expect(row.editMode).toEqual(true)
   });
   it('should get column type', () => {
-    component.table.columns=[{name: "id",type:"number",isNullable:"NO"},{name:"firstname",type:"string",isNullable:"NO"}]
+    component.table.columns=[{name: "id",type:"number",isNullable:"NO",size:"200",isAutoIncrement:"NO"},{name:"firstname",type:"string",isNullable:"NO",size:"200",isAutoIncrement:"NO"}]
    const type =component.getColumnType("id",component.table)
     fixture.detectChanges()
     expect(type).toEqual("number")

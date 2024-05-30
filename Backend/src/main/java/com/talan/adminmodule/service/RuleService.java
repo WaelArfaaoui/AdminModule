@@ -32,5 +32,4 @@ public interface RuleService {
     long getTotalRulesCount();
 
     long getTotalRuleUsages();
-    void generateAndSaveRules() ;
 }

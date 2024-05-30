@@ -1,6 +1,7 @@
 package com.talan.adminmodule.config;
 
 import com.talan.adminmodule.dto.*;
+import com.talan.adminmodule.service.RuleService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class DatabaseInitializer {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final DataSource dataSource;
     private static final Logger log =  LoggerFactory.getLogger(DatabaseInitializer.class);
+
     @Autowired
 
     public DatabaseInitializer(DataSource dataSource, NamedParameterJdbcTemplate jdbcTemplate) {
@@ -30,7 +32,6 @@ public class DatabaseInitializer {
     @PostConstruct
     private void initialize() {
          allTablesWithColumns = retrieveAllTablesWithColumns();
-
         for (TableInfo tableInfo : allTablesWithColumns.getAllTablesWithColumns()) {
             String active="active";
             if (tableInfo.getColumns().stream().noneMatch(columnInfo -> columnInfo.getName().equals(active))){
@@ -53,6 +54,7 @@ public class DatabaseInitializer {
         tablesData.add("rule_attribute");
         tablesData.add("rule_modification");
         tablesData.add("dashboard");
+        tablesData.add("_category");
         try (Connection connection = dataSource.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet tables = metaData.getTables(null, "public", null, new String[]{"TABLE"});

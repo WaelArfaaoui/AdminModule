@@ -45,7 +45,8 @@ public class Rule {
     private LocalDateTime createDate;
 
     @LastModifiedDate
-    @Column(insertable = false)
+//    @Column(insertable = false)
+    @Column
     private LocalDateTime lastModified;
 
     @CreatedBy

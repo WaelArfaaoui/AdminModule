@@ -20,6 +20,7 @@ export class ParamTableComponent implements OnInit{
 
   @Input() table: TableInfo=new TableInfo();
 isLoading:boolean=false
+  testtest:string=""
   async ngOnInit() {
     await this.getForeignKeyOptions(this.table.name);
   }
@@ -37,7 +38,7 @@ isLoading:boolean=false
   const columnNames = table.columns.map((column:ColumnInfo) => column.name)
     const invalidColumns: string[] = [];
     columnNames.forEach((column: any) => {
-      if (this.checkNullable(column, table)&&(!row[column] || row[column]==='' )) {
+      if (this.checkNullable(column, table)&&(!row[column] || row[column]==='' )&& column.name!==table.pk.name) {
         invalidColumns.push(column);
       }
 

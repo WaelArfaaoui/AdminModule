@@ -21,7 +21,12 @@
   <thead>
   <tr>
     <th *ngFor="let column of table.selectedColumns">
-      {{ column }}<span *ngIf="column === table.pk.name" class="p-badge p-badge-info"> PK</span> <span *ngIf="checkForeignKey(column,table)" class="p-badge p-badge-fk">FK</span><span *ngIf="checkNullable(column,table)" class="p-badge p-badge-danger">NOTNULL</span>
+     <!-- <ng-container *ngIf="checkForeignKey(column, table)">
+        <p-dropdown [options]="table.selectedColumns" [(ngModel)]="testtest" [style]="{'width': '100%'}"></p-dropdown>
+      </ng-container>-->
+      {{ column }}<span *ngIf="column === table.pk.name" class="p-badge p-badge-info"> PK</span>
+      <span *ngIf="checkForeignKey(column,table)" class="p-badge p-badge-fk">FK</span>
+      <span *ngIf="checkNullable(column,table)" class="p-badge p-badge-danger">NOTNULL</span>
     </th>
     <th class="action-column">Actions</th>
   </tr>

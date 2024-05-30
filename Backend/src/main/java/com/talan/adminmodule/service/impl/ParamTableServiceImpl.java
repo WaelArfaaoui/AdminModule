@@ -467,7 +467,7 @@ public class ParamTableServiceImpl implements ParamTableService {
     public void checkReferencedRecursive(DeleteRequest deleteRequest, List<DeleteRequest> response) {
         Set<DeleteRequest> deleted= new HashSet<>(response);
 
-        if (!deleted.contains(deleteRequest)){
+//        if (!deleted.contains(deleteRequest)){
         List<ForeignKey> fks = allTablesWithColumns.getAllforeignKeys().stream().filter( fk -> fk.getReferencedTable().equals(deleteRequest.getTableName())).toList();
         ColumnInfo pk = primaryKeyDetails(deleteRequest.getTableName());
         String typePk = pk.getType();
@@ -482,7 +482,7 @@ public class ParamTableServiceImpl implements ParamTableService {
 
             params.addValue("fkValue",fkValue);
             //String sqlQuerry ="SELECT  "+primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName()+" WHERE "+primaryKeyDetails(fk.getFkColumnName()) +" = :fkValue";
-            String sqlQuerry ="SELECT  "+primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName()+" WHERE "+primaryKeyDetails(fk.getFkTableName()).getName() +" = :fkValue";
+            String sqlQuerry ="SELECT  "+primaryKeyDetails(fk.getFkTableName()).getName()+" FROM "+fk.getFkTableName()+" WHERE "+fk.getFkColumnName() +" = :fkValue";
 //NOSONAR
             List<Map<String,Object>>rowref = jdbcTemplate.queryForList(sqlQuerry,params);
             if (!rowref.isEmpty()) {
@@ -496,7 +496,7 @@ public class ParamTableServiceImpl implements ParamTableService {
                     checkReferencedRecursive(childDeleteRequest, response);
                 }
             }
-        }}
+        }
     }
     @Override
     public Boolean checkunicity(String primaryKeyValue, String tableName){
@@ -505,7 +505,6 @@ public class ParamTableServiceImpl implements ParamTableService {
         Object convertedValue = convertToDataType(primaryKeyValue,pkType);
         String sql = "SELECT COUNT(*) FROM "+tableName+"  WHERE "+primaryKeyDetails(tableName).getName()+" = :pkValue";
 //      List<Object> params = new ArrayList<>();
-//
 //        params.add(primaryKeyDetails(tableName).getName());
 //        params.add(convertedValue);
 

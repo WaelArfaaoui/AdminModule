@@ -37,6 +37,7 @@ public class DatabaseInitializer {
                 jdbcTemplate.getJdbcOperations().execute("ALTER TABLE " + tableInfo.getName() + " ADD COLUMN "+ active +" BOOLEAN DEFAULT TRUE");
             }
         }
+
          allTablesWithColumns =retrieveAllTablesWithColumns();
     }
 
@@ -69,7 +70,6 @@ public class DatabaseInitializer {
                     String isNullable = tableColumns.getString("IS_NULLABLE");
                     String columnSize = tableColumns.getString("COLUMN_SIZE");
                     String isAutoIncrement = tableColumns.getString("IS_AUTOINCREMENT");
-
                     columns.add(new ColumnInfo(columnName, columnType,isNullable,columnSize,isAutoIncrement));
                 }
 

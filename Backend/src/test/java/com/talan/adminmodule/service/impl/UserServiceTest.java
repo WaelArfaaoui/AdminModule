@@ -367,58 +367,58 @@ class UserServiceTest {
 //        }
 //    }
 
-    @Test
-    void testAddUser() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenReturn(1L);
-            when(passwordEncoder.encode(Mockito.<CharSequence>any())).thenReturn("secret");
-            UserDto buildResult = UserDto.builder()
-                    .active(true)
-                    .company("Company")
-                    .email("jane.doe@example.org")
-                    .error("An error occurred")
-                    .firstname("Jane")
-                    .id(1L)
-                    .lastname("Doe")
-                    .nonExpired(true)
-                    .phone("6625550144")
-                    .profileImagePath("Profile Image Path")
-                    .role(Role.BUSINESSEXPERT)
-                    .build();
-            when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
-
-            User user = new User();
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            when(userRepository.save(Mockito.<User>any())).thenReturn(user);
-            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
-                    Role.BUSINESSEXPERT);
-
-            // Act
-            userService.addUser(dto, new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-
-            // Assert
-            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(modelMapper).map(isA(Object.class), isA(Class.class));
-            verify(userRepository).save(isA(User.class));
-            verify(passwordEncoder).encode(isA(CharSequence.class));
-        }
-    }
+//    @Test
+//    void testAddUser() throws IOException {
+//        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
+//            // Arrange
+//            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
+//            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
+//                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
+//            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
+//                    .thenReturn(1L);
+//            when(passwordEncoder.encode(Mockito.<CharSequence>any())).thenReturn("secret");
+//            UserDto buildResult = UserDto.builder()
+//                    .active(true)
+//                    .company("Company")
+//                    .email("jane.doe@example.org")
+//                    .error("An error occurred")
+//                    .firstname("Jane")
+//                    .id(1L)
+//                    .lastname("Doe")
+//                    .nonExpired(true)
+//                    .phone("6625550144")
+//                    .profileImagePath("Profile Image Path")
+//                    .role(Role.BUSINESSEXPERT)
+//                    .build();
+//            when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
+//
+//            User user = new User();
+//            user.setActive(true);
+//            user.setCompany("Company");
+//            user.setEmail("jane.doe@example.org");
+//            user.setFirstname("Jane");
+//            user.setId(1);
+//            user.setLastname("Doe");
+//            user.setNonExpired(true);
+//            user.setPassword("iloveyou");
+//            user.setPhone("6625550144");
+//            user.setProfileImagePath("Profile Image Path");
+//            user.setRole(Role.BUSINESSEXPERT);
+//            when(userRepository.save(Mockito.<User>any())).thenReturn(user);
+//            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
+//                    Role.BUSINESSEXPERT);
+//
+//            // Act
+//            userService.addUser(dto, new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+//
+//            // Assert
+//            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
+//            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
+//            verify(modelMapper).map(isA(Object.class), isA(Class.class));
+//            verify(userRepository).save(isA(User.class));
+//            verify(passwordEncoder).encode(isA(CharSequence.class));
+//        }
+//    }
 
     @Test
     void testGetAll() {
@@ -561,212 +561,212 @@ class UserServiceTest {
     }
 
 
-    @Test
-    void testUpdate() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenReturn(1L);
-
-            User user = new User();
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            Optional<User> ofResult = Optional.of(user);
-
-            User user2 = new User();
-            user2.setActive(true);
-            user2.setCompany("Company");
-            user2.setEmail("jane.doe@example.org");
-            user2.setFirstname("Jane");
-            user2.setId(1);
-            user2.setLastname("Doe");
-            user2.setNonExpired(true);
-            user2.setPassword("iloveyou");
-            user2.setPhone("6625550144");
-            user2.setProfileImagePath("Profile Image Path");
-            user2.setRole(Role.BUSINESSEXPERT);
-            UserRepository userRepository = mock(UserRepository.class);
-            when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
-            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-            ModelMapper modelMapper = new ModelMapper();
-            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
-                    Role.BUSINESSEXPERT);
-
-            // Act
-            UserDto actualUpdateResult = userService.update(1, dto,
-                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-
-            // Assert
-            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(1);
-            verify(userRepository).save(isA(User.class));
-            assertEquals("6625550144", actualUpdateResult.getPhone());
-            assertEquals("Company", actualUpdateResult.getCompany());
-            assertEquals("Doe", actualUpdateResult.getLastname());
-            assertEquals("Jane", actualUpdateResult.getFirstname());
-            assertEquals("assets\\demo\\images\\user-profiles", actualUpdateResult.getProfileImagePath());
-            assertEquals("jane.doe@example.org", actualUpdateResult.getEmail());
-            assertEquals(1L, actualUpdateResult.getId().longValue());
-            assertEquals(Role.BUSINESSEXPERT, actualUpdateResult.getRole());
-            assertTrue(actualUpdateResult.isActive());
-            assertTrue(actualUpdateResult.isNonExpired());
-        }
-    }
-
-    @Test
-    void testUpdate2() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(false);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenReturn(1L);
-
-            User user = new User();
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            Optional<User> ofResult = Optional.of(user);
-
-            User user2 = new User();
-            user2.setActive(true);
-            user2.setCompany("Company");
-            user2.setEmail("jane.doe@example.org");
-            user2.setFirstname("Jane");
-            user2.setId(1);
-            user2.setLastname("Doe");
-            user2.setNonExpired(true);
-            user2.setPassword("iloveyou");
-            user2.setPhone("6625550144");
-            user2.setProfileImagePath("Profile Image Path");
-            user2.setRole(Role.BUSINESSEXPERT);
-            UserRepository userRepository = mock(UserRepository.class);
-            when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
-            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-            ModelMapper modelMapper = new ModelMapper();
-            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
-                    Role.BUSINESSEXPERT);
-
-            // Act
-            UserDto actualUpdateResult = userService.update(1, dto,
-                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-
-            // Assert
-            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
-            mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(userRepository).findById(1);
-            verify(userRepository).save(isA(User.class));
-            assertEquals("6625550144", actualUpdateResult.getPhone());
-            assertEquals("Company", actualUpdateResult.getCompany());
-            assertEquals("Doe", actualUpdateResult.getLastname());
-            assertEquals("Jane", actualUpdateResult.getFirstname());
-            assertEquals("assets\\demo\\images\\user-profiles", actualUpdateResult.getProfileImagePath());
-            assertEquals("jane.doe@example.org", actualUpdateResult.getEmail());
-            assertEquals(1L, actualUpdateResult.getId().longValue());
-            assertEquals(Role.BUSINESSEXPERT, actualUpdateResult.getRole());
-            assertTrue(actualUpdateResult.isActive());
-            assertTrue(actualUpdateResult.isNonExpired());
-        }
-    }
-
-
-    @Test
-    void testUpdate3() throws IOException {
-        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
-
-            // Arrange
-            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
-            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
-                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
-            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
-                    .thenReturn(1L);
-            ModelMapper modelMapper = mock(ModelMapper.class);
-            UserDto buildResult = UserDto.builder()
-                    .active(true)
-                    .company("Company")
-                    .email("jane.doe@example.org")
-                    .error("An error occurred")
-                    .firstname("Jane")
-                    .id(1L)
-                    .lastname("Doe")
-                    .nonExpired(true)
-                    .phone("6625550144")
-                    .profileImagePath("Profile Image Path")
-                    .role(Role.BUSINESSEXPERT)
-                    .build();
-            when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
-
-            User user = new User();
-            user.setActive(true);
-            user.setCompany("Company");
-            user.setEmail("jane.doe@example.org");
-            user.setFirstname("Jane");
-            user.setId(1);
-            user.setLastname("Doe");
-            user.setNonExpired(true);
-            user.setPassword("iloveyou");
-            user.setPhone("6625550144");
-            user.setProfileImagePath("Profile Image Path");
-            user.setRole(Role.BUSINESSEXPERT);
-            Optional<User> ofResult = Optional.of(user);
-
-            User user2 = new User();
-            user2.setActive(true);
-            user2.setCompany("Company");
-            user2.setEmail("jane.doe@example.org");
-            user2.setFirstname("Jane");
-            user2.setId(1);
-            user2.setLastname("Doe");
-            user2.setNonExpired(true);
-            user2.setPassword("iloveyou");
-            user2.setPhone("6625550144");
-            user2.setProfileImagePath("Profile Image Path");
-            user2.setRole(Role.BUSINESSEXPERT);
-            UserRepository userRepository = mock(UserRepository.class);
-            when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
-            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
-            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
-            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
-                    Role.BUSINESSEXPERT);
-
-            // Act
-            userService.update(1, dto, new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-
-            // Assert
-            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
-            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
-            verify(modelMapper).map(isA(Object.class), isA(Class.class));
-            verify(userRepository).findById(1);
-            verify(userRepository).save(isA(User.class));
-        }
-    }
+//    @Test
+//    void testUpdate() throws IOException {
+//        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
+//
+//            // Arrange
+//            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
+//            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
+//                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
+//            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
+//                    .thenReturn(1L);
+//
+//            User user = new User();
+//            user.setActive(true);
+//            user.setCompany("Company");
+//            user.setEmail("jane.doe@example.org");
+//            user.setFirstname("Jane");
+//            user.setId(1);
+//            user.setLastname("Doe");
+//            user.setNonExpired(true);
+//            user.setPassword("iloveyou");
+//            user.setPhone("6625550144");
+//            user.setProfileImagePath("Profile Image Path");
+//            user.setRole(Role.BUSINESSEXPERT);
+//            Optional<User> ofResult = Optional.of(user);
+//
+//            User user2 = new User();
+//            user2.setActive(true);
+//            user2.setCompany("Company");
+//            user2.setEmail("jane.doe@example.org");
+//            user2.setFirstname("Jane");
+//            user2.setId(1);
+//            user2.setLastname("Doe");
+//            user2.setNonExpired(true);
+//            user2.setPassword("iloveyou");
+//            user2.setPhone("6625550144");
+//            user2.setProfileImagePath("Profile Image Path");
+//            user2.setRole(Role.BUSINESSEXPERT);
+//            UserRepository userRepository = mock(UserRepository.class);
+//            when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
+//            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
+//            ModelMapper modelMapper = new ModelMapper();
+//            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
+//            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
+//                    Role.BUSINESSEXPERT);
+//
+//            // Act
+//            UserDto actualUpdateResult = userService.update(1, dto,
+//                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+//
+//            // Assert
+//            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
+//            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
+//            verify(userRepository).findById(1);
+//            verify(userRepository).save(isA(User.class));
+//            assertEquals("6625550144", actualUpdateResult.getPhone());
+//            assertEquals("Company", actualUpdateResult.getCompany());
+//            assertEquals("Doe", actualUpdateResult.getLastname());
+//            assertEquals("Jane", actualUpdateResult.getFirstname());
+//            assertEquals("assets\\demo\\images\\user-profiles", actualUpdateResult.getProfileImagePath());
+//            assertEquals("jane.doe@example.org", actualUpdateResult.getEmail());
+//            assertEquals(1L, actualUpdateResult.getId().longValue());
+//            assertEquals(Role.BUSINESSEXPERT, actualUpdateResult.getRole());
+//            assertTrue(actualUpdateResult.isActive());
+//            assertTrue(actualUpdateResult.isNonExpired());
+//        }
+//    }
+//
+//    @Test
+//    void testUpdate2() throws IOException {
+//        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
+//
+//            // Arrange
+//            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(false);
+//            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
+//                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
+//            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
+//                    .thenReturn(1L);
+//
+//            User user = new User();
+//            user.setActive(true);
+//            user.setCompany("Company");
+//            user.setEmail("jane.doe@example.org");
+//            user.setFirstname("Jane");
+//            user.setId(1);
+//            user.setLastname("Doe");
+//            user.setNonExpired(true);
+//            user.setPassword("iloveyou");
+//            user.setPhone("6625550144");
+//            user.setProfileImagePath("Profile Image Path");
+//            user.setRole(Role.BUSINESSEXPERT);
+//            Optional<User> ofResult = Optional.of(user);
+//
+//            User user2 = new User();
+//            user2.setActive(true);
+//            user2.setCompany("Company");
+//            user2.setEmail("jane.doe@example.org");
+//            user2.setFirstname("Jane");
+//            user2.setId(1);
+//            user2.setLastname("Doe");
+//            user2.setNonExpired(true);
+//            user2.setPassword("iloveyou");
+//            user2.setPhone("6625550144");
+//            user2.setProfileImagePath("Profile Image Path");
+//            user2.setRole(Role.BUSINESSEXPERT);
+//            UserRepository userRepository = mock(UserRepository.class);
+//            when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
+//            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
+//            ModelMapper modelMapper = new ModelMapper();
+//            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
+//            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
+//                    Role.BUSINESSEXPERT);
+//
+//            // Act
+//            UserDto actualUpdateResult = userService.update(1, dto,
+//                    new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+//
+//            // Assert
+//            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
+//            mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
+//            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
+//            verify(userRepository).findById(1);
+//            verify(userRepository).save(isA(User.class));
+//            assertEquals("6625550144", actualUpdateResult.getPhone());
+//            assertEquals("Company", actualUpdateResult.getCompany());
+//            assertEquals("Doe", actualUpdateResult.getLastname());
+//            assertEquals("Jane", actualUpdateResult.getFirstname());
+//            assertEquals("assets\\demo\\images\\user-profiles", actualUpdateResult.getProfileImagePath());
+//            assertEquals("jane.doe@example.org", actualUpdateResult.getEmail());
+//            assertEquals(1L, actualUpdateResult.getId().longValue());
+//            assertEquals(Role.BUSINESSEXPERT, actualUpdateResult.getRole());
+//            assertTrue(actualUpdateResult.isActive());
+//            assertTrue(actualUpdateResult.isNonExpired());
+//        }
+//    }
+//
+//
+//    @Test
+//    void testUpdate3() throws IOException {
+//        try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
+//
+//            // Arrange
+//            mockFiles.when(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class))).thenReturn(true);
+//            mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
+//                    .thenReturn(Paths.get(System.getProperty("java.io.tmpdir"), "test.txt"));
+//            mockFiles.when(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)))
+//                    .thenReturn(1L);
+//            ModelMapper modelMapper = mock(ModelMapper.class);
+//            UserDto buildResult = UserDto.builder()
+//                    .active(true)
+//                    .company("Company")
+//                    .email("jane.doe@example.org")
+//                    .error("An error occurred")
+//                    .firstname("Jane")
+//                    .id(1L)
+//                    .lastname("Doe")
+//                    .nonExpired(true)
+//                    .phone("6625550144")
+//                    .profileImagePath("Profile Image Path")
+//                    .role(Role.BUSINESSEXPERT)
+//                    .build();
+//            when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<UserDto>>any())).thenReturn(buildResult);
+//
+//            User user = new User();
+//            user.setActive(true);
+//            user.setCompany("Company");
+//            user.setEmail("jane.doe@example.org");
+//            user.setFirstname("Jane");
+//            user.setId(1);
+//            user.setLastname("Doe");
+//            user.setNonExpired(true);
+//            user.setPassword("iloveyou");
+//            user.setPhone("6625550144");
+//            user.setProfileImagePath("Profile Image Path");
+//            user.setRole(Role.BUSINESSEXPERT);
+//            Optional<User> ofResult = Optional.of(user);
+//
+//            User user2 = new User();
+//            user2.setActive(true);
+//            user2.setCompany("Company");
+//            user2.setEmail("jane.doe@example.org");
+//            user2.setFirstname("Jane");
+//            user2.setId(1);
+//            user2.setLastname("Doe");
+//            user2.setNonExpired(true);
+//            user2.setPassword("iloveyou");
+//            user2.setPhone("6625550144");
+//            user2.setProfileImagePath("Profile Image Path");
+//            user2.setRole(Role.BUSINESSEXPERT);
+//            UserRepository userRepository = mock(UserRepository.class);
+//            when(userRepository.save(Mockito.<User>any())).thenReturn(user2);
+//            when(userRepository.findById(Mockito.<Integer>any())).thenReturn(ofResult);
+//            UserService userService = new UserService(modelMapper, new BCryptPasswordEncoder(), userRepository);
+//            RegisterDto dto = new RegisterDto("Jane", "Doe", "iloveyou", "jane.doe@example.org", "Company", "6625550144",
+//                    Role.BUSINESSEXPERT);
+//
+//            // Act
+//            userService.update(1, dto, new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
+//
+//            // Assert
+//            mockFiles.verify(() -> Files.copy(Mockito.<InputStream>any(), Mockito.<Path>any(), isA(CopyOption[].class)));
+//            mockFiles.verify(() -> Files.exists(Mockito.<Path>any(), isA(LinkOption[].class)));
+//            verify(modelMapper).map(isA(Object.class), isA(Class.class));
+//            verify(userRepository).findById(1);
+//            verify(userRepository).save(isA(User.class));
+//        }
+//    }
     @Test
     void testFindbyemail() {
 

@@ -1142,7 +1142,6 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 
 .p-inputtext {
   font-family: var(--font-family);
-  font-feature-settings: var(--font-feature-settings, normal);
   font-size: 1rem;
   color: #4b5563;
   background: #ffffff;
@@ -2156,8 +2155,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-color: transparent;
   color: #689F38;
 }
-
-
 .p-button.p-button-warning, .p-buttonset.p-button-warning > .p-button, .p-splitbutton.p-button-warning > .p-button {
   color: #4b2f01;
   background: #FFE082;

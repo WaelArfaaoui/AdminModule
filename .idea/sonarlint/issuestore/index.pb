@@ -63,3 +63,17 @@ I
 docker/backend/Dockerfile,d\9\d99aa21f5bada484ca6b2954ef8767c524ea2c1e
 J
 docker/frontend/Dockerfile,d\e\de99846720c3c24b39a07edd85869b8c41518984
+@
+Front/nginx.conf,e\7\e7bb2478b54c35a60cde8ca06a7725d1e65010ad
+B
+docker-compose.yml,3\5\35b8c13cf2eb2a194eada000eb310d65aed53b2a
+B
+Front/angular.json,1\6\1627e1830e530e83bc4f498c9b774be28b5b6aa4
+a
+1Front/src/assets/layout/styles/layout/layout.scss,6\5\65dc9e66db7adc39f6bcf0e43056f9251e43299e
+j
+:Front/src/assets/layout/styles/theme/vela-orange/theme.css,5\b\5b2838be2b3e7a39d59fa07f5c9b1db8b9cb7050
+B
+Backend/Dockerfile,c\b\cb4be36eed51e75adb18dd1c6ecebf1c09791f15
+@
+Front/Dockerfile,4\9\495710d6f9c824b6012a8d6f6dd4d9fc4d8ef773

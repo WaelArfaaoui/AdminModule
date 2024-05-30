@@ -452,7 +452,7 @@ public class ParamTableServiceImpl implements ParamTableService {
             addDeleteRequest(del);
         }
         ResponseDto result = new ResponseDto();
-        result.setSuccess("Cascade deletion succeeded");
+        result.setSuccess("Deletion will be executed at 8 AM");
         return result;
     }
     @Override

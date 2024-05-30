@@ -40,7 +40,7 @@ try {
         this.isLoading=false
         this.messageService.add({
           severity: 'success',
-          summary: 'Parameter deleted cascade ',
+          summary: 'Cascade Deletion scheduled',
           detail: `${response.success}`
         });
         this.paramTableComponent.getDataTable(this.table);

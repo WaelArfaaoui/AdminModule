@@ -31,7 +31,7 @@ this.ref.close()
           console.log(response);
           this.messageService.add({
             severity: 'success',
-            summary: 'Data DELETED',
+            summary: 'Parameter scheduled to be deleted',
             detail: `${response.success}`
           });
           this.paramTableComponent.getDataTable(this.table);

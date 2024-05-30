@@ -447,7 +447,6 @@ public class ParamTableServiceImpl implements ParamTableService {
     @Transactional
     public ResponseDto deletecascade(DeleteRequest deleteRequest){
         List<DeleteRequest> response = new ArrayList<>();
-        response.add(deleteRequest);
         checkReferencedRecursive(deleteRequest, response);
         for (DeleteRequest del : response){
             addDeleteRequest(del);
@@ -467,7 +466,8 @@ public class ParamTableServiceImpl implements ParamTableService {
     public void checkReferencedRecursive(DeleteRequest deleteRequest, List<DeleteRequest> response) {
         Set<DeleteRequest> deleted= new HashSet<>(response);
 
-//        if (!deleted.contains(deleteRequest)){
+        if (!deleted.contains(deleteRequest)){
+            response.add(deleteRequest);
         List<ForeignKey> fks = allTablesWithColumns.getAllforeignKeys().stream().filter( fk -> fk.getReferencedTable().equals(deleteRequest.getTableName())).toList();
         ColumnInfo pk = primaryKeyDetails(deleteRequest.getTableName());
         String typePk = pk.getType();
@@ -496,7 +496,7 @@ public class ParamTableServiceImpl implements ParamTableService {
                     checkReferencedRecursive(childDeleteRequest, response);
                 }
             }
-        }
+        }}
     }
     @Override
     public Boolean checkunicity(String primaryKeyValue, String tableName){

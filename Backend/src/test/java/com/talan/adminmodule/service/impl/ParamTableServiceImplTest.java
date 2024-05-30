@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ParamTableServiceImplTest {
     @Autowired
     private ParamTableService paramTableService;
-@Autowired
-private  ParamTableServiceImpl paramTableServiceImpl;
+    @Autowired
+    private  ParamTableServiceImpl paramTableServiceImpl;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

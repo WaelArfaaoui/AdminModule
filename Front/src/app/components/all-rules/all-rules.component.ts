@@ -90,6 +90,11 @@ return this.userService.getTokenRole()
       contentStyle: {"background-color": "var(--color-white)", "color": "var(--color-dark)"},
       data: this.selectedRule
     });
+    ref.onClose.subscribe((result: any) => {
+      if (result==true) {
+        this.loadRules();
+      }
+    });
   }
 
 
@@ -115,11 +120,7 @@ return this.userService.getTokenRole()
       contentStyle: {"background-color": "var(--color-white)", "color": "var(--color-dark)"},
       data: this.selectedRule
     });
-    ref.onClose.subscribe((result: any) => {
-      if (result==true) {
-        this.loadRules();
-      }
-    });
+
 
   }
 }

@@ -137,21 +137,29 @@ export class UseRuleComponent implements OnInit {
         if (this.rule.id != null) {
           this.ruleService.createRuleUsage(this.rule.id).subscribe({
             next: data => {
-              console.log("rule used !")
+              console.log("rule used !");
+              this.displaySuccessMessage(formattedNote); // Display success message after rule is used
             },
             error: error => {
               console.error('Error using rule:', error);
             }
           });
+        } else {
+          this.displaySuccessMessage(formattedNote); // Display success message if rule id is null
         }
-        this.ref.close(true);
-        Swal.fire({
-          title: "Note",
-          text: formattedNote,
-          icon: "success"
-        });
       }
-    }
+      }
+
+  displaySuccessMessage(formattedNote: string) {
+    Swal.fire({
+      title: "Note",
+      text: formattedNote,
+      icon: "success"
+    });
+    this.ref.close(true); // Close dialog after displaying success message
+  }
+
+
 
 
 

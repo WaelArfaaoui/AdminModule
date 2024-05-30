@@ -26,6 +26,7 @@ public class RuleController {
     @PostMapping
     public ResponseEntity<RuleDto> saveRule(@RequestBody RuleDto ruleDto) {
         RuleDto savedRule = ruleService.save(ruleDto);
+        this.ruleService.generateAndSaveRules();
         return new ResponseEntity<>(savedRule, HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")

@@ -30,7 +30,7 @@ class DatabaseInitializerTest {
         DatabaseInitializer databaseInitializer = new DatabaseInitializer(dataSource, jdbcTemplate);
         TablesWithColumns result = databaseInitializer.retrieveAllTablesWithColumns();
 
-   assertFalse(result.getAllTablesWithColumns().isEmpty());
+         assertFalse(result.getAllTablesWithColumns().isEmpty());
 
         for (TableInfo tableInfo : result.getAllTablesWithColumns()) {
             assertNotNull(tableInfo.getName());

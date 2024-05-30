@@ -4,4 +4,5 @@ export class ColumnInfo {
   isNullable: string="";
   size:string="";
   isAutoIncrement:string=""
+
 }

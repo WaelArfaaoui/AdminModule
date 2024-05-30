@@ -87,11 +87,20 @@
     <ng-container *ngFor="let column of table.selectedColumns">
       <td>
         <ng-container [ngSwitch]="getColumnType(column,table)" >
+<<<<<<< Updated upstream
           <input *ngSwitchCase="'number'" type="number"  [(ngModel)]="newrow[column]" [disabled]="iscolumndisabled(column,table)" pInputText>
           <input *ngSwitchCase="'float'" type="number" [(ngModel)]="newrow[column]" [disabled]="iscolumndisabled(column,table)" pInputText step="0.01">
           <p-calendar *ngSwitchCase="'date'" [(ngModel)]="newrow[column]" [disabled]="iscolumndisabled(column,table)" ></p-calendar>
           <input *ngSwitchCase="'string'" type="text"  [(ngModel)]="newrow[column]" [disabled]="iscolumndisabled(column,table)" pInputText>
           <p-dropdown [options]="['true','false']" *ngSwitchCase="'boolean'" [(ngModel)]="newrow[column]" [style]="{'width': '80px'}" [disabled]="iscolumndisabled(column,table)"></p-dropdown>
+=======
+          <input *ngSwitchCase="'number'" type="number"  [(ngModel)]="newrow[column]" pInputText>
+          <input *ngSwitchCase="'float'" type="number" [(ngModel)]="newrow[column]" pInputText step="0.01">
+          <p-calendar *ngSwitchCase="'date'" [(ngModel)]="newrow[column]" ></p-calendar>
+          <input *ngSwitchCase="'string'" type="text"  [(ngModel)]="newrow[column]" pInputText>
+          <p-dropdown [options]="['true','false']" *ngSwitchCase="'boolean'" [(ngModel)]="newrow[column]" [style]="{'width': '80px'}"></p-dropdown>
+          <input *ngSwitchCase="'auto'" [disabled]="column === table.pk.name"  [(ngModel)]="newrow[column]" pInputText>
+>>>>>>> Stashed changes
           <p-dropdown *ngSwitchCase="'fk'"
                       [options]="getForeignKeyOptionspercolumn(column,newrow[column])"
                       [(ngModel)]="newrow[column]"

@@ -80,6 +80,12 @@ export class ListParamTablesComponent implements OnInit {
         case "precision":
           column.type = "float";
           break;
+        case "real":
+        case "decimal":
+        case "double":
+        case "precision":
+          column.type = "float";
+          break;
         case "varchar":
         case "text":
         case "pchar":
@@ -93,18 +99,7 @@ export class ListParamTablesComponent implements OnInit {
           column.type = "date"
           break;
         default:
-        /*  const charSizeMatch = column.type.match(/^char(?:acter)?\((\d+)\)$/);
-          const varcharSizeMatch = column.type.match(/^(?:varchar|character varying)\((\d+)\)$/);
-
-          if (charSizeMatch) {
-            column.type = "string";
-            column.size= parseInt(charSizeMatch[1], 10);
-          } else if (varcharSizeMatch) {
-            column.type = "string";
-            column.size = parseInt(varcharSizeMatch[1], 10);
-          } else {*/
-            column.type = "string";
-          // }
+          column.type = "string";
           break;
       }}
 

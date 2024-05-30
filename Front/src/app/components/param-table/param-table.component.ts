@@ -37,6 +37,7 @@ isLoading:boolean=false
   getInvalidColumns(row: any, table: any): string[] {
   const columnNames = table.columns.map((column:ColumnInfo) => column.name)
     const invalidColumns: string[] = [];
+  const wrongsize:String[]=[];
     columnNames.forEach((column: any) => {
       if (this.checkNullable(column, table)&&(!row[column] || row[column]==='' )&& column.name!==table.pk.name) {
         invalidColumns.push(column);
@@ -53,6 +54,7 @@ isLoading:boolean=false
     wrongsize.push(column.name)
    }
    });
+
   return wrongsize;
   };
 
@@ -369,6 +371,7 @@ editValue (table: TableInfo, row: any) {
         severity: 'warn',
         summary: 'Validation Error',
         detail: `Wrong size of : ${wrongsize.join(', ')  }`
+
       });
     }else {
       this.tableService.addInstance(instanceData, table.name)

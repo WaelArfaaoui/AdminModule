@@ -70,4 +70,5 @@ public interface ParamTableService {
     ColumnInfo primaryKeyDetails(String tableName);
 
     List<ParamAudit> paramHistory(String tableName);
+
 }

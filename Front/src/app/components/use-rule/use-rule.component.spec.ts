@@ -1,7 +1,7 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {FormArray, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {UseRuleComponent} from './use-rule.component';
-import {MessageService} from 'primeng/api';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormArray, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UseRuleComponent } from './use-rule.component';
+import { MessageService } from 'primeng/api';
 import {
   AttributeDataDto,
   AttributeService,
@@ -10,12 +10,13 @@ import {
   RuleService,
   UserControllerService
 } from '../../../open-api';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {Router} from '@angular/router';
-import {UserService} from '../../services/user/user.service';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import Swal from "sweetalert2";
-import {of, throwError} from "rxjs";
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user/user.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { of, throwError } from 'rxjs';
+import {HttpEvent} from "@angular/common/http";
+
 describe('UseRuleComponent', () => {
   let component: UseRuleComponent;
   let fixture: ComponentFixture<UseRuleComponent>;
@@ -28,10 +29,11 @@ describe('UseRuleComponent', () => {
   let router: jasmine.SpyObj<Router>;
   let config: DynamicDialogConfig;
   let ref: DynamicDialogRef;
+
   beforeEach(async () => {
     const messageServiceSpy = jasmine.createSpyObj('MessageService', ['add']);
     const attributeServiceSpy = jasmine.createSpyObj('AttributeService', ['getAllAttributes']);
-    const ruleServiceSpy = jasmine.createSpyObj('RuleService', ['useRule']);
+    const ruleServiceSpy = jasmine.createSpyObj('RuleService', ['createRuleUsage']); // Correct the method name here
     const categoryServiceSpy = jasmine.createSpyObj('CategoryService', ['getAllCategories']);
     const userServiceSpy = jasmine.createSpyObj('UserService', ['']);
     const userControllerServiceSpy = jasmine.createSpyObj('UserControllerService', ['']);
@@ -51,10 +53,11 @@ describe('UseRuleComponent', () => {
         { provide: DynamicDialogRef, useValue: {} }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
+
     fixture = TestBed.createComponent(UseRuleComponent);
     component = fixture.componentInstance;
+
     messageService = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
     attributeService = TestBed.inject(AttributeService) as jasmine.SpyObj<AttributeService>;
     ruleService = TestBed.inject(RuleService) as jasmine.SpyObj<RuleService>;
@@ -64,6 +67,65 @@ describe('UseRuleComponent', () => {
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     config = TestBed.inject(DynamicDialogConfig);
     ref = TestBed.inject(DynamicDialogRef);
+  });
+
+  describe('onSubmit', () => {
+    it('should display success message if validation succeeds and rule id is null', () => {
+      // Mock necessary dependencies and setup component
+      spyOn(component, 'validateAttributeValues').and.returnValue(true);
+      spyOn(component, 'getAttributeControls').and.returnValue([]);
+      spyOn(component, 'displaySuccessMessage');
+
+      component.rule = { id: 1 }; // Simulate rule id being null
+
+      // Create a fake observable for createRuleUsage method
+      const fakeData = {}; // Simulate data returned by the service
+      ruleService.createRuleUsage.and.returnValue(of(fakeData as HttpEvent<any>));
+
+      // Invoke the method
+      component.onSubmit();
+
+      // Assert
+      expect(ruleService.createRuleUsage).toHaveBeenCalledWith(1); // Ensure correct usage
+      expect(component.displaySuccessMessage).toHaveBeenCalled();
+    });
+
+
+
+
+    it('should call createRuleUsage and displaySuccessMessage if validation succeeds and rule id is not null', () => {
+      // Mock necessary dependencies and setup component
+      spyOn(component, 'validateAttributeValues').and.returnValue(true);
+      spyOn(component, 'getAttributeControls').and.returnValue([]);
+      spyOn(component, 'displaySuccessMessage');
+
+      component.rule = { id: 123 }; // Simulate a rule id
+      const fakeData = {}; // Simulate data returned by the service
+      ruleService.createRuleUsage.and.returnValue(of(fakeData as HttpEvent<any>)); // Simulate successful service call
+
+      // Invoke the method
+      component.onSubmit();
+
+      // Assert
+      expect(ruleService.createRuleUsage).toHaveBeenCalledWith(123);
+      expect(component.displaySuccessMessage).toHaveBeenCalled();
+    });
+    it('should log error if createRuleUsage fails', () => {
+      // Mock necessary dependencies and setup component
+      spyOn(component, 'validateAttributeValues').and.returnValue(true);
+      spyOn(component, 'getAttributeControls').and.returnValue([]);
+      spyOn(console, 'error');
+
+      component.rule = { id: 123 }; // Simulate a rule id
+      const fakeError = new Error('Test error'); // Simulate an error
+      ruleService.createRuleUsage.and.returnValue(throwError(fakeError)); // Simulate failed service call
+
+      // Invoke the method
+      component.onSubmit();
+
+      // Assert
+      expect(console.error).toHaveBeenCalledWith('Error using rule:', fakeError);
+    });
   });
   describe('ngOnInit', () => {
     it('should call the necessary methods on initialization', () => {
@@ -145,4 +207,6 @@ describe('UseRuleComponent', () => {
       expect(attributeArray.length).toBe(2);
     });
   });
+
+
 });

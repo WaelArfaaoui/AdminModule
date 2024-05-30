@@ -81,4 +81,18 @@ describe('StackedColumnsComponent', () => {
 
     expect(component.updateChart).toHaveBeenCalledTimes(0); // it will be called initially
   }));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should update chart when heatMapdata changes', () => {
+    const spy = spyOn(component, 'updateChart').and.callThrough();
+
+    // Simulate changes to heatMapdata
+    component.heatMapdata = [{ x: 'New String', y: '30' }];
+    component.ngOnChanges({ heatMapdata: { currentValue: component.heatMapdata, previousValue: null, firstChange: true, isFirstChange: () => true } });
+
+    expect(spy).toHaveBeenCalled();
+  });
+
 });

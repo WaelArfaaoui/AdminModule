@@ -18,31 +18,31 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DatabaseInitializerTest {
 
-//    @Autowired
-//    private DataSource dataSource;
-//
-//    @Autowired
-//    private NamedParameterJdbcTemplate jdbcTemplate;
-//
-//
-//    @Test
-//    void testRetrieveAllTablesWithColumns() {
-//        DatabaseInitializer databaseInitializer = new DatabaseInitializer(dataSource, jdbcTemplate);
-//        TablesWithColumns result = databaseInitializer.retrieveAllTablesWithColumns();
-//
-//   assertFalse(result.getAllTablesWithColumns().isEmpty());
-//
-//        for (TableInfo tableInfo : result.getAllTablesWithColumns()) {
-//            assertNotNull(tableInfo.getName());
-//            assertFalse(tableInfo.getColumns().isEmpty());
-//            ColumnInfo primaryKey = tableInfo.getPk();
-//            assertNotNull(primaryKey);
-//            assertNotNull(primaryKey.getName());
-//            assertNotNull(primaryKey.getType());
-//            for (ColumnInfo column : tableInfo.getColumns()) {
-//                assertNotNull(column.getName());
-//                assertNotNull(column.getType());
-//            }
-//        }
-//    }
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
+
+
+    @Test
+    void testRetrieveAllTablesWithColumns() {
+        DatabaseInitializer databaseInitializer = new DatabaseInitializer(dataSource, jdbcTemplate);
+        TablesWithColumns result = databaseInitializer.retrieveAllTablesWithColumns();
+
+   assertFalse(result.getAllTablesWithColumns().isEmpty());
+
+        for (TableInfo tableInfo : result.getAllTablesWithColumns()) {
+            assertNotNull(tableInfo.getName());
+            assertFalse(tableInfo.getColumns().isEmpty());
+            ColumnInfo primaryKey = tableInfo.getPk();
+            assertNotNull(primaryKey);
+            assertNotNull(primaryKey.getName());
+            assertNotNull(primaryKey.getType());
+            for (ColumnInfo column : tableInfo.getColumns()) {
+                assertNotNull(column.getName());
+                assertNotNull(column.getType());
+            }
+        }
+    }
 }

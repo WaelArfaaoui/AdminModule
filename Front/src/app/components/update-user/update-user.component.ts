@@ -14,6 +14,8 @@ export class UpdateUserComponent implements OnInit {
     updateUserForm!: FormGroup;
     user: any;
     file!: File;
+    companies: string[] = ['Talan , Paris', 'Talan , Marseille', 'Talan , Lyon'];
+    roles: string[] = ['ADMIN', 'BUSINESSEXPERT', 'CONSULTANT'];
 
     constructor(
         private fb: FormBuilder,
@@ -55,7 +57,7 @@ export class UpdateUserComponent implements OnInit {
             .subscribe({
                 next: (updatedUser: UserDto) => {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully' });
-                    this.ref.close();
+                    this.ref.close(true);
                 },
                 error: (err: any) => {
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating user' });

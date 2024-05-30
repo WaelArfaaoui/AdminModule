@@ -28,7 +28,7 @@ export class AddUserComponent implements OnInit {
             lastname: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             phone: ['', Validators.required],
-            company: ['', Validators.required],
+            company: ['Talan , Paris', Validators.required],
             role: [UserDto.RoleEnum.Admin, Validators.required],
             password: ['', Validators.required],
         });
@@ -48,7 +48,7 @@ export class AddUserComponent implements OnInit {
             },
             error: error => {
                 this.errorFound = true;
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add user' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email exists !' });
             }
         });
     }

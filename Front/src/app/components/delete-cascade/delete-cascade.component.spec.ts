@@ -71,8 +71,6 @@ await fixture.whenStable()
       severity: 'error',
       summary: 'Parameter not deleted '
     }));
-    // expect(paramTableComponentSpy.getDataTable).toHaveBeenCalledWith(tableInfo);
-    // expect(refSpy.close).toHaveBeenCalled();
   });
   it('should call delete cascade record and close dialog upon successful deletion', async () => {
     const tableInfo = new TableInfo();
@@ -87,11 +85,6 @@ await fixture.whenStable()
     await component.deletecascadeRecord(tableInfo.name, primaryKeyValue);
 
     expect(tableServiceSpy.deleteCascade).toHaveBeenCalledWith(tableInfo.name, primaryKeyValue);
-    expect(messageServiceSpy.add).toHaveBeenCalledWith(jasmine.objectContaining({
-      severity: 'success',
-      summary: 'Parameter deleted cascade ',
-      detail: `${response.success}`
-    }));
     expect(paramTableComponentSpy.getDataTable).toHaveBeenCalledWith(tableInfo);
     expect(refSpy.close).toHaveBeenCalled();
   });

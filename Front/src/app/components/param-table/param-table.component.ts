@@ -50,7 +50,7 @@ isLoading:boolean=false
   const wrongsize:string[]=[];
     table.columns.forEach((column:ColumnInfo)=> {
       const columnSize = parseInt(column.size, 10);
-  if (row[column.name]&& row[column.name].length>columnSize){
+  if (row[column.name]&& column.type !="boolean" && row[column.name].length>columnSize){
     wrongsize.push(column.name)
    }
    });

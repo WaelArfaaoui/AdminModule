@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     environment {
-        NODEJS_HOME = tool name: 'NodeJS_18', type: 'NodeJSInstallation'
-        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
         SCANNER_HOME = tool 'sonar-scanner'
 
     }

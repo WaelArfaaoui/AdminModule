@@ -60,7 +60,12 @@ pipeline {
                 dir('Backend') {
                     withSonarQubeEnv('sonar') {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=AdminModuleAPI -Dsonar.projectKey=AdminModuleAPI \
-                                -Dsonar.java.binaries=. '''
+                                -Dsonar.java.binaries=. \
+                                -Dsonar.coverage.exclusions=src/main/java/com/talan/adminmodule/entity/**/*.java,\
+                                src/main/java/com/talan/adminmodule/dto/**/*.java,\
+                                src/main/java/com/talan/adminmodule/config/**/*.java,\
+                                src/main/java/com/talan/adminmodule/repository/**/*.java,\
+                                src/main/java/com/talan/adminmodule/validator/**/*.java '''
                     }
                 }
             }

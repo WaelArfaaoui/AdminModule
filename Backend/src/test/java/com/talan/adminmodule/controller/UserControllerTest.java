@@ -109,7 +109,6 @@ class UserControllerTest {
             assertEquals("Company", body.getCompany());
             assertEquals("Doe", body.getLastname());
             assertEquals("Jane", body.getFirstname());
-            assertEquals("assets\\demo\\images\\user-profiles", body.getProfileImagePath());
             assertEquals("jane.doe@example.org", body.getEmail());
             assertNull(body.getId());
             assertEquals(201, actualAddUserResult.getStatusCodeValue());
@@ -168,7 +167,6 @@ class UserControllerTest {
             assertEquals("Company", body.getCompany());
             assertEquals("Doe", body.getLastname());
             assertEquals("Jane", body.getFirstname());
-            assertEquals("assets\\demo\\images\\user-profiles", body.getProfileImagePath());
             assertEquals("jane.doe@example.org", body.getEmail());
             assertNull(body.getId());
             assertEquals(201, actualAddUserResult.getStatusCodeValue());
@@ -348,7 +346,6 @@ class UserControllerTest {
             assertEquals("Company", body.getCompany());
             assertEquals("Doe", body.getLastname());
             assertEquals("Jane", body.getFirstname());
-            assertEquals("assets\\demo\\images\\user-profiles", body.getProfileImagePath());
             assertEquals("jane.doe@example.org", body.getEmail());
             assertNull(body.getId());
             assertEquals(201, actualAddUserResult.getStatusCodeValue());

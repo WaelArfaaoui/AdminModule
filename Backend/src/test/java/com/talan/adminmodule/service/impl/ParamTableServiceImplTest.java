@@ -91,10 +91,9 @@ void testDeleteCascade(){
 
     DeleteRequest cascade = new DeleteRequest("country","1");
        ResponseDto response= paramTableService.deletecascade(cascade);
-    assertEquals("Cascade deletion succeeded",response.getSuccess());
+    assertEquals("Deletion will be executed at 8 AM",response.getSuccess());
     List<DeleteRequest> deletedd = new ArrayList<>();
     paramTableService.checkReferencedRecursive(cascade,deletedd);
-//    assertEquals(3,deletedd.size());
 }
 @Test
 void testFkOptions()

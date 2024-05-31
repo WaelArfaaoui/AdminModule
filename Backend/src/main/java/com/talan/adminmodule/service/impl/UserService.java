@@ -109,6 +109,9 @@ public class UserService {
         if (dto.getRole() != null) {
             user.setRole(dto.getRole());
         }
+        if (dto.getCompany() != null) {
+            user.setCompany(dto.getCompany());
+        }
         if (file != null && !file.isEmpty()) {
             String profileImagePath = storeProfileImage(file);
             user.setProfileImagePath(profileImagePath);

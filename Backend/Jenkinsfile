@@ -25,6 +25,18 @@ pipeline {
             }
         }
 
+        stage('Run PostgreSQL for Build') {
+            steps {
+                script {
+                    // Start PostgreSQL container
+                    def postgres = docker.image('postgres:latest').run('-e POSTGRES_DB=BUILD_DB -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5433:5432')
+
+                    // Wait for PostgreSQL to start
+                    sleep(time: 20, unit: 'SECONDS')
+                }
+            }
+        }
+
         stage('Test') {
             steps {
                 dir('Backend') {
@@ -119,22 +131,20 @@ pipeline {
             }
         }
 
-        // stage('Deploy To Kubernetes') {
-        //     steps {
-        //         withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.30.121:6443') {
-        //             sh "kubectl apply -f k8s/Backend-deployment-service.yaml"
-        //         }
-        //     }
-        // }
+        // Uncomment these stages if needed
+        /*
+        stage('Deploy To Kubernetes') {
+            steps {
+                // Your deployment steps
+            }
+        }
 
-        // stage('Verify the Deployment') {
-        //     steps {
-        //         withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.30.121:6443') {
-        //             sh "kubectl get pods -n webapps"
-        //             sh "kubectl get svc -n webapps"
-        //         }
-        //     }
-        // }
+        stage('Verify the Deployment') {
+            steps {
+                // Your verification steps
+            }
+        }
+        */
     }
 
     post {

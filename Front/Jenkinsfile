@@ -30,21 +30,21 @@ pipeline {
             }
         }
 
+         stage('Install sonar') {
+                       steps {
+                                dir('Front') {
+                                    sh 'npm install --save-dev sonar-scanner'
+                                }
+                            }
+                }
+
         stage('Run Unit Tests') {
             steps {
                 dir('Front') {
-                    sh 'ng test --watch=false --browsers=ChromeHeadless'
+                    sh 'ng test'
                 }
             }
         }
-
-        stage('Install sonar') {
-               steps {
-                        dir('Front') {
-                            sh 'npm install --save-dev sonar-scanner'
-                        }
-                    }
-               }
 
         stage('SonarQube Analysis') {
             steps {

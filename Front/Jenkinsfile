@@ -41,7 +41,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 dir('Front') {
-                    sh 'ng test --watch=false'
+                    sh 'npm run test'
                 }
             }
         }
@@ -58,9 +58,11 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
+              withSonarQubeEnv('sonar'){
                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                 }
+            }
             }
         }
 

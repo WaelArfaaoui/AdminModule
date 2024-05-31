@@ -41,7 +41,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 dir('Front') {
-                    sh 'ng test --sourceMap=false --watch=false'
+                    sh 'ng test --watch=false'
                 }
             }
         }

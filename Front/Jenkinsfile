@@ -48,8 +48,10 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('Front') {
+                dir('Front') { 
+                   withSonarQubeEnv('sonar'){
                    sh 'npm run sonar'
+                } 
                 }
             }
         }

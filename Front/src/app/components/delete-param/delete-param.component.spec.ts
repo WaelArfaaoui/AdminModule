@@ -51,7 +51,7 @@ describe('DeleteParamComponent', () => {
     expect(component).toBeTruthy();
     expect(component.table).toEqual(tableServiceSpy.dataDeleteInstance.table);
   });
-  xit('should call deleteRecord and close dialog upon successful deletion', () => {
+  it('should call deleteRecord and close dialog upon successful deletion', () => {
     const tableInfo = new TableInfo();
     tableInfo.name = 'TestTable';
     const primaryKeyValue = '123';
@@ -65,7 +65,7 @@ describe('DeleteParamComponent', () => {
     expect(tableServiceSpy.deleteRecord).toHaveBeenCalledWith(tableInfo.name, primaryKeyValue);
     expect(messageServiceSpy.add).toHaveBeenCalledWith(jasmine.objectContaining({
       severity: 'success',
-      summary: 'Data DELETED'
+      summary: 'Parameter scheduled to be deleted'
     }));
     expect(paramTableComponentSpy.getDataTable).toHaveBeenCalledWith(tableInfo);
     expect(refSpy.close).toHaveBeenCalled();

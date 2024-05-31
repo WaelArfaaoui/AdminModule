@@ -1,0 +1,99 @@
+pipeline {
+    agent any
+
+    environment {
+        NODEJS_HOME = tool name: 'NodeJS_18', type: 'NodeJSInstallation'
+        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
+        SCANNER_HOME = tool 'sonar-scanner'
+
+    }
+
+    stages {
+
+         stage('Git Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/WaelArfaaoui/AdminModule.git'
+            }
+        }
+
+
+        stage('Install Angular CLI') {
+            steps {
+                dir('Front') {
+                    script {
+                        sh 'npm install -g @angular/cli@14'
+                    }
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('Front') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                dir('Front') {
+                    sh 'ng test --watch=false --browsers=ChromeHeadless'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('Front') {
+                    withSonarQubeEnv('sonar') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=AdminModuleFront -Dsonar.projectKey=AdminModuleFront \
+                                -Dsonar.java.binaries=. '''
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                }
+            }
+        }
+
+        stage('Build Angular App') {
+            steps {
+                dir('Front') {
+                    sh 'ng build --configuration production'
+                }
+            }
+        }
+
+        stage('Build & Tag Docker Image') {
+            steps {
+                dir('Front') {
+                    script {
+                        withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                            sh "docker build -t arfaoui01/admin-module-ui:1.0.1 ."
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                dir('Front') {
+                    script {
+                        withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                            sh "docker push arfaoui01/admin-module-ui:1.0.1"
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}

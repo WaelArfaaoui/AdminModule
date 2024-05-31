@@ -40,7 +40,7 @@ pipeline {
                             sh "mvn test"
                         } finally {
                             // Stop and remove the container
-                            postgres.stop()
+
                         }
                     }
                 }

@@ -41,7 +41,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 dir('Front') {
-                    sh 'npm run test'
+                    sh 'ng test --watch=false'
                 }
             }
         }

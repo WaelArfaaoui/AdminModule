@@ -22,13 +22,13 @@ pipeline {
             sh 'npm install'
             sh 'npm run build'
           }
-        }
+        
     
         stage('Test') {
           steps {
             sh 'npm run test'
           }
-        
+        }
 
          stage('Install sonar') {
                        steps {

@@ -43,13 +43,18 @@ pipeline {
             }
         }
 
+        stage('Install sonar') {
+               steps {
+                        dir('Front') {
+                            sh 'npm install --save-dev sonar-scanner'
+                        }
+                    }
+               }
+
         stage('SonarQube Analysis') {
             steps {
                 dir('Front') {
-                    withSonarQubeEnv('sonar') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=AdminModuleFront -Dsonar.projectKey=AdminModuleFront \
-                                -Dsonar.java.binaries=. '''
-                    }
+                   sh 'npm run sonar'
                 }
             }
         }

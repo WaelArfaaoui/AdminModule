@@ -16,19 +16,19 @@ pipeline {
             }
         }
 
-        stage('Install Angular CLI') {
-            steps {
-                sh 'npm install -g @angular/cli'
-            }
+      
+        stage('Build') {
+          steps {
+            sh 'npm install'
+            sh 'npm run build'
+          }
         }
-
-        stage('Install Dependencies') {
-            steps {
-                dir('Front') {
-                    sh 'npm install'
-                }
-            }
-        }
+    
+        stage('Test') {
+          steps {
+            sh 'npm run test'
+          }
+        
 
          stage('Install sonar') {
                        steps {
@@ -38,13 +38,6 @@ pipeline {
                             }
                 }
 
-        stage('Run Unit Tests') {
-            steps {
-                dir('Front') {
-                    sh 'ng test --watch=false'
-                }
-            }
-        }
 
         stage('SonarQube Analysis') {
             steps {

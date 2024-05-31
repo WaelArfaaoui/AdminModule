@@ -28,7 +28,21 @@ pipeline {
         stage('Test') {
             steps {
                 dir('Backend') {
-                    sh "mvn test"
+                    script {
+                        // Start PostgreSQL container
+                        def postgres = docker.image('postgres:latest').run('-e POSTGRES_DB=TEST1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432')
+
+                        // Wait for PostgreSQL to start
+                        sleep(time: 20, unit: 'SECONDS')
+
+                        // Run tests
+                        try {
+                            sh "mvn test"
+                        } finally {
+                            // Stop and remove the container
+                            postgres.stop()
+                        }
+                    }
                 }
             }
         }
@@ -67,7 +81,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Build & Tag Docker Image') {
             steps {

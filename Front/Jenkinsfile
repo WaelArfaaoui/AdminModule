@@ -1,6 +1,8 @@
 pipeline {
     agent any
 
+    tools {nodejs "NODEJS"}
+
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
 
@@ -11,17 +13,6 @@ pipeline {
          stage('Git Checkout') {
             steps {
                 git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/WaelArfaaoui/AdminModule.git'
-            }
-        }
-
-
-        stage('Install Angular CLI') {
-            steps {
-                dir('Front') {
-                    script {
-                        sh 'npm install -g @angular/cli@14'
-                    }
-                }
             }
         }
 

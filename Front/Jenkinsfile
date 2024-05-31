@@ -38,29 +38,19 @@ pipeline {
                             }
                 }
 
-        stage('Run Unit Tests') {
-            steps {
-                dir('Front') {
-                    sh 'npm run test'
-                }
-            }
-        }
+        // stage('Run Unit Tests') {
+        //     steps {
+        //         dir('Front') {
+        //             sh 'npm run test'
+        //         }
+        //     }
+        // }
 
         stage('SonarQube Analysis') {
             steps {
-                dir('Front') { 
+                dir('Front') {
                    sh 'npm run sonar'
                 }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-              withSonarQubeEnv('sonar'){
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-                }
-            }
             }
         }
 

@@ -11,6 +11,75 @@ pipeline {
     }
 
     stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/WaelArfaaoui/AdminModule.git'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                dir('Backend') {
+                    sh "mvn compile"
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('Backend') {
+                    script {
+                        def postgres = docker.image('postgres:latest').run('-e POSTGRES_DB=TEST1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432')
+                        sleep(time: 20, unit: 'SECONDS')
+                        try {
+                            sh "mvn test"
+                        } finally {
+                            postgres.stop()
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('Backend') {
+                    withSonarQubeEnv('sonar') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=AdminModuleAPI -Dsonar.projectKey=AdminModuleAPI \
+                                -Dsonar.java.binaries=. \
+                                -Dsonar.coverage.exclusions="**/com/talan/adminmodule/config/**,\
+                                                             **/com/talan/adminmodule/dto/**,\
+                                                             **/com/talan/adminmodule/entity/**,\
+                                                             **/com/talan/adminmodule/repository/** ,\
+                                                             **/com/talan/adminmodule/validator/** " '''
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('Backend') {
+                    script {
+                         def postgres = docker.image('postgres:latest').run('-e POSTGRES_DB=TEST1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432')
+                         sleep(time: 20, unit: 'SECONDS')
+                         try {
+                            sh "mvn package"
+                         } finally {
+                           postgres.stop()
+                         }
+                    }
+                }
+            }
+        }
 
         stage('Build & Tag Docker Image') {
             steps {

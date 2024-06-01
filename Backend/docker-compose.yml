@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
   admin-module-api:
     container_name: admin-module-api
-    image: arfaoui01/admin-module-api:1.0.1
+    image: arfaoui01/admin-module-api:1.0.2
     ports:
       - 8090:8090
     networks:

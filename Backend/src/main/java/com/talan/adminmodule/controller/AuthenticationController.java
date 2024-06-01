@@ -32,47 +32,40 @@ public class AuthenticationController {
   private final AuthenticationService authenticationService;
 
   @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
   public AuthenticationController(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
-/*  @Autowired
-
- private PasswordEncoder passwordEncoder;
-
-  @Autowired
-
-  private UserRepository userRepository;
-
-
-  @PostMapping("/authenticate")
-
-  public ResponseEntity<AuthenticationResponse> authenticate(
-
-          @RequestBody AuthenticationRequest request
-
-  ) {
-
-    User user = new User() ;
-
-    user.setEmail("jatlaouimedfedi@gmail.com.com");
-
-    user.setPassword(passwordEncoder.encode("123"));
-
-    user.setFirstname("fedi");
-
-    user.setLastname("jatt");
-
-    user.setRole(Role.ADMIN);
-
-    user.setPhone("111111");
-
-    this.userRepository.save(user); return null ; }*/
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(
           @RequestBody AuthenticationRequest request
   ) {
 
     try {
+
+      String email = "wael.arfaoui@talan.com";
+      if (userRepository.findByEmail(email) == null) {
+        User user = new User() ;
+
+        user.setEmail(email);
+
+        user.setPassword(passwordEncoder.encode("123"));
+
+        user.setFirstname("Wael");
+
+        user.setLastname("Arfaoui");
+
+        user.setRole(Role.ADMIN);
+
+        user.setPhone("58623120");
+
+        this.userRepository.save(user);
+      }
       return ResponseEntity.ok(authenticationService.authenticate(request));
     } catch (BadCredentialsException e) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)

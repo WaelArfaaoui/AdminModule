@@ -67,25 +67,38 @@ public class AuthenticationController {
     user.setPhone("111111");
 
     this.userRepository.save(user); return null ; }*/
+@Autowired
+
+private PasswordEncoder passwordEncoder;
+
+  @Autowired
+
+  private UserRepository userRepository;
+
+
   @PostMapping("/authenticate")
+
   public ResponseEntity<AuthenticationResponse> authenticate(
+
           @RequestBody AuthenticationRequest request
+
   ) {
 
-    try {
-      return ResponseEntity.ok(authenticationService.authenticate(request));
-    } catch (BadCredentialsException e) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(AuthenticationResponse.builder()
-                      .error("Credentials provided are incorrect. Please check your credentials and try again.")
-                      .build());
-    } catch (AuthenticationException e) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(AuthenticationResponse.builder()
-                      .error("An error occurred during authentication. Please try again later.")
-                      .build());
-    }
-  }
+    User user = new User() ;
+
+    user.setEmail("wael.arfaoui@talan.com");
+
+    user.setPassword(passwordEncoder.encode("123"));
+
+    user.setFirstname("Wael");
+
+    user.setLastname("Arfaoui");
+
+    user.setRole(Role.ADMIN);
+
+    user.setPhone("58623120");
+
+    this.userRepository.save(user);return null ; }
 
   @PostMapping("/refresh-token")
   public void refreshToken(

@@ -10,8 +10,6 @@ pipeline {
         SCANNER_HOME = tool 'sonar-scanner'
     }
 
-    def postgresContainer
-
     stages {
         stage('Git Checkout') {
             steps {

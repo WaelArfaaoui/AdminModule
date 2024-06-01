@@ -10,8 +10,6 @@ pipeline {
         SCANNER_HOME = tool 'sonar-scanner'
     }
 
-    def postgresContainer
-
     stages {
         stage('Git Checkout') {
             steps {
@@ -31,14 +29,13 @@ pipeline {
             steps {
                 dir('Backend') {
                     script {
-                        // Start PostgreSQL container
-                        postgresContainer = docker.image('postgres:latest').run('-e POSTGRES_DB=TEST1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432')
-
-                        // Wait for PostgreSQL to start
+                        def postgres = docker.image('postgres:latest').run('-e POSTGRES_DB=TEST1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432')
                         sleep(time: 20, unit: 'SECONDS')
-
-                        // Run tests
-                        sh "mvn test"
+                        try {
+                            sh "mvn test"
+                        } finally {
+                            postgres.stop()
+                        }
                     }
                 }
             }
@@ -71,7 +68,15 @@ pipeline {
         stage('Build') {
             steps {
                 dir('Backend') {
-                    sh "mvn package"
+                    script {
+                         def postgres = docker.image('postgres:latest').run('-e POSTGRES_DB=TEST1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -p 5432:5432')
+                         sleep(time: 20, unit: 'SECONDS')
+                         try {
+                            sh "mvn package"
+                         } finally {
+                           postgres.stop()
+                         }
+                    }
                 }
             }
         }
@@ -95,17 +100,6 @@ pipeline {
                         withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                             sh "docker push arfaoui01/admin-module-api:1.0.1"
                         }
-                    }
-                }
-            }
-        }
-
-        stage('Stop PostgreSQL') {
-            steps {
-                script {
-                    // Stop and remove the PostgreSQL container
-                    if (postgresContainer) {
-                        postgresContainer.stop()
                     }
                 }
             }

@@ -86,7 +86,7 @@ pipeline {
                 dir('Backend') {
                     script {
                         withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker build -t arfaoui01/admin-module-api:1.0.1 ."
+                            sh "docker build -t arfaoui01/admin-module-api:1.0.2 ."
                         }
                     }
                 }
@@ -98,7 +98,7 @@ pipeline {
                 dir('Backend') {
                     script {
                         withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker push arfaoui01/admin-module-api:1.0.1"
+                            sh "docker push arfaoui01/admin-module-api:1.0.2"
                         }
                     }
                 }

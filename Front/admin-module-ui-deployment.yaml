@@ -1,4 +1,3 @@
-# admin-module-ui-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,16 +17,3 @@ spec:
           image: arfaoui01/admin-module-ui:1.0.1
           ports:
             - containerPort: 80
----
-# admin-module-ui-service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: admin-module-ui
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 80
-  selector:
-    app: admin-module-ui

@@ -104,5 +104,31 @@ pipeline {
                 }
             }
         }
+        
+        stage('Deploy To K8s') {
+                    steps {
+                     dir('Backend') {
+                        withKubeConfig(caCertificate: '', clusterName: 'arfaoui-eks', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://4893165EC733971DA96B9FF89872284A.gr7.us-east-2.eks.amazonaws.com') {
+                            sh "kubectl apply -f postgres-pvc.yaml -n webapps"
+                            sh "kubectl apply -f postgres-deployment.yaml -n webapps"
+                            sh "kubectl apply -f postgres-service.yaml -n webapps"
+                            sh "kubectl apply -f admin-module-api-deployment.yaml -n webapps"
+                            sh "kubectl apply -f admin-module-api-service.yaml -n webapps"
+                            sleep 60
+                        }
+                     }
+                    }
+        }
+        
+        stage('Verify Deployment') {
+                    steps {
+                     dir('Backend') {
+                        withKubeConfig(caCertificate: '', clusterName: 'arfaoui-eks', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://4893165EC733971DA96B9FF89872284A.gr7.us-east-2.eks.amazonaws.com') {
+                            sh "kubectl get pods -n webapps"
+                            sh "kubectl get svc -n webapps"
+                        }
+                     }
+                    }
+        }
     }
 }

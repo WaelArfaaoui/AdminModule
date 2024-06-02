@@ -1,0 +1,32 @@
+# admin-module-api-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-module-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-module-api
+  template:
+    metadata:
+      labels:
+        app: admin-module-api
+    spec:
+      containers:
+        - name: admin-module-api
+          image: arfaoui01/admin-module-api:1.0.1
+          ports:
+            - containerPort: 8090
+---
+# admin-module-api-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-module-api
+spec:
+  ports:
+    - port: 8090
+      targetPort: 8090
+  selector:
+    app: admin-module-api

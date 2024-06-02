@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: admin-module-api
+  namespace: webapps
 spec:
   replicas: 1
   selector:
@@ -17,3 +18,10 @@ spec:
           image: arfaoui01/admin-module-api:1.0.1
           ports:
             - containerPort: 8090
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres:5432/admin_module"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "admin"

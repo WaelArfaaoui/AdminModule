@@ -19,6 +19,8 @@ RUN APP_VERSION=$(ls /app | grep *.jar | awk 'NR==2{split($0,a,"-"); print a[3]}
     && echo "Building container with BSN v-$version"
 EXPOSE 8090
 
+ENV DB_URL=jdbc:postgresql://postgresql:5432/admin_module
+
 ENV ACTIVE_PROFILE=${PROFILE}
 ENV JAR_VERSION=${APP_VERSION}
 

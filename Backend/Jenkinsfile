@@ -109,10 +109,7 @@ pipeline {
             steps {
                 dir('Backend/kube') {
                     withKubeConfig(caCertificate: '', clusterName: 'arfaoui-eks', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://4893165EC733971DA96B9FF89872284A.gr7.us-east-2.eks.amazonaws.com') {
-                        sh "kubectl apply -f pg-configmap.yml -n webapps"
-                        sh "kubectl apply -f pg-credentials.yml -n webapps"
-                        sh "kubectl apply -f pg-pv.yml -n webapps"
-                        sh "kubectl apply -f pg-deployment.yml -n webapps"
+
                         sh "kubectl apply -f api-service.yml -n webapps"
                         sh "kubectl apply -f api-deployment.yml -n webapps"
                         sleep 60

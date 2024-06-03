@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Attribute")
-@CrossOrigin(origins = "*")
 @RequestMapping("api/attributes")
 public class AttributeController {
 

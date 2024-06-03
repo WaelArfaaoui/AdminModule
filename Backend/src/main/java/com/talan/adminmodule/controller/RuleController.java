@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rules")
 @Tag(name = "Rule")
-@CrossOrigin(origins = "*")
 public class RuleController {
 
     private final RuleService ruleService;

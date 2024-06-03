@@ -16,8 +16,6 @@ import java.util.Map;
 
 @RequestMapping("/api/tables")
 @RestController
-@CrossOrigin(origins = "*")
-
 public class ParamTableController {
     @Autowired
     private ParamTableService tableService;
